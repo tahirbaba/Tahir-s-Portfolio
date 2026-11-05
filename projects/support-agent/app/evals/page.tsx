@@ -5,6 +5,7 @@ import Nav from "@/components/site/Nav";
 import type { EvalCase, RunSummary } from "@/evals/types";
 
 export const dynamic = "force-static";
+export const metadata = { title: "Evals" };
 
 const dir = path.join(process.cwd(), "evals");
 const readJson = <T,>(p: string): T | null => (existsSync(p) ? (JSON.parse(readFileSync(p, "utf8")) as T) : null);
