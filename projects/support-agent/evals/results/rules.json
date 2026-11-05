@@ -1,0 +1,152 @@
+{
+  "runAt": "2026-11-05T20:48:51.088Z",
+  "total": 29,
+  "passed": 29,
+  "tests": [
+    {
+      "name": "identity: correct order + email verifies",
+      "pass": true,
+      "ms": 1.75
+    },
+    {
+      "name": "identity: wrong email is rejected without leaking order details",
+      "pass": true,
+      "ms": 0.22
+    },
+    {
+      "name": "identity: unknown order gives the same error as a wrong email",
+      "pass": true,
+      "ms": 0.17
+    },
+    {
+      "name": "identity: order number formats are normalised (#nh1001, nh-1001)",
+      "pass": true,
+      "ms": 0.17
+    },
+    {
+      "name": "identity: locks after three failed attempts",
+      "pass": true,
+      "ms": 0.19
+    },
+    {
+      "name": "actions require verification first",
+      "pass": true,
+      "ms": 0.18
+    },
+    {
+      "name": "refund: verifying one order does not unlock another",
+      "pass": true,
+      "ms": 0.13
+    },
+    {
+      "name": "refund: damaged item within window and under limit is issued",
+      "pass": true,
+      "ms": 0.21
+    },
+    {
+      "name": "refund: above 100 USD goes to human approval, not issued",
+      "pass": true,
+      "ms": 0.3
+    },
+    {
+      "name": "refund: outside 30-day window is refused",
+      "pass": true,
+      "ms": 0.38
+    },
+    {
+      "name": "refund: cannot exceed remaining refundable amount (prior refunds counted)",
+      "pass": true,
+      "ms": 0.26
+    },
+    {
+      "name": "refund: duplicate refund for the same reason is blocked",
+      "pass": true,
+      "ms": 0.17
+    },
+    {
+      "name": "late delivery: shipping fee refunded when late by more than 5 days",
+      "pass": true,
+      "ms": 0.09
+    },
+    {
+      "name": "late delivery: amount above the shipping fee is refused",
+      "pass": true,
+      "ms": 0.07
+    },
+    {
+      "name": "late delivery: on-time order is refused",
+      "pass": true,
+      "ms": 0.06
+    },
+    {
+      "name": "lost parcel: full refund allowed only when status is lost",
+      "pass": true,
+      "ms": 0.1
+    },
+    {
+      "name": "lost parcel above 100 USD needs approval",
+      "pass": true,
+      "ms": 0.11
+    },
+    {
+      "name": "cancelled order cannot be refunded again",
+      "pass": true,
+      "ms": 0.09
+    },
+    {
+      "name": "address change allowed while processing, refused once shipped",
+      "pass": true,
+      "ms": 0.21
+    },
+    {
+      "name": "cancel only while processing; refunds the full amount",
+      "pass": true,
+      "ms": 1.05
+    },
+    {
+      "name": "returns: within window ok, outside refused",
+      "pass": true,
+      "ms": 0.2
+    },
+    {
+      "name": "escalation never attaches an unverified order",
+      "pass": true,
+      "ms": 0.09
+    },
+    {
+      "name": "policy search finds the right section",
+      "pass": true,
+      "ms": 0.31
+    },
+    {
+      "name": "PII redaction masks emails, phones and cards but keeps dates",
+      "pass": true,
+      "ms": 0.26
+    },
+    {
+      "name": "loop runs tools in order, carries state and ends with text",
+      "pass": true,
+      "ms": 2.65
+    },
+    {
+      "name": "blocked actions come back as tool errors and change nothing",
+      "pass": true,
+      "ms": 0.45
+    },
+    {
+      "name": "traces never contain raw customer emails",
+      "pass": true,
+      "ms": 0.58
+    },
+    {
+      "name": "the session digest rides on the latest user message, not the system prompt",
+      "pass": true,
+      "ms": 0.35
+    },
+    {
+      "name": "a refusal ends the turn with a safe handoff message",
+      "pass": true,
+      "ms": 0.18
+    }
+  ]
+}

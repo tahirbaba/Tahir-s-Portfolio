@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Layout: three-pane ops console (scenarios · chat · trace) on a dark single theme. */
+@theme {
+  --color-ink: #06080c;
+  --color-panel: #0b0f16;
+  --color-panel-2: #111722;
+  --color-line: #1b2331;
+  --color-line-2: #283245;
+  --color-fg: #eaf0f7;
+  --color-muted: #8a97ab;
+  --color-dim: #5c687a;
+  --color-ice: #8ccbff;
+  --color-ok: #4ade80;
+  --color-amber: #ffb547;
+  --color-rose: #fb7185;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  --font-naskh: var(--font-naskh-ar), "Noto Naskh Arabic", "Geeza Pro", serif;
+  --font-nastaliq: var(--font-nastaliq-ur), "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
+}
+:root { color-scheme: dark; }
+body { background: var(--color-ink); color: var(--color-fg); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--color-ink); }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--color-dim); }
+.panel { background: var(--color-panel); border: 1px solid var(--color-line); border-radius: 18px; }
+.urdu { font-family: var(--font-nastaliq); line-height: 2.1; }
+.arabic { font-family: var(--font-naskh); line-height: 1.9; }
+:focus-visible { outline: 2px solid var(--color-ice); outline-offset: 2px; border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

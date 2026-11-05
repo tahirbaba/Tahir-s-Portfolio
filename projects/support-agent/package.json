@@ -1,0 +1,32 @@
+{
+  "name": "relay-support-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Multilingual customer support agent (English, Arabic, Urdu) with enforced business rules, human handoff and an eval dashboard.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test:rules": "tsx --test tests/*.test.ts",
+    "rules:report": "tsx evals/rules-report.ts",
+    "dataset": "tsx evals/build-dataset.ts",
+    "eval": "tsx evals/run.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.5.0",
+    "motion": "^14.9.1",
+    "next": "^16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.4",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.2"
+  }
+}
