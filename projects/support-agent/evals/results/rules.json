@@ -1,152 +1,152 @@
 {
-  "runAt": "2026-11-05T20:48:51.088Z",
+  "runAt": "2026-11-05T21:25:21.809Z",
   "total": 29,
   "passed": 29,
   "tests": [
     {
       "name": "identity: correct order + email verifies",
       "pass": true,
-      "ms": 1.75
+      "ms": 2.3
     },
     {
       "name": "identity: wrong email is rejected without leaking order details",
       "pass": true,
-      "ms": 0.22
+      "ms": 0.28
     },
     {
       "name": "identity: unknown order gives the same error as a wrong email",
       "pass": true,
-      "ms": 0.17
+      "ms": 0.15
     },
     {
       "name": "identity: order number formats are normalised (#nh1001, nh-1001)",
       "pass": true,
-      "ms": 0.17
+      "ms": 0.28
     },
     {
       "name": "identity: locks after three failed attempts",
       "pass": true,
-      "ms": 0.19
+      "ms": 0.31
     },
     {
       "name": "actions require verification first",
       "pass": true,
-      "ms": 0.18
+      "ms": 0.17
     },
     {
       "name": "refund: verifying one order does not unlock another",
       "pass": true,
-      "ms": 0.13
+      "ms": 0.24
     },
     {
       "name": "refund: damaged item within window and under limit is issued",
       "pass": true,
-      "ms": 0.21
+      "ms": 0.25
     },
     {
       "name": "refund: above 100 USD goes to human approval, not issued",
       "pass": true,
-      "ms": 0.3
+      "ms": 0.55
     },
     {
       "name": "refund: outside 30-day window is refused",
       "pass": true,
-      "ms": 0.38
+      "ms": 0.76
     },
     {
       "name": "refund: cannot exceed remaining refundable amount (prior refunds counted)",
       "pass": true,
-      "ms": 0.26
+      "ms": 0.24
     },
     {
       "name": "refund: duplicate refund for the same reason is blocked",
       "pass": true,
-      "ms": 0.17
+      "ms": 0.28
     },
     {
       "name": "late delivery: shipping fee refunded when late by more than 5 days",
       "pass": true,
-      "ms": 0.09
+      "ms": 0.16
     },
     {
       "name": "late delivery: amount above the shipping fee is refused",
       "pass": true,
-      "ms": 0.07
+      "ms": 0.09
     },
     {
       "name": "late delivery: on-time order is refused",
       "pass": true,
-      "ms": 0.06
+      "ms": 0.07
     },
     {
       "name": "lost parcel: full refund allowed only when status is lost",
       "pass": true,
-      "ms": 0.1
+      "ms": 0.13
     },
     {
       "name": "lost parcel above 100 USD needs approval",
       "pass": true,
-      "ms": 0.11
+      "ms": 0.08
     },
     {
       "name": "cancelled order cannot be refunded again",
       "pass": true,
-      "ms": 0.09
+      "ms": 0.1
     },
     {
       "name": "address change allowed while processing, refused once shipped",
       "pass": true,
-      "ms": 0.21
+      "ms": 0.34
     },
     {
       "name": "cancel only while processing; refunds the full amount",
       "pass": true,
-      "ms": 1.05
+      "ms": 0.18
     },
     {
       "name": "returns: within window ok, outside refused",
       "pass": true,
-      "ms": 0.2
+      "ms": 0.15
     },
     {
       "name": "escalation never attaches an unverified order",
       "pass": true,
-      "ms": 0.09
+      "ms": 0.11
     },
     {
       "name": "policy search finds the right section",
       "pass": true,
-      "ms": 0.31
+      "ms": 0.4
     },
     {
       "name": "PII redaction masks emails, phones and cards but keeps dates",
       "pass": true,
-      "ms": 0.26
+      "ms": 0.45
     },
     {
       "name": "loop runs tools in order, carries state and ends with text",
       "pass": true,
-      "ms": 2.65
+      "ms": 3.02
     },
     {
       "name": "blocked actions come back as tool errors and change nothing",
       "pass": true,
-      "ms": 0.45
+      "ms": 0.43
     },
     {
       "name": "traces never contain raw customer emails",
       "pass": true,
-      "ms": 0.58
+      "ms": 0.56
     },
     {
       "name": "the session digest rides on the latest user message, not the system prompt",
       "pass": true,
-      "ms": 0.35
+      "ms": 0.33
     },
     {
       "name": "a refusal ends the turn with a safe handoff message",
       "pass": true,
-      "ms": 0.18
+      "ms": 0.21
     }
   ]
 }

@@ -4,6 +4,18 @@ A production-style support agent for **Nimbus Home**, a fictional online home-go
 
 Built with Next.js, TypeScript and the Claude API (`claude-opus-5-5`). All customers, orders and emails are synthetic.
 
+## What's in the app
+
+| Page | For | What it shows |
+|---|---|---|
+| `/` | Business owners | The problem, how Relay works, features, an ROI calculator |
+| `/demo` | Everyone | Split screen: the customer's view (chat app or store website) next to every check and action Relay takes. Auto-play replays, plus a live tab that talks to Claude |
+| `/dashboard` | Support managers | A simulated week (clearly labelled sample data) and a working approval inbox for refunds above 100 USD |
+| `/case-study` | Recruiters, CTOs | Architecture, key decisions, evals and a six-week rollout plan |
+| `/evals` | Engineers | Rule-test results and the 116-case agent eval suite |
+
+Auto-play replays live in `data/replays.json`. `npm run replays` builds them with scripted replies (tools and rules still run for real); `npm run replays -- --live` records real Claude runs once an API key is set.
+
 ## Why this project
 
 Most support-bot demos answer FAQs. Real deployments fail on the parts around the model: identity checks, refund limits, policy windows, prompt injection, escalation and proof that it works. Relay is built around those parts.

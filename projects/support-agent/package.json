@@ -11,7 +11,8 @@
     "test:rules": "tsx --test tests/*.test.ts",
     "rules:report": "tsx evals/rules-report.ts",
     "dataset": "tsx evals/build-dataset.ts",
-    "eval": "tsx evals/run.ts"
+    "eval": "tsx evals/run.ts",
+    "replays": "tsx evals/replays.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.5.0",

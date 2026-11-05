@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import Header from "@/components/Header";
+import Footer from "@/components/site/Footer";
+import Nav from "@/components/site/Nav";
 import type { EvalCase, RunSummary } from "@/evals/types";
 
 export const dynamic = "force-static";
@@ -39,7 +40,7 @@ export default function EvalsPage() {
 
   return (
     <>
-      <Header active="evals" />
+      <Nav active="/evals" />
       <main className="gutter">
         <div className="mx-auto flex max-w-[1100px] flex-col gap-10 py-10">
           <section>
@@ -129,6 +130,7 @@ export default function EvalsPage() {
           </section>
         </div>
       </main>
+      <Footer />
     </>
   );
 }
