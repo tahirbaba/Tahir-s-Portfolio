@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* Layout: cinematic dark single theme. Globe hero, then numbered "deployment reports",
+   a live agent lab, playbook timeline, stack, experience, AI twin and contact. */
+@theme {
+  --color-ink: #05070b;
+  --color-panel: #0a0e15;
+  --color-panel-2: #0f141d;
+  --color-line: #1a2230;
+  --color-line-2: #263043;
+  --color-fg: #edf2f8;
+  --color-muted: #8794a8;
+  --color-dim: #5b6779;
+  --color-ice: #8ccbff;
+  --color-ice-deep: #3d8bff;
+  --color-amber: #ffb547;
+  --color-ok: #4ade80;
+  --color-rose: #fb7185;
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: var(--font-instrument), "Iowan Old Style", Georgia, serif;
+
+  --animate-marquee: marquee 48s linear infinite;
+  --animate-pulse-dot: pulse-dot 2s ease-out infinite;
+  --animate-scan: scan 2.4s linear infinite;
+}
+
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-ok) 70%, transparent); }
+  80%, 100% { box-shadow: 0 0 0 7px transparent; }
+}
+@keyframes scan { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+:root { color-scheme: dark; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+body {
+  background: var(--color-ink);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 60; background: var(--color-ink);
+}
+::selection { background: color-mix(in srgb, var(--color-ice) 35%, transparent); color: #fff; }
+:focus-visible { outline: 2px solid var(--color-ice); outline-offset: 3px; border-radius: 8px; }
+h1, h2, h3 { text-wrap: balance; }
+
+/* reusable pieces */
+.gutter {
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+.eyebrow {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--color-ice);
+}
+.hairline { background-image: linear-gradient(90deg, transparent, var(--color-line-2), transparent); height: 1px; }
+.grain::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.card {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--color-panel-2) 90%, transparent), var(--color-panel));
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+}
+.glow-edge { position: relative; }
+.glow-edge::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--color-ice) 55%, transparent), transparent 45%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .3s;
+}
+.glow-edge:hover::before { opacity: 1; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--color-line-2);
+  background: var(--color-panel-2); border-radius: 999px; padding: 5px 11px; font-size: 13px; color: var(--color-fg);
+}
+.chip-mono { font-family: var(--font-mono); font-size: 12px; color: var(--color-muted); padding: 4px 10px; }
+.live-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--color-ok); animation: var(--animate-pulse-dot); display: inline-block; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}
