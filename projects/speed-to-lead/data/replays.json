@@ -1,0 +1,986 @@
+[
+  {
+    "id": "hot_ar",
+    "title": "VP asks for a demo, in Arabic",
+    "lang": "Arabic",
+    "source": "web_form",
+    "lead": {
+      "id": "L-201",
+      "name": "Mona Al Suwaidi",
+      "email": "mona@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "VP Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai"
+    },
+    "kind": "scripted",
+    "model": null,
+    "turns": [
+      {
+        "lead": "مرحباً، نحتاج إلى عرض توضيحي لمنصة تتبع الشحنات هذا الأسبوع، ونريد معرفة السعر أيضاً.",
+        "reply": "أهلاً منى، شكراً لتواصلك مع نورثستار. يسعدنا تقديم عرض توضيحي لمنصة تتبع الشحنات لفريق غلف لاين. هذه أقرب المواعيد المتاحة مع زميلتي سارة (بتوقيت دبي):\n• Tue 03 Nov, 12:00\n• Tue 03 Nov, 15:00\n• Wed 04 Nov, 09:00\nأما الأسعار فستشاركها سارة خلال المكالمة حسب حجم عملياتكم. أي موعد يناسبك؟\n— Leadline، نيابةً عن سارة",
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "score_lead",
+            "input": {},
+            "output": {
+              "ok": true,
+              "score": 98,
+              "tier": "hot",
+              "reasons": [
+                "Industry logistics (+30)",
+                "1800 employees (+25)",
+                "Region AE (+15)",
+                "Seniority vp (+16)",
+                "Buying intent in message (+12)"
+              ],
+              "routed_rep": "Sara Haddad",
+              "rep_tz": "Asia/Dubai",
+              "policy": "alert rep, reply, offer meeting"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "tool",
+            "name": "enrich_company",
+            "input": {
+              "domain": "gulfline.example"
+            },
+            "output": {
+              "ok": true,
+              "found": true,
+              "domain": "gulfline.example",
+              "name": "Gulfline Freight",
+              "industry": "logistics",
+              "employees": 1800,
+              "country": "AE"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "alert_rep",
+            "input": {
+              "reason": "VP Operations at Gulfline Freight (1,800 staff) wants a demo this week and pricing."
+            },
+            "output": {
+              "ok": true,
+              "alerted": "Sara Haddad"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "tool",
+            "name": "get_availability",
+            "input": {
+              "count": 3
+            },
+            "output": {
+              "ok": true,
+              "rep": "Sara Haddad",
+              "slots": [
+                {
+                  "start_utc": "2026-11-03T08:00:00+00:00",
+                  "lead_local": "Tue 03 Nov, 12:00",
+                  "lead_tz": "Asia/Dubai"
+                },
+                {
+                  "start_utc": "2026-11-03T11:00:00+00:00",
+                  "lead_local": "Tue 03 Nov, 15:00",
+                  "lead_tz": "Asia/Dubai"
+                },
+                {
+                  "start_utc": "2026-11-04T05:00:00+00:00",
+                  "lead_local": "Wed 04 Nov, 09:00",
+                  "lead_tz": "Asia/Dubai"
+                }
+              ]
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 3,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "log_to_crm",
+            "input": {
+              "summary": "Hot lead: VP Operations at Gulfline Freight, Dubai, asked in Arabic for a shipment-tracking demo this week and pricing. Sara alerted, three slots offered.",
+              "next_step": "Book demo with Sara this week"
+            },
+            "output": {
+              "ok": true,
+              "record_id": "CRM-L-201"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 4,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      },
+      {
+        "lead": "الموعد الثاني مناسب.",
+        "reply": "تم الحجز ✅ عرضك التوضيحي مع سارة يوم Tue 03 Nov, 15:00 بتوقيت دبي. سيصلك رابط الاجتماع على بريدك الإلكتروني.\n— Leadline، نيابةً عن سارة",
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "book_meeting",
+            "input": {
+              "start_utc": "2026-11-03T11:00:00+00:00"
+            },
+            "output": {
+              "ok": true,
+              "id": "MTG-7001",
+              "start_utc": "2026-11-03T11:00:00+00:00",
+              "rep": "Sara Haddad",
+              "lead_local": "Tue 03 Nov, 15:00",
+              "rep_local": "Tue 03 Nov, 15:00"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      }
+    ],
+    "outcome": {
+      "score": {
+        "score": 98,
+        "tier": "hot",
+        "reasons": [
+          "Industry logistics (+30)",
+          "1800 employees (+25)",
+          "Region AE (+15)",
+          "Seniority vp (+16)",
+          "Buying intent in message (+12)"
+        ]
+      },
+      "meetings": [
+        {
+          "id": "MTG-7001",
+          "start_utc": "2026-11-03T11:00:00+00:00",
+          "rep": "Sara Haddad",
+          "lead_local": "Tue 03 Nov, 15:00",
+          "rep_local": "Tue 03 Nov, 15:00"
+        }
+      ],
+      "crm": {
+        "id": "CRM-L-201",
+        "tier": "hot",
+        "score": 98,
+        "rep": "Sara Haddad",
+        "summary": "Hot lead: VP Operations at Gulfline Freight, Dubai, asked in Arabic for a shipment-tracking demo this week and pricing. Sara alerted, three slots offered.",
+        "next_step": "Book demo with Sara this week"
+      },
+      "alerts": [
+        {
+          "rep": "Sara Haddad",
+          "reason": "VP Operations at Gulfline Freight (1,800 staff) wants a demo this week and pricing."
+        }
+      ],
+      "noReply": false
+    }
+  },
+  {
+    "id": "warm_ru",
+    "title": "Retail manager on WhatsApp, Roman Urdu",
+    "lang": "Roman Urdu",
+    "source": "whatsapp",
+    "lead": {
+      "id": "L-202",
+      "name": "Usman Tariq",
+      "email": "usman@indusmart.example",
+      "company": "Indus Mart",
+      "role": "Supply Chain Manager",
+      "source": "whatsapp",
+      "country": "PK",
+      "timezone": "Asia/Karachi"
+    },
+    "kind": "scripted",
+    "model": null,
+    "turns": [
+      {
+        "lead": "Assalam o alaikum, hamari stores mein demand forecasting ka masla hai. Aap ka software kaise kaam karta hai?",
+        "reply": "Walaikum assalam Usman sahab! Northstar har store ki pichli sales, season aur promotions dekh kar agle hafton ki demand ka andaza lagata hai, taake stock na kam pare na zyada. Ayesha aap ko 30 minute mein Indus Mart jaise retail ka example dikha sakti hain:\n• Tue 03 Nov, 13:00\n• Tue 03 Nov, 16:00\nKaunsa time theek rahega?\n— Leadline, Ayesha ki taraf se",
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "score_lead",
+            "input": {},
+            "output": {
+              "ok": true,
+              "score": 68,
+              "tier": "warm",
+              "reasons": [
+                "Industry retail (+22)",
+                "3200 employees (+25)",
+                "Region PK (+12)",
+                "Seniority manager (+9)"
+              ],
+              "routed_rep": "Ayesha Siddiqui",
+              "rep_tz": "Asia/Karachi",
+              "policy": "reply and offer meeting"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "get_availability",
+            "input": {
+              "count": 2
+            },
+            "output": {
+              "ok": true,
+              "rep": "Ayesha Siddiqui",
+              "slots": [
+                {
+                  "start_utc": "2026-11-03T08:00:00+00:00",
+                  "lead_local": "Tue 03 Nov, 13:00",
+                  "lead_tz": "Asia/Karachi"
+                },
+                {
+                  "start_utc": "2026-11-03T11:00:00+00:00",
+                  "lead_local": "Tue 03 Nov, 16:00",
+                  "lead_tz": "Asia/Karachi"
+                }
+              ]
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 3,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "log_to_crm",
+            "input": {
+              "summary": "Warm lead: Supply Chain Manager at Indus Mart (3,200 staff, Pakistan) asked on WhatsApp in Roman Urdu how demand forecasting works.",
+              "next_step": "Offer 30-minute walkthrough with Ayesha"
+            },
+            "output": {
+              "ok": true,
+              "record_id": "CRM-L-202"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 4,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      }
+    ],
+    "outcome": {
+      "score": {
+        "score": 68,
+        "tier": "warm",
+        "reasons": [
+          "Industry retail (+22)",
+          "3200 employees (+25)",
+          "Region PK (+12)",
+          "Seniority manager (+9)"
+        ]
+      },
+      "meetings": [],
+      "crm": {
+        "id": "CRM-L-202",
+        "tier": "warm",
+        "score": 68,
+        "rep": "Ayesha Siddiqui",
+        "summary": "Warm lead: Supply Chain Manager at Indus Mart (3,200 staff, Pakistan) asked on WhatsApp in Roman Urdu how demand forecasting works.",
+        "next_step": "Offer 30-minute walkthrough with Ayesha"
+      },
+      "alerts": [],
+      "noReply": false
+    }
+  },
+  {
+    "id": "hot_ur",
+    "title": "Missed call from a CEO, Urdu",
+    "lang": "Urdu",
+    "source": "missed_call",
+    "lead": {
+      "id": "L-203",
+      "name": "Kamran Ahmed",
+      "email": "kamran@brightloom.example",
+      "company": "Brightloom Textiles",
+      "role": "CEO",
+      "source": "missed_call",
+      "country": "PK",
+      "timezone": "Asia/Karachi"
+    },
+    "kind": "scripted",
+    "model": null,
+    "turns": [
+      {
+        "lead": "ہمیں اپنی فیکٹری کی سپلائی چین کے لیے ڈیمو چاہیے، اسی مہینے فیصلہ کرنا ہے۔",
+        "reply": "کامران صاحب، کال مس ہونے پر معذرت اور رابطے کا شکریہ۔ میری ساتھی عائشہ آپ کو برائٹ لوم کی سپلائی چین کے لیے ڈیمو دکھائیں گی۔ یہ اوقات دستیاب ہیں (پاکستان کے وقت کے مطابق):\n• Tue 03 Nov, 13:00\n• Tue 03 Nov, 16:00\n• Wed 04 Nov, 10:00\nکون سا وقت مناسب رہے گا؟\n— Leadline، عائشہ کی جانب سے",
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "score_lead",
+            "input": {},
+            "output": {
+              "ok": true,
+              "score": 78,
+              "tier": "hot",
+              "reasons": [
+                "Industry manufacturing (+18)",
+                "650 employees (+22)",
+                "Region PK (+12)",
+                "Seniority c_level (+18)",
+                "Buying intent in message (+8)"
+              ],
+              "routed_rep": "Ayesha Siddiqui",
+              "rep_tz": "Asia/Karachi",
+              "policy": "alert rep, reply, offer meeting"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "alert_rep",
+            "input": {
+              "reason": "CEO of Brightloom Textiles called, wants a supply-chain demo and decides this month."
+            },
+            "output": {
+              "ok": true,
+              "alerted": "Ayesha Siddiqui"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "tool",
+            "name": "get_availability",
+            "input": {
+              "count": 3
+            },
+            "output": {
+              "ok": true,
+              "rep": "Ayesha Siddiqui",
+              "slots": [
+                {
+                  "start_utc": "2026-11-03T08:00:00+00:00",
+                  "lead_local": "Tue 03 Nov, 13:00",
+                  "lead_tz": "Asia/Karachi"
+                },
+                {
+                  "start_utc": "2026-11-03T11:00:00+00:00",
+                  "lead_local": "Tue 03 Nov, 16:00",
+                  "lead_tz": "Asia/Karachi"
+                },
+                {
+                  "start_utc": "2026-11-04T05:00:00+00:00",
+                  "lead_local": "Wed 04 Nov, 10:00",
+                  "lead_tz": "Asia/Karachi"
+                }
+              ]
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 3,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "log_to_crm",
+            "input": {
+              "summary": "Hot lead from a missed call: CEO of Brightloom Textiles (650 staff, Pakistan) wants a demo for factory supply chain, decision this month.",
+              "next_step": "Ayesha to call back and book demo"
+            },
+            "output": {
+              "ok": true,
+              "record_id": "CRM-L-203"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 4,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      }
+    ],
+    "outcome": {
+      "score": {
+        "score": 78,
+        "tier": "hot",
+        "reasons": [
+          "Industry manufacturing (+18)",
+          "650 employees (+22)",
+          "Region PK (+12)",
+          "Seniority c_level (+18)",
+          "Buying intent in message (+8)"
+        ]
+      },
+      "meetings": [],
+      "crm": {
+        "id": "CRM-L-203",
+        "tier": "hot",
+        "score": 78,
+        "rep": "Ayesha Siddiqui",
+        "summary": "Hot lead from a missed call: CEO of Brightloom Textiles (650 staff, Pakistan) wants a demo for factory supply chain, decision this month.",
+        "next_step": "Ayesha to call back and book demo"
+      },
+      "alerts": [
+        {
+          "rep": "Ayesha Siddiqui",
+          "reason": "CEO of Brightloom Textiles called, wants a supply-chain demo and decides this month."
+        }
+      ],
+      "noReply": false
+    }
+  },
+  {
+    "id": "tz_us",
+    "title": "Time-zone check: Chicago lead, New York rep",
+    "lang": "English",
+    "source": "web_form",
+    "lead": {
+      "id": "L-204",
+      "name": "Rachel Kim",
+      "email": "rachel@peakparcel.example",
+      "company": "PeakParcel",
+      "role": "Director of Logistics",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/Chicago"
+    },
+    "kind": "scripted",
+    "model": null,
+    "turns": [
+      {
+        "lead": "Interested in a demo of your shipment visibility product. We're evaluating vendors this quarter.",
+        "reply": "Hi Rachel, thanks for reaching out. Daniel leads our logistics accounts and would be glad to walk PeakParcel through shipment visibility. Here are times in Chicago time:\n• Tue 03 Nov, 09:30\n• Tue 03 Nov, 12:30\n• Tue 03 Nov, 15:30\nDo any of these work?\n— Leadline, on behalf of Daniel",
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "score_lead",
+            "input": {},
+            "output": {
+              "ok": true,
+              "score": 83,
+              "tier": "hot",
+              "reasons": [
+                "Industry logistics (+30)",
+                "9000 employees (+12)",
+                "Region US (+13)",
+                "Seniority director (+14)",
+                "Buying intent in message (+14)"
+              ],
+              "routed_rep": "Daniel Brooks",
+              "rep_tz": "America/New_York",
+              "policy": "alert rep, reply, offer meeting"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "alert_rep",
+            "input": {
+              "reason": "Director of Logistics at PeakParcel (9,000 staff) evaluating vendors this quarter."
+            },
+            "output": {
+              "ok": true,
+              "alerted": "Daniel Brooks"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "tool",
+            "name": "get_availability",
+            "input": {
+              "count": 3
+            },
+            "output": {
+              "ok": true,
+              "rep": "Daniel Brooks",
+              "slots": [
+                {
+                  "start_utc": "2026-11-03T15:30:00+00:00",
+                  "lead_local": "Tue 03 Nov, 09:30",
+                  "lead_tz": "America/Chicago"
+                },
+                {
+                  "start_utc": "2026-11-03T18:30:00+00:00",
+                  "lead_local": "Tue 03 Nov, 12:30",
+                  "lead_tz": "America/Chicago"
+                },
+                {
+                  "start_utc": "2026-11-03T21:30:00+00:00",
+                  "lead_local": "Tue 03 Nov, 15:30",
+                  "lead_tz": "America/Chicago"
+                }
+              ]
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 3,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "log_to_crm",
+            "input": {
+              "summary": "Hot lead: Director of Logistics at PeakParcel, Chicago, evaluating vendors this quarter. Daniel alerted.",
+              "next_step": "Book demo with Daniel"
+            },
+            "output": {
+              "ok": true,
+              "record_id": "CRM-L-204"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 4,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      },
+      {
+        "lead": "Could we do Wednesday at 7am my time instead?",
+        "reply": "7am Chicago is 8am in New York, just before Daniel's working day starts, so I couldn't book that one. The earliest I can offer is Tue 03 Nov, 09:30 your time. Would that work, or is another of the times above better?\n— Leadline, on behalf of Daniel",
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "book_meeting",
+            "input": {
+              "start_utc": "2026-11-04T13:00:00+00:00"
+            },
+            "output": {
+              "ok": false,
+              "error": "Outside Daniel Brooks's working hours (9:00-17:00 America/New_York)"
+            },
+            "isError": true,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      }
+    ],
+    "outcome": {
+      "score": {
+        "score": 83,
+        "tier": "hot",
+        "reasons": [
+          "Industry logistics (+30)",
+          "9000 employees (+12)",
+          "Region US (+13)",
+          "Seniority director (+14)",
+          "Buying intent in message (+14)"
+        ]
+      },
+      "meetings": [],
+      "crm": {
+        "id": "CRM-L-204",
+        "tier": "hot",
+        "score": 83,
+        "rep": "Daniel Brooks",
+        "summary": "Hot lead: Director of Logistics at PeakParcel, Chicago, evaluating vendors this quarter. Daniel alerted.",
+        "next_step": "Book demo with Daniel"
+      },
+      "alerts": [
+        {
+          "rep": "Daniel Brooks",
+          "reason": "Director of Logistics at PeakParcel (9,000 staff) evaluating vendors this quarter."
+        }
+      ],
+      "noReply": false
+    }
+  },
+  {
+    "id": "cold_us",
+    "title": "Small business, not a fit yet",
+    "lang": "English",
+    "source": "web_form",
+    "lead": {
+      "id": "L-205",
+      "name": "Tom Avery",
+      "email": "tom@cornerbakery.example",
+      "company": "Corner Bakery Co",
+      "role": "Owner",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/New_York"
+    },
+    "kind": "scripted",
+    "model": null,
+    "turns": [
+      {
+        "lead": "Saw your ad. Not sure if this is for us, what does it do?",
+        "reply": "Hi Tom, thanks for asking! Northstar helps logistics, e-commerce and retail teams track shipments and forecast demand, so it's built for businesses moving a lot of stock. Here's a two-minute overview so you can judge if it fits: northstar.example/overview. If your volumes grow, we'd love to talk.\n— Leadline",
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "score_lead",
+            "input": {},
+            "output": {
+              "ok": true,
+              "score": 31,
+              "tier": "cold",
+              "reasons": [
+                "Industry food_service (+0)",
+                "12 employees, below target size (+0)",
+                "Region US (+13)",
+                "Seniority c_level (+18)"
+              ],
+              "routed_rep": "Daniel Brooks",
+              "rep_tz": "America/New_York",
+              "policy": "reply with resources, no meeting push"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "log_to_crm",
+            "input": {
+              "summary": "Cold lead: owner of a 12-person bakery saw an ad, unsure of fit. Food service is outside our target market.",
+              "next_step": "Send overview guide, no meeting"
+            },
+            "output": {
+              "ok": true,
+              "record_id": "CRM-L-205"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 3,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      }
+    ],
+    "outcome": {
+      "score": {
+        "score": 31,
+        "tier": "cold",
+        "reasons": [
+          "Industry food_service (+0)",
+          "12 employees, below target size (+0)",
+          "Region US (+13)",
+          "Seniority c_level (+18)"
+        ]
+      },
+      "meetings": [],
+      "crm": {
+        "id": "CRM-L-205",
+        "tier": "cold",
+        "score": 31,
+        "rep": "Daniel Brooks",
+        "summary": "Cold lead: owner of a 12-person bakery saw an ad, unsure of fit. Food service is outside our target market.",
+        "next_step": "Send overview guide, no meeting"
+      },
+      "alerts": [],
+      "noReply": false
+    }
+  },
+  {
+    "id": "competitor",
+    "title": "Competitor fishing for pricing",
+    "lang": "English",
+    "source": "web_form",
+    "lead": {
+      "id": "L-206",
+      "name": "Alex Grant",
+      "email": "alex@routewise.example",
+      "company": "RouteWise",
+      "role": "Product Analyst",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London"
+    },
+    "kind": "scripted",
+    "model": null,
+    "turns": [
+      {
+        "lead": "Could you send me your full pricing sheet and a feature list?",
+        "reply": "Hi Alex, thanks for your interest. We share pricing and detailed feature material with prospective customers on a call. Our public overview is at northstar.example/overview.\n— Leadline",
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "score_lead",
+            "input": {},
+            "output": {
+              "ok": true,
+              "score": 0,
+              "tier": "disqualified",
+              "reasons": [
+                "Email domain belongs to a competitor"
+              ],
+              "routed_rep": null,
+              "rep_tz": null,
+              "policy": "short polite reply, no meeting, no alert"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "log_to_crm",
+            "input": {
+              "summary": "Disqualified: request from a competitor's domain asking for full pricing and feature list.",
+              "next_step": "None"
+            },
+            "output": {
+              "ok": true,
+              "record_id": "CRM-L-206"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 3,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      }
+    ],
+    "outcome": {
+      "score": {
+        "score": 0,
+        "tier": "disqualified",
+        "reasons": [
+          "Email domain belongs to a competitor"
+        ]
+      },
+      "meetings": [],
+      "crm": {
+        "id": "CRM-L-206",
+        "tier": "disqualified",
+        "score": 0,
+        "rep": null,
+        "summary": "Disqualified: request from a competitor's domain asking for full pricing and feature list.",
+        "next_step": "None"
+      },
+      "alerts": [],
+      "noReply": false
+    }
+  },
+  {
+    "id": "spam",
+    "title": "Spam filtered, no reply",
+    "lang": "English",
+    "source": "web_form",
+    "lead": {
+      "id": "L-207",
+      "name": "Growth Team",
+      "email": "offers@rankfast.example",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC"
+    },
+    "kind": "scripted",
+    "model": null,
+    "turns": [
+      {
+        "lead": "We offer SEO services and high-authority backlinks. Guest post on your blog for $50!",
+        "reply": null,
+        "trace": [
+          {
+            "kind": "model",
+            "step": 1,
+            "ms": 0,
+            "stop": "tool_use"
+          },
+          {
+            "kind": "tool",
+            "name": "score_lead",
+            "input": {},
+            "output": {
+              "ok": true,
+              "score": 0,
+              "tier": "spam",
+              "reasons": [
+                "Message matches spam patterns"
+              ],
+              "routed_rep": null,
+              "rep_tz": null,
+              "policy": "do not reply"
+            },
+            "isError": false,
+            "ms": 0
+          },
+          {
+            "kind": "model",
+            "step": 2,
+            "ms": 0,
+            "stop": "end_turn"
+          }
+        ],
+        "latencyMs": null,
+        "costUsd": null
+      }
+    ],
+    "outcome": {
+      "score": {
+        "score": 0,
+        "tier": "spam",
+        "reasons": [
+          "Message matches spam patterns"
+        ]
+      },
+      "meetings": [],
+      "crm": null,
+      "alerts": [],
+      "noReply": true
+    }
+  }
+]

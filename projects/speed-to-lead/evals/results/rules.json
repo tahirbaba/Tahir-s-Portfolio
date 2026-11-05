@@ -1,0 +1,137 @@
+{
+  "runAt": "2026-11-05T21:56:10Z",
+  "total": 26,
+  "passed": 26,
+  "tests": [
+    {
+      "name": "full hot flow",
+      "file": "test_agent_loop",
+      "pass": true
+    },
+    {
+      "name": "blocked tool returns error to model",
+      "file": "test_agent_loop",
+      "pass": true
+    },
+    {
+      "name": "spam produces no reply",
+      "file": "test_agent_loop",
+      "pass": true
+    },
+    {
+      "name": "trace masks emails",
+      "file": "test_agent_loop",
+      "pass": true
+    },
+    {
+      "name": "refusal is safe",
+      "file": "test_agent_loop",
+      "pass": true
+    },
+    {
+      "name": "ideal lead is hot with reasons",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "small off target company is cold",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "personal email is penalised",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "competitor is disqualified",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "student is disqualified",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "spam is detected",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "intent raises score and is capped",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "multilingual intent terms count",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "routing by region",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "slots are in rep hours and shown in lead timezone",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "slot rules",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "tools require scoring first",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "booking flow and no double booking",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "booking rejects naive times and bad hours",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "cold leads get no meetings and no alerts",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "alert only for hot and only once",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "spam blocks reply",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "signed state round trip and tamper detection",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "pii redaction",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "late night slot rejected across midnight",
+      "file": "test_rules",
+      "pass": true
+    },
+    {
+      "name": "every suggested slot is valid",
+      "file": "test_rules",
+      "pass": true
+    }
+  ]
+}

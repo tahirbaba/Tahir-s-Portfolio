@@ -1,0 +1,1162 @@
+[
+  {
+    "lead": {
+      "id": "E001",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "We'd like a demo this month and pricing for Gulfline Freight."
+    },
+    "language": "en",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E002",
+      "name": "Faisal",
+      "email": "faisal@souqcart.example",
+      "company": "SouqCart",
+      "role": "Head of Logistics",
+      "source": "web_form",
+      "country": "SA",
+      "timezone": "Asia/Riyadh",
+      "message": "We'd like a demo this month and pricing for SouqCart."
+    },
+    "language": "en",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E003",
+      "name": "Sana",
+      "email": "sana@indusmart.example",
+      "company": "Indus Mart",
+      "role": "Supply Chain Manager",
+      "source": "web_form",
+      "country": "PK",
+      "timezone": "Asia/Karachi",
+      "message": "What exactly does your product do?"
+    },
+    "language": "en",
+    "category": "curious",
+    "expect": {
+      "tier": "warm",
+      "rep": "ayesha",
+      "alert": false,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E004",
+      "name": "Oliver",
+      "email": "oliver@harbourway.example",
+      "company": "Harbourway Logistics",
+      "role": "COO",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "What exactly does your product do?"
+    },
+    "language": "en",
+    "category": "curious",
+    "expect": {
+      "tier": "hot",
+      "rep": "ayesha",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E005",
+      "name": "Priya",
+      "email": "priya@peakparcel.example",
+      "company": "PeakParcel",
+      "role": "VP Supply Chain",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/Los_Angeles",
+      "message": "We'd like a demo this month and pricing for PeakParcel."
+    },
+    "language": "en",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "daniel",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E006",
+      "name": "Tom",
+      "email": "tom@cornerbakery.example",
+      "company": "Corner Bakery Co",
+      "role": "Owner",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/New_York",
+      "message": "What exactly does your product do?"
+    },
+    "language": "en",
+    "category": "curious",
+    "expect": {
+      "tier": "cold",
+      "rep": "daniel",
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E007",
+      "name": "Jess",
+      "email": "jess@pixelpets.example",
+      "company": "Pixel Pets",
+      "role": "Marketing Assistant",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "What exactly does your product do?"
+    },
+    "language": "en",
+    "category": "curious",
+    "expect": {
+      "tier": "cold",
+      "rep": "ayesha",
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E008",
+      "name": "Alex",
+      "email": "alex@routewise.example",
+      "company": "RouteWise",
+      "role": "Product Analyst",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "We'd like a demo this month and pricing for RouteWise."
+    },
+    "language": "en",
+    "category": "competitor",
+    "expect": {
+      "tier": "disqualified",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E009",
+      "name": "Visitor",
+      "email": "visitor@gmail.com",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC",
+      "message": "I'm a student working on my thesis about logistics software, can you share data?"
+    },
+    "language": "en",
+    "category": "student",
+    "expect": {
+      "tier": "disqualified",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E010",
+      "name": "Visitor",
+      "email": "visitor@gmail.com",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC",
+      "message": "SEO services and backlinks for your site, guest post only $40"
+    },
+    "language": "en",
+    "category": "spam",
+    "expect": {
+      "tier": "spam",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": false,
+      "meeting": false,
+      "crm": false
+    }
+  },
+  {
+    "lead": {
+      "id": "E011",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "We'd like a demo this month and pricing for Gulfline Freight."
+    },
+    "language": "en",
+    "category": "booking_valid",
+    "followup": "Wednesday 4 November at 10:00 Dubai time works.",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": true,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E012",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "We'd like a demo this month and pricing for Gulfline Freight."
+    },
+    "language": "en",
+    "category": "booking_invalid",
+    "followup": "Can we do Wednesday at 8pm Dubai time?",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E013",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "نرغب في عرض توضيحي هذا الشهر ومعرفة السعر لشركة Gulfline Freight."
+    },
+    "language": "ar",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E014",
+      "name": "Faisal",
+      "email": "faisal@souqcart.example",
+      "company": "SouqCart",
+      "role": "Head of Logistics",
+      "source": "web_form",
+      "country": "SA",
+      "timezone": "Asia/Riyadh",
+      "message": "نرغب في عرض توضيحي هذا الشهر ومعرفة السعر لشركة SouqCart."
+    },
+    "language": "ar",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E015",
+      "name": "Sana",
+      "email": "sana@indusmart.example",
+      "company": "Indus Mart",
+      "role": "Supply Chain Manager",
+      "source": "web_form",
+      "country": "PK",
+      "timezone": "Asia/Karachi",
+      "message": "ما الذي يفعله منتجكم بالضبط؟"
+    },
+    "language": "ar",
+    "category": "curious",
+    "expect": {
+      "tier": "warm",
+      "rep": "ayesha",
+      "alert": false,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E016",
+      "name": "Oliver",
+      "email": "oliver@harbourway.example",
+      "company": "Harbourway Logistics",
+      "role": "COO",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "ما الذي يفعله منتجكم بالضبط؟"
+    },
+    "language": "ar",
+    "category": "curious",
+    "expect": {
+      "tier": "hot",
+      "rep": "ayesha",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E017",
+      "name": "Priya",
+      "email": "priya@peakparcel.example",
+      "company": "PeakParcel",
+      "role": "VP Supply Chain",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/Los_Angeles",
+      "message": "نرغب في عرض توضيحي هذا الشهر ومعرفة السعر لشركة PeakParcel."
+    },
+    "language": "ar",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "daniel",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E018",
+      "name": "Tom",
+      "email": "tom@cornerbakery.example",
+      "company": "Corner Bakery Co",
+      "role": "Owner",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/New_York",
+      "message": "ما الذي يفعله منتجكم بالضبط؟"
+    },
+    "language": "ar",
+    "category": "curious",
+    "expect": {
+      "tier": "cold",
+      "rep": "daniel",
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E019",
+      "name": "Jess",
+      "email": "jess@pixelpets.example",
+      "company": "Pixel Pets",
+      "role": "Marketing Assistant",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "ما الذي يفعله منتجكم بالضبط؟"
+    },
+    "language": "ar",
+    "category": "curious",
+    "expect": {
+      "tier": "cold",
+      "rep": "ayesha",
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E020",
+      "name": "Alex",
+      "email": "alex@routewise.example",
+      "company": "RouteWise",
+      "role": "Product Analyst",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "نرغب في عرض توضيحي هذا الشهر ومعرفة السعر لشركة RouteWise."
+    },
+    "language": "ar",
+    "category": "competitor",
+    "expect": {
+      "tier": "disqualified",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E021",
+      "name": "Visitor",
+      "email": "visitor@gmail.com",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC",
+      "message": "I'm a student working on my thesis, can you help?"
+    },
+    "language": "ar",
+    "category": "student",
+    "expect": {
+      "tier": "disqualified",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E022",
+      "name": "Visitor",
+      "email": "visitor@gmail.com",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC",
+      "message": "SEO services and backlinks, guest post $40"
+    },
+    "language": "ar",
+    "category": "spam",
+    "expect": {
+      "tier": "spam",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": false,
+      "meeting": false,
+      "crm": false
+    }
+  },
+  {
+    "lead": {
+      "id": "E023",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "نرغب في عرض توضيحي هذا الشهر ومعرفة السعر لشركة Gulfline Freight."
+    },
+    "language": "ar",
+    "category": "booking_valid",
+    "followup": "الأربعاء 4 نوفمبر الساعة 10:00 بتوقيت دبي مناسب.",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": true,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E024",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "نرغب في عرض توضيحي هذا الشهر ومعرفة السعر لشركة Gulfline Freight."
+    },
+    "language": "ar",
+    "category": "booking_invalid",
+    "followup": "هل يمكن يوم الأربعاء الساعة 8 مساءً بتوقيت دبي؟",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E025",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "ہمیں اس مہینے Gulfline Freight کے لیے ڈیمو اور قیمت کی معلومات چاہیے۔"
+    },
+    "language": "ur",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E026",
+      "name": "Faisal",
+      "email": "faisal@souqcart.example",
+      "company": "SouqCart",
+      "role": "Head of Logistics",
+      "source": "web_form",
+      "country": "SA",
+      "timezone": "Asia/Riyadh",
+      "message": "ہمیں اس مہینے SouqCart کے لیے ڈیمو اور قیمت کی معلومات چاہیے۔"
+    },
+    "language": "ur",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E027",
+      "name": "Sana",
+      "email": "sana@indusmart.example",
+      "company": "Indus Mart",
+      "role": "Supply Chain Manager",
+      "source": "web_form",
+      "country": "PK",
+      "timezone": "Asia/Karachi",
+      "message": "آپ کا پروڈکٹ اصل میں کیا کرتا ہے؟"
+    },
+    "language": "ur",
+    "category": "curious",
+    "expect": {
+      "tier": "warm",
+      "rep": "ayesha",
+      "alert": false,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E028",
+      "name": "Oliver",
+      "email": "oliver@harbourway.example",
+      "company": "Harbourway Logistics",
+      "role": "COO",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "آپ کا پروڈکٹ اصل میں کیا کرتا ہے؟"
+    },
+    "language": "ur",
+    "category": "curious",
+    "expect": {
+      "tier": "hot",
+      "rep": "ayesha",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E029",
+      "name": "Priya",
+      "email": "priya@peakparcel.example",
+      "company": "PeakParcel",
+      "role": "VP Supply Chain",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/Los_Angeles",
+      "message": "ہمیں اس مہینے PeakParcel کے لیے ڈیمو اور قیمت کی معلومات چاہیے۔"
+    },
+    "language": "ur",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "daniel",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E030",
+      "name": "Tom",
+      "email": "tom@cornerbakery.example",
+      "company": "Corner Bakery Co",
+      "role": "Owner",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/New_York",
+      "message": "آپ کا پروڈکٹ اصل میں کیا کرتا ہے؟"
+    },
+    "language": "ur",
+    "category": "curious",
+    "expect": {
+      "tier": "cold",
+      "rep": "daniel",
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E031",
+      "name": "Jess",
+      "email": "jess@pixelpets.example",
+      "company": "Pixel Pets",
+      "role": "Marketing Assistant",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "آپ کا پروڈکٹ اصل میں کیا کرتا ہے؟"
+    },
+    "language": "ur",
+    "category": "curious",
+    "expect": {
+      "tier": "cold",
+      "rep": "ayesha",
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E032",
+      "name": "Alex",
+      "email": "alex@routewise.example",
+      "company": "RouteWise",
+      "role": "Product Analyst",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "ہمیں اس مہینے RouteWise کے لیے ڈیمو اور قیمت کی معلومات چاہیے۔"
+    },
+    "language": "ur",
+    "category": "competitor",
+    "expect": {
+      "tier": "disqualified",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E033",
+      "name": "Visitor",
+      "email": "visitor@gmail.com",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC",
+      "message": "I'm a student working on my thesis, can you help?"
+    },
+    "language": "ur",
+    "category": "student",
+    "expect": {
+      "tier": "disqualified",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E034",
+      "name": "Visitor",
+      "email": "visitor@gmail.com",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC",
+      "message": "SEO services and backlinks, guest post $40"
+    },
+    "language": "ur",
+    "category": "spam",
+    "expect": {
+      "tier": "spam",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": false,
+      "meeting": false,
+      "crm": false
+    }
+  },
+  {
+    "lead": {
+      "id": "E035",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "ہمیں اس مہینے Gulfline Freight کے لیے ڈیمو اور قیمت کی معلومات چاہیے۔"
+    },
+    "language": "ur",
+    "category": "booking_valid",
+    "followup": "بدھ 4 نومبر صبح 10 بجے دبئی وقت ٹھیک ہے۔",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": true,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E036",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "ہمیں اس مہینے Gulfline Freight کے لیے ڈیمو اور قیمت کی معلومات چاہیے۔"
+    },
+    "language": "ur",
+    "category": "booking_invalid",
+    "followup": "کیا بدھ رات 8 بجے دبئی وقت ہو سکتا ہے؟",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E037",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "Humein is mahine Gulfline Freight ke liye demo aur price ki maloomat chahiye."
+    },
+    "language": "roman_ur",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E038",
+      "name": "Faisal",
+      "email": "faisal@souqcart.example",
+      "company": "SouqCart",
+      "role": "Head of Logistics",
+      "source": "web_form",
+      "country": "SA",
+      "timezone": "Asia/Riyadh",
+      "message": "Humein is mahine SouqCart ke liye demo aur price ki maloomat chahiye."
+    },
+    "language": "roman_ur",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E039",
+      "name": "Sana",
+      "email": "sana@indusmart.example",
+      "company": "Indus Mart",
+      "role": "Supply Chain Manager",
+      "source": "web_form",
+      "country": "PK",
+      "timezone": "Asia/Karachi",
+      "message": "Aap ka product asal mein kya karta hai?"
+    },
+    "language": "roman_ur",
+    "category": "curious",
+    "expect": {
+      "tier": "warm",
+      "rep": "ayesha",
+      "alert": false,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E040",
+      "name": "Oliver",
+      "email": "oliver@harbourway.example",
+      "company": "Harbourway Logistics",
+      "role": "COO",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "Aap ka product asal mein kya karta hai?"
+    },
+    "language": "roman_ur",
+    "category": "curious",
+    "expect": {
+      "tier": "hot",
+      "rep": "ayesha",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E041",
+      "name": "Priya",
+      "email": "priya@peakparcel.example",
+      "company": "PeakParcel",
+      "role": "VP Supply Chain",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/Los_Angeles",
+      "message": "Humein is mahine PeakParcel ke liye demo aur price ki maloomat chahiye."
+    },
+    "language": "roman_ur",
+    "category": "demo",
+    "expect": {
+      "tier": "hot",
+      "rep": "daniel",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E042",
+      "name": "Tom",
+      "email": "tom@cornerbakery.example",
+      "company": "Corner Bakery Co",
+      "role": "Owner",
+      "source": "web_form",
+      "country": "US",
+      "timezone": "America/New_York",
+      "message": "Aap ka product asal mein kya karta hai?"
+    },
+    "language": "roman_ur",
+    "category": "curious",
+    "expect": {
+      "tier": "cold",
+      "rep": "daniel",
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E043",
+      "name": "Jess",
+      "email": "jess@pixelpets.example",
+      "company": "Pixel Pets",
+      "role": "Marketing Assistant",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "Aap ka product asal mein kya karta hai?"
+    },
+    "language": "roman_ur",
+    "category": "curious",
+    "expect": {
+      "tier": "cold",
+      "rep": "ayesha",
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E044",
+      "name": "Alex",
+      "email": "alex@routewise.example",
+      "company": "RouteWise",
+      "role": "Product Analyst",
+      "source": "web_form",
+      "country": "GB",
+      "timezone": "Europe/London",
+      "message": "Humein is mahine RouteWise ke liye demo aur price ki maloomat chahiye."
+    },
+    "language": "roman_ur",
+    "category": "competitor",
+    "expect": {
+      "tier": "disqualified",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E045",
+      "name": "Visitor",
+      "email": "visitor@gmail.com",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC",
+      "message": "Main student hoon, thesis ke liye help chahiye. I'm a student."
+    },
+    "language": "roman_ur",
+    "category": "student",
+    "expect": {
+      "tier": "disqualified",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E046",
+      "name": "Visitor",
+      "email": "visitor@gmail.com",
+      "company": "",
+      "role": "",
+      "source": "web_form",
+      "country": "",
+      "timezone": "UTC",
+      "message": "SEO services aur backlinks, guest post sirf $40"
+    },
+    "language": "roman_ur",
+    "category": "spam",
+    "expect": {
+      "tier": "spam",
+      "rep": null,
+      "alert": false,
+      "offer_slots": false,
+      "reply": false,
+      "meeting": false,
+      "crm": false
+    }
+  },
+  {
+    "lead": {
+      "id": "E047",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "Humein is mahine Gulfline Freight ke liye demo aur price ki maloomat chahiye."
+    },
+    "language": "roman_ur",
+    "category": "booking_valid",
+    "followup": "Budh 4 November subah 10 baje Dubai time theek hai.",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": true,
+      "crm": true
+    }
+  },
+  {
+    "lead": {
+      "id": "E048",
+      "name": "Hana",
+      "email": "hana@gulfline.example",
+      "company": "Gulfline Freight",
+      "role": "Director of Operations",
+      "source": "web_form",
+      "country": "AE",
+      "timezone": "Asia/Dubai",
+      "message": "Humein is mahine Gulfline Freight ke liye demo aur price ki maloomat chahiye."
+    },
+    "language": "roman_ur",
+    "category": "booking_invalid",
+    "followup": "Kya Budh raat 8 baje Dubai time ho sakta hai?",
+    "expect": {
+      "tier": "hot",
+      "rep": "sara",
+      "alert": true,
+      "offer_slots": true,
+      "reply": true,
+      "meeting": false,
+      "crm": true
+    }
+  }
+]
