@@ -30,11 +30,12 @@ export const profile = {
 };
 
 // PLACEHOLDER numbers: replace with real figures
-export const metrics = [
-  { value: 34, suffix: "+", label: "Agents in production" },
-  { value: 21, suffix: "", label: "Customer deployments" },
-  { value: 18, suffix: "k", label: "Hours returned / year" },
-  { value: 98.4, suffix: "%", label: "Task success, monitored", decimals: 1 },
+// Real numbers from the six live projects' test and eval suites.
+export const metrics: { value: number; suffix: string; label: string; decimals?: number }[] = [
+  { value: 6, suffix: "", label: "Agent projects live" },
+  { value: 90, suffix: "", label: "Unit tests passing" },
+  { value: 151, suffix: "", label: "Eval cases, all measured" },
+  { value: 40, suffix: "/40", label: "Security attacks stopped" },
 ];
 
 export const pillars = [
@@ -74,142 +75,92 @@ export type Deployment = {
   placeholder?: boolean;
 };
 
-// PLACEHOLDER deployments: replace with real projects and links
+// The six live agent projects. Numbers are measured by each project's own test and eval suites.
+const GH = "https://github.com/tahirbaba/Tahir-s-Portfolio/tree/claude/quirky-volta-w80yvp/projects/";
 export const deployments: Deployment[] = [
   {
-    id: "dep-01",
-    title: "Autonomous support desk",
-    codename: "HELPDESK-01",
-    client: "D2C e-commerce brand",
-    sector: "Customer support",
-    location: "Austin, US",
-    year: "2025",
-    duration: "7 weeks",
-    mode: "Remote, embedded with CX team",
-    problem:
-      "11,000 tickets a month, a six-hour first response time and a support team drowning in refunds and 'where is my order' requests.",
+    id: "relay", title: "Relay: multilingual support agent", codename: "RELAY", client: "support teams in multilingual e-commerce",
+    sector: "Customer support", location: "Live demo", year: "2026", duration: "29/29 tests", mode: "Next.js · TypeScript · Claude",
+    problem: "Support bots promise refunds policy doesn't allow, share order details with whoever asks, and fail customers who write in Arabic or Urdu.",
     shipped: [
-      "Five-agent support system: triage, order lookup, policy RAG, resolver and human review",
-      "Refunds and replacements executed within policy limits, with every action logged",
-      "Eval suite of 600 historical tickets gating every prompt and model change",
+      "Claude tool-use agent replying in English, Arabic, Urdu and Roman Urdu",
+      "Refund limits, 30-day windows and identity checks enforced in code; refunds above 100 USD go to an approval inbox",
+      "116-case eval suite in four languages with an LLM judge, plus a manager dashboard and approval inbox",
     ],
-    graph: ["Triage", "Order lookup", "Policy RAG", "Resolver", "Human review"],
-    impact: [
-      { value: "71%", label: "tickets resolved end to end" },
-      { value: "4 min", label: "median first response, from 6 h" },
-      { value: "4.8/5", label: "CSAT on agent replies" },
-    ],
-    stack: ["LangGraph", "Claude", "pgvector", "Shopify API", "Zendesk", "Langfuse"],
-    links: [{ label: "Case study", href: "#" }, { label: "Architecture", href: "#" }],
-    placeholder: true,
+    graph: ["Verify identity", "Check policy", "Act within limits", "Approval or handoff"],
+    impact: [{ value: "29/29", label: "rule and agent-loop tests" }, { value: "116", label: "eval cases in 4 languages" }, { value: "4", label: "languages incl. Urdu Nastaliq" }],
+    stack: ["Next.js", "TypeScript", "Claude", "Tool use", "HMAC sessions"],
+    links: [{ label: "Live demo", href: "https://relay-support-agent.vercel.app" }, { label: "Case study", href: "https://relay-support-agent.vercel.app/case-study" }, { label: "Code", href: GH + "support-agent" }],
   },
   {
-    id: "dep-02",
-    title: "Invoice-to-ERP agent",
-    codename: "LEDGER-07",
-    client: "Freight forwarder",
-    sector: "Finance operations",
-    location: "Dubai, UAE",
-    year: "2025",
-    duration: "5 weeks",
-    mode: "On-site week one, then remote",
-    problem:
-      "Accounts payable keyed 1,300 invoices a month by hand from PDFs and email, with frequent PO mismatches and late-payment penalties.",
+    id: "leadline", title: "Leadline: speed-to-lead agent", codename: "LEADLINE", client: "B2B sales teams",
+    sector: "Sales", location: "Live demo", year: "2026", duration: "26/26 tests", mode: "Python · FastAPI · Next.js",
+    problem: "Inbound leads wait hours on three channels, reps chase bad fits, and time zones break meeting bookings.",
     shipped: [
-      "Invoice agent that extracts, matches to purchase orders and validates totals",
-      "Exception queue with reasons, so finance only reviews what needs judgment",
-      "Direct posting to the ERP through a permissioned MCP server",
+      "Lead scoring against an ideal customer profile in Python, with every point explained",
+      "Region routing, hot-lead alerts and meeting slots in the lead's time zone, validated against rep hours",
+      "48-lead eval suite in four languages; tests caught a real midnight wrap-around booking bug",
     ],
-    graph: ["Extract", "Match PO", "Validate", "Post to ERP"],
-    impact: [
-      { value: "92%", label: "invoices processed hands-free" },
-      { value: "−80%", label: "late-payment penalties" },
-      { value: "3 FTE", label: "hours redeployed to analysis" },
-    ],
-    stack: ["OpenAI Agents SDK", "MCP", "FastAPI", "Odoo", "OCR", "Temporal"],
-    links: [{ label: "Case study", href: "#" }],
-    placeholder: true,
+    graph: ["Score", "Route", "Reply", "Book", "Log to CRM"],
+    impact: [{ value: "26/26", label: "pytest tests" }, { value: "48", label: "eval leads in 4 languages" }, { value: "1", label: "real scheduling bug caught by tests" }],
+    stack: ["Python", "FastAPI", "zoneinfo", "Claude", "Next.js"],
+    links: [{ label: "Live demo", href: "https://leadline-speed-to-lead.vercel.app" }, { label: "Case study", href: "https://leadline-speed-to-lead.vercel.app/case-study" }, { label: "Code", href: GH + "speed-to-lead" }],
   },
   {
-    id: "dep-03",
-    title: "Lead research & outreach crew",
-    codename: "PIPELINE-12",
-    client: "B2B SaaS scale-up",
-    sector: "Sales",
-    location: "London, UK",
-    year: "2025",
-    duration: "4 weeks",
-    mode: "Remote, embedded with RevOps",
-    problem:
-      "Reps spent 30 minutes researching each inbound lead and wrote generic first emails that rarely booked meetings.",
+    id: "gatekeeper", title: "Gatekeeper: secure MCP gateway", codename: "GATEKEEPER", client: "security and platform teams rolling out agents",
+    sector: "AI security", location: "Live playground", year: "2026", duration: "40/40 attacks stopped", mode: "Python · FastAPI · MCP",
+    problem: "Teams give AI agents broad credentials; one manipulated agent can read salaries, drop tables or email data out.",
     shipped: [
-      "Research crew that enriches each lead from the web, CRM and product usage",
-      "Fit scoring against the ideal customer profile, with reasons",
-      "Personalised first emails drafted for one-click rep approval in HubSpot",
+      "MCP server (initialize, tools/list, tools/call) with per-agent keys and scopes",
+      "Read-only SQL guard via SQLite's authorizer, path policy, PII masking by value, prompt-injection quarantine, approvals and audit log",
+      "Live attack playground that runs without any AI; tests caught a PII leak through column aliases",
     ],
-    graph: ["Enrich", "Score fit", "Draft", "Rep approves"],
-    impact: [
-      { value: "3×", label: "qualified meetings booked" },
-      { value: "25 min", label: "saved per lead" },
-      { value: "0", label: "emails sent without approval" },
-    ],
-    stack: ["CrewAI", "Claude", "Tavily", "HubSpot", "n8n"],
-    links: [{ label: "Case study", href: "#" }],
-    placeholder: true,
+    graph: ["Authenticate", "Scope", "Guard arguments", "Approve", "Filter output", "Audit"],
+    impact: [{ value: "40/40", label: "attacks stopped" }, { value: "9/9", label: "legitimate calls allowed" }, { value: "12/12", label: "pytest tests" }],
+    stack: ["Python", "FastAPI", "MCP", "SQLite authorizer", "Claude"],
+    links: [{ label: "Try to break it", href: "https://gatekeeper-mcp-gateway.vercel.app/demo" }, { label: "Security results", href: "https://gatekeeper-mcp-gateway.vercel.app/evals" }, { label: "Code", href: GH + "mcp-gateway" }],
   },
   {
-    id: "dep-04",
-    title: "Bilingual voice booking agent",
-    codename: "VOICE-03",
-    client: "Real estate brokerage",
-    sector: "Voice agents",
-    location: "Riyadh, KSA",
-    year: "2024",
-    duration: "6 weeks",
-    mode: "Remote, bilingual rollout",
-    problem:
-      "Half of after-hours property calls went to voicemail and most of those buyers never called back.",
+    id: "ledger", title: "Ledger: accounts-payable exception agent", codename: "LEDGER", client: "finance and AP teams",
+    sector: "Finance operations", location: "Live demo", year: "2026", duration: "30/30 controls", mode: "Python · FastAPI · Next.js",
+    problem: "Invoices in three languages are keyed in by hand; price creep, short deliveries, wrong VAT and bank-change fraud are caught late.",
     shipped: [
-      "Arabic and English voice agent that qualifies buyers and books viewings",
-      "Calendar and CRM write-back with call summaries for agents",
-      "Escalation to a human broker on high-intent or sensitive calls",
+      "Claude reads invoices into a strict schema, copying what is printed, mistakes included",
+      "Python controls: 3-way match, duplicates, bank-change fraud hold, VAT/GST, arithmetic and approval limits",
+      "Live controls checker that runs without AI, an exception queue and vendor drafts",
     ],
-    graph: ["Speech", "Qualify", "Book viewing", "CRM log"],
-    impact: [
-      { value: "24/7", label: "call coverage" },
-      { value: "+38%", label: "viewings booked" },
-      { value: "92%", label: "calls handled without transfer" },
-    ],
-    stack: ["OpenAI Realtime", "Twilio", "Vapi", "Airtable", "Google Calendar"],
-    links: [{ label: "Case study", href: "#" }],
-    placeholder: true,
+    graph: ["Read invoice", "3-way match", "Duplicates", "Bank check", "Tax", "Post or explain"],
+    impact: [{ value: "30/30", label: "control decisions correct" }, { value: "9/9", label: "pytest tests" }, { value: "5", label: "outcomes, never a guess" }],
+    stack: ["Python", "FastAPI", "Claude", "Strict tools", "Next.js"],
+    links: [{ label: "Live demo", href: "https://ledger-ap-agent.vercel.app" }, { label: "Case study", href: "https://ledger-ap-agent.vercel.app/case-study" }, { label: "Code", href: GH + "ap-exception-agent" }],
   },
   {
-    id: "dep-05",
-    title: "Explainable CV screening agent",
-    codename: "TALENT-02",
-    client: "Recruitment agency",
-    sector: "HR & recruiting",
-    location: "Karachi, PK",
-    year: "2024",
-    duration: "3 weeks",
-    mode: "On-site",
-    problem:
-      "Recruiters screened 400 CVs per role by hand and candidates waited two weeks for a response.",
+    id: "verity", title: "Verity: recruiter integrity copilot", codename: "VERITY", client: "recruiters and HR teams",
+    sector: "HR & recruiting", location: "Live demo", year: "2026", duration: "30/30 fairness checks", mode: "Python · FastAPI · Next.js",
+    problem: "Polished AI-written applications flood recruiters, claims don't add up, and screening tools can react to names and gender.",
     shipped: [
-      "Rubric-based screening agent that explains every score",
-      "Bias checks and a human sign-off before any rejection",
-      "Automatic interview scheduling for the shortlist",
+      "Blind screening: names, contact details, gender, age and marital status removed before the AI reads a CV",
+      "Rubric points only for verbatim quotes verified in code; experience computed from dates",
+      "Consistency checks against the application form and public profile, a verification checklist, and no auto-reject",
     ],
-    graph: ["Parse CV", "Rubric score", "Explain", "Schedule"],
-    impact: [
-      { value: "−80%", label: "screening time" },
-      { value: "2 days", label: "candidate response, from 14" },
-      { value: "100%", label: "decisions explained" },
+    graph: ["Redact", "Cite evidence", "Verify quotes", "Consistency checks", "Recruiter decides"],
+    impact: [{ value: "30/30", label: "integrity and fairness cases" }, { value: "0", label: "score change from name or gender swaps" }, { value: "8/8", label: "pytest tests" }],
+    stack: ["Python", "FastAPI", "Claude", "Counterfactual tests", "Next.js"],
+    links: [{ label: "Live demo", href: "https://verity-recruiter-copilot.vercel.app" }, { label: "Fairness tests", href: "https://verity-recruiter-copilot.vercel.app/evals" }, { label: "Code", href: GH + "recruiter-copilot" }],
+  },
+  {
+    id: "compass", title: "Compass: company knowledge assistant", codename: "COMPASS", client: "IT, HR and every employee",
+    sector: "Enterprise knowledge (RAG)", location: "Live demo", year: "2026", duration: "0 permission leaks", mode: "Python · FastAPI · Next.js",
+    problem: "Answers are buried in documents, chatbots leak restricted content, and old policies get quoted as current.",
+    shipped: [
+      "Permission filtering and superseded-policy removal before ranking, so restricted text never reaches the model",
+      "Answers with section citations verified in code; unverifiable answers become ‘not found’",
+      "Retrieval evals published, including a gate that was tried and reverted because it cut recall",
     ],
-    stack: ["Claude Agent SDK", "MCP", "Google Workspace", "PostgreSQL"],
-    links: [{ label: "Case study", href: "#" }],
-    placeholder: true,
+    graph: ["Filter by role", "Skip outdated", "Rank", "Answer with ids", "Verify citations"],
+    impact: [{ value: "100%", label: "recall@3 on 26 questions" }, { value: "0", label: "permission leaks" }, { value: "6/6", label: "pytest tests" }],
+    stack: ["Python", "FastAPI", "BM25", "Claude", "Next.js"],
+    links: [{ label: "Live demo", href: "https://compass-knowledge-assistant.vercel.app" }, { label: "Retrieval results", href: "https://compass-knowledge-assistant.vercel.app/evals" }, { label: "Code", href: GH + "knowledge-assistant" }],
   },
 ];
 
@@ -285,7 +236,7 @@ export function knowledgePack(): string {
   const d = deployments
     .map(
       (x) =>
-        `- ${x.codename} (${x.sector}, ${x.client}, ${x.location}, ${x.year}, ${x.duration}): Problem: ${x.problem} Shipped: ${x.shipped.join("; ")}. Impact: ${x.impact.map((i) => `${i.value} ${i.label}`).join("; ")}. Stack: ${x.stack.join(", ")}.`,
+        `- ${x.title} (${x.sector}, built for ${x.client}; live at ${x.links[0].href}; ${x.duration}): Problem: ${x.problem} Shipped: ${x.shipped.join("; ")}. Impact: ${x.impact.map((i) => `${i.value} ${i.label}`).join("; ")}. Stack: ${x.stack.join(", ")}.`,
     )
     .join("\n");
   return [

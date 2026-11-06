@@ -72,10 +72,10 @@ export default function Page() {
         {/* Deployments */}
         <section id="deployments" className="gutter mx-auto max-w-[1180px] pb-28 sm:pb-36">
           <SectionHead
-            eyebrow="Field deployments"
-            title="Reports from"
-            accent="the field."
-            lead="Every engagement ends as a deployment report: the situation I walked into, what I shipped, and the number the customer measured. Client names are withheld."
+            eyebrow="Live projects"
+            title="Six agents."
+            accent="All live."
+            lead="Each one solves a problem companies are paying to fix in 2026, runs live with a demo you can try, and ships with its own tests and evals. The businesses and data in the demos are fictional; every number below is measured."
           />
           <Reveal><Deployments /></Reveal>
         </section>

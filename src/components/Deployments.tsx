@@ -26,7 +26,7 @@ export default function Deployments() {
                 <span>{x.year}</span>
               </span>
               <span className="mt-2 block text-[16px] font-medium">{x.title}</span>
-              <span className="mt-0.5 block text-[13px] text-muted">{x.sector} · {x.location}</span>
+              <span className="mt-0.5 block text-[13px] text-muted">{x.sector} · {x.duration}</span>
               {on && <motion.span layoutId="dep-bar" className="absolute inset-y-3 left-0 w-[3px] rounded-full bg-ice" />}
             </button>
           );
@@ -43,13 +43,12 @@ export default function Deployments() {
           >
             <header className="flex flex-col gap-4">
               <div className="flex flex-wrap items-center gap-2 font-mono text-[11.5px] text-muted">
-                <span className="rounded-md bg-amber/10 px-2 py-1 text-amber">DEPLOYMENT REPORT</span>
+                <span className="rounded-md bg-amber/10 px-2 py-1 text-amber">LIVE PROJECT</span>
                 <span className="rounded-md border border-line-2 px-2 py-1">{d.codename}</span>
-                <span className="rounded-md border border-line-2 px-2 py-1">{d.location}</span>
-                <span className="rounded-md border border-line-2 px-2 py-1">{d.duration}</span>
+                                <span className="rounded-md border border-line-2 px-2 py-1">{d.duration}</span>
                 <span className="rounded-md border border-line-2 px-2 py-1">{d.mode}</span>
               </div>
-              <p className="text-[14px] text-muted">{d.sector} · {d.client}</p>
+              <p className="text-[14px] text-muted">{d.sector} · built for {d.client}</p>
               <h3 className="-mt-2 text-[clamp(26px,3.2vw,38px)] font-semibold leading-tight tracking-tight">
                 {d.title}
               </h3>

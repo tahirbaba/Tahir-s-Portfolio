@@ -43,7 +43,7 @@ export default function Hero() {
               <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
             </a>
             <a href="#deployments" className="inline-flex items-center gap-2 rounded-xl border border-line-2 px-5 py-3.5 text-[15px] font-medium transition-colors hover:border-ice hover:text-ice">
-              View field deployments
+              See the six live agents
             </a>
           </motion.div>
         </div>
