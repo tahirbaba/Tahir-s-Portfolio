@@ -13,6 +13,14 @@ const DECISIONS = [
   { q: "Why no AI-writing detector?", a: "They are unreliable and penalise strong writers and non-native speakers. Checkable facts are a better signal than guessing who wrote the words." },
   { q: "Why never auto-reject?", a: "Hiring decisions carry legal and human weight. Verity explains and recommends; the recruiter decides, and the output says so." },
 ];
+const PRIVACY = [
+  ["Data minimisation", "Name, email, phone, city, LinkedIn/GitHub links, gender, age and marital status are masked the moment a CV arrives, before the model sees anything."],
+  ["Re-identification risk", "Employer and university names must stay so recruiters can verify them. Verity lists them as a re-identification risk and never scores them."],
+  ["Audit log", "Every screening records when it ran, the rules version, the model used and exactly what was hidden. Tested in the integrity suite."],
+  ["Retention", "The demo stores nothing: CVs are processed in memory and discarded. In a deployment, retention is a client setting (for example, delete after 30 days), agreed with the DPO."],
+  ["Human in the loop", "There is no reject button. Every outcome is a recommendation that waits for a recruiter, who can always override it."],
+  ["Structural bias", "Career gaps are noted but never scored, and the checklist tells recruiters not to ask why: family and health reasons are private."],
+];
 export default function CaseStudy() {
   return (
     <>
@@ -28,6 +36,9 @@ export default function CaseStudy() {
         </section>
         <section className="flex flex-col gap-5"><h2 className="text-[30px] font-extrabold">Key decisions</h2><div className="grid gap-4 md:grid-cols-2">{DECISIONS.map((d) => <div key={d.q} className="panel p-6"><h3 className="text-[17px] font-bold">{d.q}</h3><p className="mt-2 text-[14.5px] leading-relaxed text-muted">{d.a}</p></div>)}</div></section>
         <section className="flex flex-col gap-4"><h2 className="text-[30px] font-extrabold">Results</h2><div className="grid gap-4 md:grid-cols-2">{[["Integrity and fairness cases", `${integrity.passed}/${integrity.total}`], ["Unit tests", `${rules.passed}/${rules.total}`]].map(([k, v]) => <div key={k} className="panel p-6"><p className="font-display text-[40px] font-extrabold">{v}</p><p className="text-[14px] text-muted">{k}</p></div>)}</div><Link href="/evals" className="self-start text-[14.5px] font-semibold text-ice hover:underline">See every case →</Link></section>
+        <section className="flex flex-col gap-5"><h2 className="text-[30px] font-extrabold">Privacy and governance</h2>
+          <p className="max-w-[68ch] text-[15px] leading-relaxed text-muted">Recruitment AI counts as high-risk under the EU AI Act, and CVs are personal data under GDPR and Saudi PDPL. Version 1.1 added these controls after an independent privacy and governance review.</p>
+          <div className="grid gap-4 md:grid-cols-2">{PRIVACY.map(([t, b]) => <div key={t} className="panel p-6"><h3 className="text-[17px] font-bold">{t}</h3><p className="mt-2 text-[14.5px] leading-relaxed text-muted">{b}</p></div>)}</div></section>
         <section className="flex flex-col gap-4"><h2 className="text-[30px] font-extrabold">How I'd roll it out in your company</h2>
           <ol>{[["Week 0", "Embed", "Sit with recruiters, agree the rubric with hiring managers, and review data-protection and local hiring rules."], ["Week 1", "Shadow", "Verity screens in parallel; compare its flags and recommendations with recruiters' own."], ["Week 2", "Checklists live", "Recruiters use the verification checklist on real pipelines; nothing is automated."], ["Weeks 3–4", "Fairness audit", "Run counterfactual tests on real (consented) data; publish the results internally."], ["Week 6", "Hand over", "Dashboard, audit log and a quarterly fairness review owned by HR."]].map(([w, t, b]) => <li key={w} className="grid gap-2 border-t border-line py-5 sm:grid-cols-[120px_180px_1fr] sm:gap-6"><span className="font-mono text-[12.5px] text-ice">{w}</span><span className="text-[16px] font-bold">{t}</span><span className="text-[14.5px] leading-relaxed text-muted">{b}</span></li>)}</ol>
         </section>

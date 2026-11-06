@@ -31,6 +31,13 @@ export default function Assessment({ r, delay = 0 }: { r: Result; delay?: number
           <ul className="flex flex-col gap-1.5">{r.flags.map((f, i) => <motion.li key={i} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: delay + i * 0.1 }} className={`rounded-xl border px-3 py-2 text-[12.5px] ${SEV[f.severity]}`}><span className="font-mono text-[10px] uppercase">{f.severity === "info" ? "note" : f.severity}</span> · {f.detail}</motion.li>)}</ul>)}
       </div>
       {r.checklist.length > 0 && <div><p className="mb-2 font-mono text-[10.5px] uppercase tracking-wider text-dim">Verification checklist for the recruiter</p><ul className="flex flex-col gap-1">{r.checklist.map((c, i) => <li key={i} className="flex gap-2 text-[12.5px]"><span className="text-ice">☐</span><span>{c.item}</span></li>)}</ul></div>}
+      {r.audit && <details className="rounded-xl border border-line bg-panel px-3 py-2 text-[12px]"><summary className="cursor-pointer font-mono text-[10.5px] uppercase tracking-wider text-dim">Audit log · privacy record for this screening</summary>
+        <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 font-mono text-[11.5px]">
+          <dt className="text-dim">time</dt><dd>{r.audit.at}</dd><dt className="text-dim">rules</dt><dd>{r.audit.rules_version}</dd><dt className="text-dim">model</dt><dd>{r.audit.model}</dd>
+          <dt className="text-dim">hidden before AI</dt><dd>{Object.entries(r.audit.redacted_before_model).map(([k, v]) => `${k.replace("_", " ")} ×${v}`).join(", ")}</dd>
+          <dt className="text-dim">stored</dt><dd className="text-ok">{r.audit.stored ? "yes" : "no"}</dd><dt className="text-dim">retention</dt><dd className="font-sans">{r.audit.retention}</dd>
+          <dt className="text-dim">decision</dt><dd>{r.audit.decision}</dd></dl>
+        {r.audit.reidentification_notes.map((n) => <p key={n} className="mt-2 text-[12px] text-amber">Re-identification risk: {n}</p>)}</details>}
       <div className={`rounded-xl border px-4 py-3 ${REC[r.recommendation].cls}`}><div className="font-mono text-[11.5px] font-semibold">{REC[r.recommendation].label}</div><div className="mt-0.5 text-[13px]">{r.why}</div><div className="mt-1 font-mono text-[10.5px] opacity-80">Decision made by {r.decided_by}</div></div>
     </div>
   );

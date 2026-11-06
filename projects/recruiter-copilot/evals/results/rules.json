@@ -1,10 +1,20 @@
 {
-  "runAt": "2026-11-06T05:24:38Z",
-  "total": 8,
-  "passed": 8,
+  "runAt": "2026-11-06T19:19:22Z",
+  "total": 10,
+  "passed": 10,
   "tests": [
     {
       "name": "redaction removes protected attributes",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "redaction removes profile links",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "audit record and retention",
       "file": "test_verity",
       "pass": true
     },

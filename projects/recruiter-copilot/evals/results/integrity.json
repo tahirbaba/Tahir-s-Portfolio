@@ -1,7 +1,7 @@
 {
-  "runAt": "2026-11-06T05:20:29Z",
-  "total": 30,
-  "passed": 30,
+  "runAt": "2026-11-06T19:19:32Z",
+  "total": 35,
+  "passed": 35,
   "results": [
     {
       "id": "REC-amina",
@@ -182,6 +182,36 @@
       "category": "Fairness",
       "pass": true,
       "detail": "\u201cNon-binary, 38, divorced\u201d fully removed"
+    },
+    {
+      "id": "PRIV-1",
+      "category": "Privacy",
+      "pass": true,
+      "detail": "LinkedIn and GitHub links are removed, so the model can't look the person up"
+    },
+    {
+      "id": "PRIV-2",
+      "category": "Privacy",
+      "pass": true,
+      "detail": "the city on the contact line is removed with the rest of the contact details"
+    },
+    {
+      "id": "PRIV-3",
+      "category": "Privacy",
+      "pass": true,
+      "detail": "every screening writes an audit record of what was hidden; nothing is stored"
+    },
+    {
+      "id": "PRIV-4",
+      "category": "Privacy",
+      "pass": true,
+      "detail": "a career gap is never questioned: the checklist says not to ask for family or health reasons"
+    },
+    {
+      "id": "PRIV-5",
+      "category": "Privacy",
+      "pass": true,
+      "detail": "no decision is automated; every outcome waits for a recruiter"
     }
   ]
 }

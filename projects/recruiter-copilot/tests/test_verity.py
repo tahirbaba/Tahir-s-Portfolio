@@ -12,7 +12,21 @@ def test_redaction_removes_protected_attributes():
     r = redact_cv(C["amina"]["cv"], "Amina Yusuf")
     for s in ("Amina", "Yusuf", "amina.yusuf@", "+44", "Female", "34", "married"):
         assert s not in r
-    assert "Snowflake" in r and "London" in r
+    assert "Snowflake" in r and "London" not in r and "[contact details removed]" in r
+
+
+def test_redaction_removes_profile_links():
+    from _lib.rules import redact_with_report
+    cv = "Jane Roe\njane@example.com · linkedin.com/in/jane-roe · Cairo\n\nSee github.com/janeroe and https://janeroe.dev"
+    r, counts = redact_with_report(cv, "Jane Roe")
+    assert "jane" not in r.lower() and "Cairo" not in r and counts["profile_link"] == 3 and counts["location"] == 1
+
+
+def test_audit_record_and_retention():
+    from _lib.rules import audit_record
+    a = audit_record(C["amina"], C["amina"]["profile"], None)
+    assert a["stored"] is False and a["redacted_before_model"]["gender"] == 1 and a["decision"].startswith("pending")
+    assert any("University of Leeds" in n for n in a["reidentification_notes"])
 
 
 def test_years_union_of_intervals():
@@ -60,5 +74,5 @@ def test_api_check_without_model():
     from fastapi.testclient import TestClient
     c = TestClient(index.app)
     r = c.post("/api/py/check", json={"candidate_id": "amina", "claimed_years": 12, "degree_year": 2018}).json()
-    assert any(f["type"] == "years_inflated" for f in r["flags"])
+    assert any(f["type"] == "years_inflated" for f in r["flags"]) and r["audit"]["stored"] is False
     assert c.post("/api/py/screen", json={"name": "X", "cv": "x" * 50, "claimed_years": 1, "degree_year": 2020}).status_code == 503

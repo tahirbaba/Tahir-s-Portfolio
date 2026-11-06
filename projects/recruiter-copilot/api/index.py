@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
 from _lib.candidates import CANDIDATES, TWIN  # noqa: E402
-from _lib.rules import redact_cv, screen  # noqa: E402
+from _lib.rules import audit_record, redact_cv, screen  # noqa: E402
 
 app = FastAPI(title="Verity API", docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 _hits: dict[str, list[float]] = defaultdict(list)
@@ -50,7 +50,7 @@ def check(body: Check, request: Request):
         roles = [dict(r) for r in c["public"]["roles"]]
         roles[0]["title"] = body.public_title
         cand["public"] = {"roles": roles}
-    return screen(cand, c["profile"])
+    return {**screen(cand, c["profile"]), "audit": audit_record(cand, c["profile"], None)}
 
 
 class Cand(BaseModel):
@@ -72,6 +72,8 @@ def screen_live(body: Cand, request: Request):
     try:
         r = run_agent(cand, client)
         r["redacted"] = redact_cv(body.cv, body.name)
+        if r["state"].get("result"):
+            r["state"]["result"]["audit"] = audit_record(cand, r["state"].get("profile") or {}, r["model"])
         return r
     except Exception as e:  # noqa: BLE001
         print("agent error", type(e).__name__)

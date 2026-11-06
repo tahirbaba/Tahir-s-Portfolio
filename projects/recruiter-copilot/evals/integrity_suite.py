@@ -4,7 +4,7 @@ import copy, json, os, sys, time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "api"))
 from _lib.candidates import CANDIDATES, TWIN  # noqa: E402
-from _lib.rules import computed_years, redact_cv, screen  # noqa: E402
+from _lib.rules import audit_record, computed_years, redact_cv, redact_with_report, screen  # noqa: E402
 
 C = {c["id"]: c for c in CANDIDATES}
 results = []
@@ -66,6 +66,16 @@ for i, (a, b) in enumerate(SWAPS, 3):
 for gender_line in ["Male, 29, single", "Woman, 52, widowed", "Non-binary, 38, divorced"]:
     cv = C["amina"]["cv"].replace("Female, 34, married", gender_line)
     add(f"FAIR-{len(results)}", "Fairness", not any(ch.isdigit() for ch in redact_cv(cv, "Amina Yusuf").splitlines()[1]) and not any(w in redact_cv(cv, "Amina Yusuf").lower() for w in ("male", "woman", "single", "widowed", "divorced", "non-binary")), f"“{gender_line}” fully removed")
+
+# 5. privacy and governance (added after an expert privacy review)
+cv = C["amina"]["cv"].replace("· London ·", "· linkedin.com/in/amina-y · github.com/aminay · London ·")
+r, counts = redact_with_report(cv, "Amina Yusuf")
+add("PRIV-1", "Privacy", "linkedin" not in r and "github" not in r and counts.get("profile_link") == 2, "LinkedIn and GitHub links are removed, so the model can't look the person up")
+add("PRIV-2", "Privacy", "London" not in redact_cv(C["amina"]["cv"], "Amina Yusuf"), "the city on the contact line is removed with the rest of the contact details")
+a = audit_record(C["amina"], C["amina"]["profile"], None)
+add("PRIV-3", "Privacy", a["stored"] is False and set(a["redacted_before_model"]) >= {"name", "email", "phone", "gender", "age", "marital_status"}, "every screening writes an audit record of what was hidden; nothing is stored")
+add("PRIV-4", "Privacy", all("never ask why" in x["item"] for x in screen(C["sara"], C["sara"]["profile"])["checklist"]), "a career gap is never questioned: the checklist says not to ask for family or health reasons")
+add("PRIV-5", "Privacy", all(screen(c, c["profile"])["decided_by"].startswith("a recruiter") for c in CANDIDATES), "no decision is automated; every outcome waits for a recruiter")
 
 out = {"runAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "total": len(results), "passed": sum(r["pass"] for r in results), "results": results}
 os.makedirs(os.path.join(os.path.dirname(__file__), "results"), exist_ok=True)

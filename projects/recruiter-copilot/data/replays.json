@@ -4,7 +4,7 @@
     "title": "Strong and consistent",
     "name": "Amina Yusuf",
     "cv": "Amina Yusuf\namina.yusuf@example.com · +44 7700 900456 · London · Female, 34, married\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
-    "redacted": "[candidate]\n[email] · [phone] · London · [removed], [removed], [removed]\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
+    "redacted": "[candidate]\n[contact details removed]\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
     "form": {
       "claimed_years": 7,
       "degree_year": 2018,
@@ -103,7 +103,27 @@
       "recommendation": "advance",
       "why": "Meets every must-have with verified evidence and no inconsistencies.",
       "checklist": [],
-      "decided_by": "a recruiter, not the system"
+      "decided_by": "a recruiter, not the system",
+      "audit": {
+        "at": "2026-11-06T19:19:22Z",
+        "rules_version": "verity-rules 1.1",
+        "model": "none: rules only",
+        "redacted_before_model": {
+          "name": 1,
+          "email": 1,
+          "phone": 1,
+          "gender": 1,
+          "marital_status": 1,
+          "age": 1,
+          "location": 1
+        },
+        "reidentification_notes": [
+          "3 employer or university names stay visible (Lumen Care, Parcelly, University of Leeds). They are needed to verify experience, are not used in the score, and together could identify someone."
+        ],
+        "stored": false,
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "decision": "pending: a recruiter decides"
+      }
     }
   },
   {
@@ -111,7 +131,7 @@
     "title": "Claims more years than the dates show",
     "name": "Rahul Verma",
     "cv": "Rahul Verma\nrahul.v@example.com · Dubai\n\nEXPERIENCE\nData Engineer, Desert Analytics (2022-06 to present)\n- Production Python ETL jobs and Spark Structured Streaming on Redshift.\nJunior Developer, Byteworks (2021-01 to 2022-05)\n- Python scripts for reporting.\n\nEDUCATION\nBTech Information Technology, Pune University, 2020",
-    "redacted": "[candidate]\n[email] · Dubai\n\nEXPERIENCE\nData Engineer, Desert Analytics (2022-06 to present)\n- Production Python ETL jobs and Spark Structured Streaming on Redshift.\nJunior Developer, Byteworks (2021-01 to 2022-05)\n- Python scripts for reporting.\n\nEDUCATION\nBTech Information Technology, Pune University, 2020",
+    "redacted": "[candidate]\n[contact details removed]\n\nEXPERIENCE\nData Engineer, Desert Analytics (2022-06 to present)\n- Production Python ETL jobs and Spark Structured Streaming on Redshift.\nJunior Developer, Byteworks (2021-01 to 2022-05)\n- Python scripts for reporting.\n\nEDUCATION\nBTech Information Technology, Pune University, 2020",
     "form": {
       "claimed_years": 8,
       "degree_year": 2020,
@@ -221,7 +241,23 @@
           "because": "Application claims 8 years; the CV's dates add up to 5.9."
         }
       ],
-      "decided_by": "a recruiter, not the system"
+      "decided_by": "a recruiter, not the system",
+      "audit": {
+        "at": "2026-11-06T19:19:22Z",
+        "rules_version": "verity-rules 1.1",
+        "model": "none: rules only",
+        "redacted_before_model": {
+          "name": 1,
+          "email": 1,
+          "location": 1
+        },
+        "reidentification_notes": [
+          "3 employer or university names stay visible (Byteworks, Desert Analytics, Pune University). They are needed to verify experience, are not used in the score, and together could identify someone."
+        ],
+        "stored": false,
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "decision": "pending: a recruiter decides"
+      }
     }
   },
   {
@@ -229,7 +265,7 @@
     "title": "Title on CV doesn't match public profile",
     "name": "Omar Haddad",
     "cv": "Omar Haddad\nomar.h@example.com · Amman\n\nEXPERIENCE\nLead Data Engineer, Petra Pay (2020-02 to present)\n- Led a team of six building dbt models on BigQuery with production Python orchestration.\n- Owned data quality SLAs and tests for regulatory reporting.\nData Analyst, Zarqa Telecom (2017-07 to 2020-01)\n\nEDUCATION\nBSc Software Engineering, University of Jordan, 2017",
-    "redacted": "[candidate]\n[email] · Amman\n\nEXPERIENCE\nLead Data Engineer, Petra Pay (2020-02 to present)\n- Led a team of six building dbt models on BigQuery with production Python orchestration.\n- Owned data quality SLAs and tests for regulatory reporting.\nData Analyst, Zarqa Telecom (2017-07 to 2020-01)\n\nEDUCATION\nBSc Software Engineering, University of Jordan, 2017",
+    "redacted": "[candidate]\n[contact details removed]\n\nEXPERIENCE\nLead Data Engineer, Petra Pay (2020-02 to present)\n- Led a team of six building dbt models on BigQuery with production Python orchestration.\n- Owned data quality SLAs and tests for regulatory reporting.\nData Analyst, Zarqa Telecom (2017-07 to 2020-01)\n\nEDUCATION\nBSc Software Engineering, University of Jordan, 2017",
     "form": {
       "claimed_years": 9,
       "degree_year": 2017,
@@ -339,7 +375,23 @@
           "because": "CV says Lead Data Engineer at Petra Pay; public profile says Data Engineer."
         }
       ],
-      "decided_by": "a recruiter, not the system"
+      "decided_by": "a recruiter, not the system",
+      "audit": {
+        "at": "2026-11-06T19:19:22Z",
+        "rules_version": "verity-rules 1.1",
+        "model": "none: rules only",
+        "redacted_before_model": {
+          "name": 1,
+          "email": 1,
+          "location": 1
+        },
+        "reidentification_notes": [
+          "3 employer or university names stay visible (Petra Pay, University of Jordan, Zarqa Telecom). They are needed to verify experience, are not used in the score, and together could identify someone."
+        ],
+        "stored": false,
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "decision": "pending: a recruiter decides"
+      }
     }
   },
   {
@@ -347,7 +399,7 @@
     "title": "Two full-time jobs at the same time",
     "name": "Li Wei",
     "cv": "Li Wei\nli.wei@example.com · Singapore\n\nEXPERIENCE\nSenior Data Engineer, Harbour Bank (2021-04 to present)\n- Spark pipelines and production Python on Snowflake.\nSenior Data Engineer, Kopi Logistics (2021-09 to 2024-06)\n- dbt modelling and data testing.\nData Engineer, Merlion Retail (2017-05 to 2021-03)\n\nEDUCATION\nMSc Data Science, National University of Singapore, 2017",
-    "redacted": "[candidate]\n[email] · Singapore\n\nEXPERIENCE\nSenior Data Engineer, Harbour Bank (2021-04 to present)\n- Spark pipelines and production Python on Snowflake.\nSenior Data Engineer, Kopi Logistics (2021-09 to 2024-06)\n- dbt modelling and data testing.\nData Engineer, Merlion Retail (2017-05 to 2021-03)\n\nEDUCATION\nMSc Data Science, National University of Singapore, 2017",
+    "redacted": "[candidate]\n[contact details removed]\n\nEXPERIENCE\nSenior Data Engineer, Harbour Bank (2021-04 to present)\n- Spark pipelines and production Python on Snowflake.\nSenior Data Engineer, Kopi Logistics (2021-09 to 2024-06)\n- dbt modelling and data testing.\nData Engineer, Merlion Retail (2017-05 to 2021-03)\n\nEDUCATION\nMSc Data Science, National University of Singapore, 2017",
     "form": {
       "claimed_years": 9,
       "degree_year": 2017,
@@ -466,7 +518,23 @@
           "because": "Senior Data Engineer at Kopi Logistics is not on the public profile. Verify employment."
         }
       ],
-      "decided_by": "a recruiter, not the system"
+      "decided_by": "a recruiter, not the system",
+      "audit": {
+        "at": "2026-11-06T19:19:22Z",
+        "rules_version": "verity-rules 1.1",
+        "model": "none: rules only",
+        "redacted_before_model": {
+          "name": 1,
+          "email": 1,
+          "location": 1
+        },
+        "reidentification_notes": [
+          "4 employer or university names stay visible (Harbour Bank, Kopi Logistics, Merlion Retail, National University of Singapore). They are needed to verify experience, are not used in the score, and together could identify someone."
+        ],
+        "stored": false,
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "decision": "pending: a recruiter decides"
+      }
     }
   },
   {
@@ -474,7 +542,7 @@
     "title": "Career break, strong skills",
     "name": "Sara Khalid",
     "cv": "Sara Khalid\nsara.k@example.com · Lahore\n\nEXPERIENCE\nData Engineer, Indus Health (2023-09 to present)\n- Spark and dbt pipelines for hospital claims data on BigQuery, written in production Python.\n- Added dbt tests and anomaly alerts for data quality.\nCareer break, caring for family (2021-06 to 2023-08)\nData Engineer, Ravi Fintech (2016-03 to 2021-05)\n- Mentored two graduate engineers.\n\nEDUCATION\nBS Computer Science, LUMS, 2015",
-    "redacted": "[candidate]\n[email] · Lahore\n\nEXPERIENCE\nData Engineer, Indus Health (2023-09 to present)\n- Spark and dbt pipelines for hospital claims data on BigQuery, written in production Python.\n- Added dbt tests and anomaly alerts for data quality.\nCareer break, caring for family (2021-06 to 2023-08)\nData Engineer, Ravi Fintech (2016-03 to 2021-05)\n- Mentored two graduate engineers.\n\nEDUCATION\nBS Computer Science, LUMS, 2015",
+    "redacted": "[candidate]\n[contact details removed]\n\nEXPERIENCE\nData Engineer, Indus Health (2023-09 to present)\n- Spark and dbt pipelines for hospital claims data on BigQuery, written in production Python.\n- Added dbt tests and anomaly alerts for data quality.\nCareer break, caring for family (2021-06 to 2023-08)\nData Engineer, Ravi Fintech (2016-03 to 2021-05)\n- Mentored two graduate engineers.\n\nEDUCATION\nBS Computer Science, LUMS, 2015",
     "form": {
       "claimed_years": 8,
       "degree_year": 2015,
@@ -495,7 +563,7 @@
     },
     "kind": "scripted",
     "model": null,
-    "reply": "Recommend advancing. Spark and dbt on BigQuery for hospital claims data, production Python, data testing and mentoring are all evidenced. There is a two-year career break; it is noted for conversation only and does not affect the score.",
+    "reply": "Recommend advancing. Spark and dbt on BigQuery for hospital claims data, production Python, data testing and mentoring are all evidenced. There is a two-year career break; it is noted only and does not affect the score.",
     "result": {
       "score": {
         "total": 100,
@@ -573,18 +641,34 @@
         {
           "type": "career_gap",
           "severity": "info",
-          "detail": "27-month gap between Ravi Fintech and Indus Health. Ask about it; don't penalise it."
+          "detail": "27-month gap between Ravi Fintech and Indus Health. Not scored and not a negative signal."
         }
       ],
       "recommendation": "advance",
       "why": "Meets every must-have with verified evidence and no inconsistencies.",
       "checklist": [
         {
-          "item": "Ask about the gap in conversation. Not a negative signal.",
-          "because": "27-month gap between Ravi Fintech and Indus Health. Ask about it; don't penalise it."
+          "item": "No action needed. Judge skills only; never ask why (family or health reasons are private) and never score the gap.",
+          "because": "27-month gap between Ravi Fintech and Indus Health. Not scored and not a negative signal."
         }
       ],
-      "decided_by": "a recruiter, not the system"
+      "decided_by": "a recruiter, not the system",
+      "audit": {
+        "at": "2026-11-06T19:19:22Z",
+        "rules_version": "verity-rules 1.1",
+        "model": "none: rules only",
+        "redacted_before_model": {
+          "name": 1,
+          "email": 1,
+          "location": 1
+        },
+        "reidentification_notes": [
+          "3 employer or university names stay visible (Indus Health, LUMS, Ravi Fintech). They are needed to verify experience, are not used in the score, and together could identify someone."
+        ],
+        "stored": false,
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "decision": "pending: a recruiter decides"
+      }
     }
   },
   {
@@ -592,7 +676,7 @@
     "title": "Early career, missing must-haves",
     "name": "Tom Fischer",
     "cv": "Tom Fischer\ntom.f@example.com · Berlin\n\nEXPERIENCE\nAnalytics Engineer, Spree Shop (2024-02 to present)\n- SQL dashboards in Looker and some Python notebooks.\n\nEDUCATION\nBSc Economics, FU Berlin, 2023",
-    "redacted": "[candidate]\n[email] · Berlin\n\nEXPERIENCE\nAnalytics Engineer, Spree Shop (2024-02 to present)\n- SQL dashboards in Looker and some Python notebooks.\n\nEDUCATION\nBSc Economics, FU Berlin, 2023",
+    "redacted": "[candidate]\n[contact details removed]\n\nEXPERIENCE\nAnalytics Engineer, Spree Shop (2024-02 to present)\n- SQL dashboards in Looker and some Python notebooks.\n\nEDUCATION\nBSc Economics, FU Berlin, 2023",
     "form": {
       "claimed_years": 2,
       "degree_year": 2023,
@@ -690,7 +774,23 @@
       "recommendation": "not_a_fit_yet",
       "why": "Missing must-haves: Spark or dbt pipelines, 5+ years (computed from dates).",
       "checklist": [],
-      "decided_by": "a recruiter, not the system"
+      "decided_by": "a recruiter, not the system",
+      "audit": {
+        "at": "2026-11-06T19:19:22Z",
+        "rules_version": "verity-rules 1.1",
+        "model": "none: rules only",
+        "redacted_before_model": {
+          "name": 1,
+          "email": 1,
+          "location": 1
+        },
+        "reidentification_notes": [
+          "2 employer or university names stay visible (FU Berlin, Spree Shop). They are needed to verify experience, are not used in the score, and together could identify someone."
+        ],
+        "stored": false,
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "decision": "pending: a recruiter decides"
+      }
     }
   },
   {
@@ -698,7 +798,7 @@
     "title": "Certificate and degree don't check out",
     "name": "Nadia Rahman",
     "cv": "Nadia Rahman\nnadia.r@example.com · Dhaka\n\nEXPERIENCE\nSenior Data Engineer, Padma Telecom (2019-01 to present)\n- Production Python and Spark pipelines on Redshift, with data quality checks.\n\nEDUCATION\nMSc Computer Science, BUET, 2016\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID 12345",
-    "redacted": "[candidate]\n[email] · Dhaka\n\nEXPERIENCE\nSenior Data Engineer, Padma Telecom (2019-01 to present)\n- Production Python and Spark pipelines on Redshift, with data quality checks.\n\nEDUCATION\nMSc Computer Science, BUET, 2016\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID 12345",
+    "redacted": "[candidate]\n[contact details removed]\n\nEXPERIENCE\nSenior Data Engineer, Padma Telecom (2019-01 to present)\n- Production Python and Spark pipelines on Redshift, with data quality checks.\n\nEDUCATION\nMSc Computer Science, BUET, 2016\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID 12345",
     "form": {
       "claimed_years": 8,
       "degree_year": 2014,
@@ -813,7 +913,23 @@
           "because": "Snowflake SnowPro Core ID “12345” doesn't match the issuer's ID format. Check with the issuer."
         }
       ],
-      "decided_by": "a recruiter, not the system"
+      "decided_by": "a recruiter, not the system",
+      "audit": {
+        "at": "2026-11-06T19:19:22Z",
+        "rules_version": "verity-rules 1.1",
+        "model": "none: rules only",
+        "redacted_before_model": {
+          "name": 1,
+          "email": 1,
+          "location": 1
+        },
+        "reidentification_notes": [
+          "2 employer or university names stay visible (BUET, Padma Telecom). They are needed to verify experience, are not used in the score, and together could identify someone."
+        ],
+        "stored": false,
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "decision": "pending: a recruiter decides"
+      }
     }
   },
   {
@@ -821,7 +937,7 @@
     "title": "Fairness twin of the first candidate",
     "name": "Daniel Okafor",
     "cv": "Daniel Okafor\nd.okafor@example.com · +44 7700 900456 · London · Male, 41, single\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
-    "redacted": "[candidate]\n[email] · [phone] · London · [removed], [removed], [removed]\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
+    "redacted": "[candidate]\n[contact details removed]\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
     "form": {
       "claimed_years": 7,
       "degree_year": 2018,
@@ -920,7 +1036,27 @@
       "recommendation": "advance",
       "why": "Meets every must-have with verified evidence and no inconsistencies.",
       "checklist": [],
-      "decided_by": "a recruiter, not the system"
+      "decided_by": "a recruiter, not the system",
+      "audit": {
+        "at": "2026-11-06T19:19:22Z",
+        "rules_version": "verity-rules 1.1",
+        "model": "none: rules only",
+        "redacted_before_model": {
+          "name": 1,
+          "email": 1,
+          "phone": 1,
+          "gender": 1,
+          "marital_status": 1,
+          "age": 1,
+          "location": 1
+        },
+        "reidentification_notes": [
+          "3 employer or university names stay visible (Lumen Care, Parcelly, University of Leeds). They are needed to verify experience, are not used in the score, and together could identify someone."
+        ],
+        "stored": false,
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "decision": "pending: a recruiter decides"
+      }
     }
   }
 ]

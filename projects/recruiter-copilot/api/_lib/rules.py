@@ -8,32 +8,72 @@ from __future__ import annotations
 
 import re
 from copy import deepcopy
+from datetime import datetime, timezone
 
 from .candidates import CERT_FORMATS, NOW, ROLE
 
+RULES_VERSION = "verity-rules 1.1"
+URL = re.compile(r"(https?://\S+|www\.\S+|\b(?:linkedin|github|gitlab|twitter|x|behance|medium)\.com/\S*)", re.I)
 PROTECTED_PATTERNS = [
-    (re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"), "[email]"),
-    (re.compile(r"\+?\d[\d\s-]{8,}\d"), "[phone]"),
-    (re.compile(r"\b(male|female|man|woman|non-binary)\b", re.I), "[removed]"),
-    (re.compile(r"\b(married|single|divorced|widowed)\b", re.I), "[removed]"),
-    (re.compile(r"\b\d{2}\s*(years old|y/o)?\b(?=[,\s]*(married|single|\[removed\]|$))", re.I), "[removed]"),
+    ("email", re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"), "[email]"),
+    ("profile_link", URL, "[link]"),
+    ("phone", re.compile(r"\+?\d[\d\s-]{8,}\d"), "[phone]"),
+    ("gender", re.compile(r"\b(male|female|man|woman|non-binary)\b", re.I), "[removed]"),
+    ("marital_status", re.compile(r"\b(married|single|divorced|widowed)\b", re.I), "[removed]"),
+    ("age", re.compile(r"\b\d{2}\s*(years old|y/o)?\b(?=[,\s]*(married|single|\[removed\]|$))", re.I), "[removed]"),
 ]
+CONTACT_LINE = "[contact details removed]"
+
+
+def redact_with_report(cv: str, name: str) -> tuple[str, dict]:
+    """Remove name, contact details (incl. city and profile links), gender, age and marital status before screening.
+    Returns the redacted text and a count of what was removed, for the audit log."""
+    counts: dict[str, int] = {}
+    out = []
+    for i, line in enumerate(cv.splitlines()):
+        if i == 0 and line.strip() == name:
+            out.append("[candidate]")
+            counts["name"] = counts.get("name", 0) + 1
+            continue
+        hit = False
+        for kind, pat, rep in PROTECTED_PATTERNS:
+            line, n = pat.subn(rep, line)
+            if n:
+                counts[kind] = counts.get(kind, 0) + n
+                hit = hit or kind in ("email", "phone")
+        for part in name.split():
+            line, n = re.subn(rf"\b{re.escape(part)}\b", "[candidate]", line)
+            if n:
+                counts["name"] = counts.get("name", 0) + n
+        if hit and i <= 2:
+            # a header line with an email or phone is the contact line: drop it whole, so the city goes too
+            counts["location"] = counts.get("location", 0) + 1
+            line = CONTACT_LINE
+        out.append(line)
+    return "\n".join(out), counts
 
 
 def redact_cv(cv: str, name: str) -> str:
-    """Remove name, contact details, gender, age and marital status before screening."""
-    lines = cv.splitlines()
-    out = []
-    for i, line in enumerate(lines):
-        if i == 0 and line.strip() == name:
-            out.append("[candidate]")
-            continue
-        for pat, rep in PROTECTED_PATTERNS:
-            line = pat.sub(rep, line)
-        for part in name.split():
-            line = re.sub(rf"\b{re.escape(part)}\b", "[candidate]", line)
-        out.append(line)
-    return "\n".join(out)
+    return redact_with_report(cv, name)[0]
+
+
+def reidentification_notes(profile: dict) -> list[str]:
+    """Things left in the CV that could still point to a person. Kept because recruiters must verify them, but never scored."""
+    orgs = sorted({r["company"] for r in profile.get("roles", [])} | {e["institution"] for e in profile.get("education", [])})
+    notes = []
+    if orgs:
+        notes.append(f"{len(orgs)} employer or university names stay visible ({', '.join(orgs)}). They are needed to verify experience, are not used in the score, and together could identify someone.")
+    return notes
+
+
+RETENTION = "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models."
+
+
+def audit_record(cand: dict, profile: dict, model: str | None) -> dict:
+    _, counts = redact_with_report(cand["cv"], cand["name"])
+    return {"at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "rules_version": RULES_VERSION, "model": model or "none: rules only",
+            "redacted_before_model": counts, "reidentification_notes": reidentification_notes(profile), "stored": False, "retention": RETENTION,
+            "decision": "pending: a recruiter decides"}
 
 
 def _months(ym: str) -> int:
@@ -91,7 +131,7 @@ def consistency(profile: dict, form: dict, public: dict) -> list[dict]:
     for a, b in zip(ordered, ordered[1:]):
         gap = _months(b["start"]) - _months(a["end"]) - 1
         if gap >= 12:
-            flags.append({"type": "career_gap", "severity": "info", "detail": f"{gap}-month gap between {a['company']} and {b['company']}. Ask about it; don't penalise it."})
+            flags.append({"type": "career_gap", "severity": "info", "detail": f"{gap}-month gap between {a['company']} and {b['company']}. Not scored and not a negative signal."})
     pub = {r["company"].lower(): r["title"] for r in public.get("roles", [])}
     senior = re.compile(r"\b(senior|lead|head|principal|staff|director|manager)\b", re.I)
     for r in roles:
@@ -121,7 +161,7 @@ CHECKLIST = {
     "degree_year_mismatch": "Request the degree certificate or verify with the university.",
     "certificate_id_format": "Verify the certificate on the issuer's verification page.",
     "future_date": "Clarify the dates with the candidate.",
-    "career_gap": "Ask about the gap in conversation. Not a negative signal.",
+    "career_gap": "No action needed. Judge skills only; never ask why (family or health reasons are private) and never score the gap.",
 }
 
 
