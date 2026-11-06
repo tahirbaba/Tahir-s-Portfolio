@@ -1,0 +1,67 @@
+{
+  "runAt": "2026-11-06T04:26:44Z",
+  "total": 12,
+  "passed": 12,
+  "tests": [
+    {
+      "name": "tools list is filtered by scope",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "every decision is audited",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "pipeline stops at first failed check",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "sql row cap and read only by authorizer",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "support sees full pii analytics masked",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "injection is removed and flagged",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "approvals are queued",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "mcp initialize list and call",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "mcp errors",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "signed state",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "agent only sees scoped tools and gateway decides",
+      "file": "test_gateway",
+      "pass": true
+    },
+    {
+      "name": "security suite all pass",
+      "file": "test_security_suite",
+      "pass": true
+    }
+  ]
+}
