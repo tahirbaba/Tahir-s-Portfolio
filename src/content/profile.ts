@@ -33,8 +33,8 @@ export const profile = {
 // Real numbers from the six live projects' test and eval suites.
 export const metrics: { value: number; suffix: string; label: string; decimals?: number }[] = [
   { value: 6, suffix: "", label: "Agent projects live" },
-  { value: 92, suffix: "", label: "Unit tests passing" },
-  { value: 156, suffix: "", label: "Eval cases, all measured" },
+  { value: 94, suffix: "", label: "Unit tests passing" },
+  { value: 160, suffix: "", label: "Eval cases, all measured" },
   { value: 40, suffix: "/40", label: "Security attacks stopped" },
 ];
 
@@ -136,7 +136,7 @@ export const deployments: Deployment[] = [
   },
   {
     id: "verity", title: "Verity: recruiter integrity copilot", codename: "VERITY", client: "recruiters and HR teams",
-    sector: "HR & recruiting", location: "Live demo", year: "2026", duration: "35/35 fairness & privacy checks", mode: "Python · FastAPI · Next.js",
+    sector: "HR & recruiting", location: "Live demo", year: "2026", duration: "39/39 fairness & privacy checks", mode: "Python · FastAPI · Next.js",
     problem: "Polished AI-written applications flood recruiters, claims don't add up, and screening tools can react to names and gender.",
     shipped: [
       "Blind screening: names, contact details, gender, age and marital status removed before the AI reads a CV",
@@ -144,7 +144,7 @@ export const deployments: Deployment[] = [
       "Consistency checks against the application form and public profile, a verification checklist, and no auto-reject",
     ],
     graph: ["Redact", "Cite evidence", "Verify quotes", "Consistency checks", "Recruiter decides"],
-    impact: [{ value: "35/35", label: "integrity, fairness and privacy cases" }, { value: "0", label: "score change from name or gender swaps" }, { value: "10/10", label: "pytest tests" }],
+    impact: [{ value: "39/39", label: "integrity, fairness, privacy and bias cases" }, { value: "0", label: "score change from name or gender swaps" }, { value: "12/12", label: "pytest tests" }],
     stack: ["Python", "FastAPI", "Claude", "Counterfactual tests", "Next.js"],
     links: [{ label: "Live demo", href: "https://verity-recruiter-copilot.vercel.app" }, { label: "Fairness tests", href: "https://verity-recruiter-copilot.vercel.app/evals" }, { label: "Code", href: GH + "recruiter-copilot" }],
   },

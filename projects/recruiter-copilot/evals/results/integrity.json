@@ -1,7 +1,7 @@
 {
-  "runAt": "2026-11-06T19:19:32Z",
-  "total": 35,
-  "passed": 35,
+  "runAt": "2026-11-06T19:36:52Z",
+  "total": 39,
+  "passed": 39,
   "results": [
     {
       "id": "REC-amina",
@@ -212,6 +212,30 @@
       "category": "Privacy",
       "pass": true,
       "detail": "no decision is automated; every outcome waits for a recruiter"
+    },
+    {
+      "id": "PRIV-6",
+      "category": "Privacy",
+      "pass": true,
+      "detail": "date of birth, nationality, religion, photo and hobbies are dropped before screening"
+    },
+    {
+      "id": "PRIV-7",
+      "category": "Privacy",
+      "pass": true,
+      "detail": "applicants get a notice: AI use, what is hidden, what is analysed, other uses, security"
+    },
+    {
+      "id": "BIAS-1",
+      "category": "Bias audit",
+      "pass": true,
+      "detail": "a group selected at half the rate of another is flagged (impact ratio 0.50 < 0.80)"
+    },
+    {
+      "id": "BIAS-2",
+      "category": "Bias audit",
+      "pass": true,
+      "detail": "1008 counterfactual screenings: impact ratio 1.00 for every gender, age band and marital status"
     }
   ]
 }

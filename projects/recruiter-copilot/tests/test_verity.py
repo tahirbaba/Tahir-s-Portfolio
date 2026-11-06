@@ -75,4 +75,22 @@ def test_api_check_without_model():
     c = TestClient(index.app)
     r = c.post("/api/py/check", json={"candidate_id": "amina", "claimed_years": 12, "degree_year": 2018}).json()
     assert any(f["type"] == "years_inflated" for f in r["flags"]) and r["audit"]["stored"] is False
-    assert c.post("/api/py/screen", json={"name": "X", "cv": "x" * 50, "claimed_years": 1, "degree_year": 2020}).status_code == 503
+    body = {"name": "X", "cv": "x" * 50, "claimed_years": 1, "degree_year": 2020}
+    assert c.post("/api/py/screen", json=body).status_code == 400  # no consent, no screening
+    assert c.post("/api/py/screen", json={**body, "consent": True}).status_code == 503
+    assert "Zero Data Retention" in c.get("/api/py/notice").json()["other_uses"]
+
+
+def test_bias_audit_four_fifths():
+    from _lib.rules import bias_audit
+    recs = [{"g": "a", "progressed": True}] * 4 + [{"g": "b", "progressed": True}] * 3 + [{"g": "b", "progressed": False}]
+    r = bias_audit(recs, "g")
+    assert not r["ok"] and [x["impact_ratio"] for x in r["rows"]] == [1.0, 0.75] and r["rows"][1]["flag"] is True
+    assert bias_audit(recs, "g", threshold=0.7)["ok"]
+
+
+def test_non_essential_personal_data_dropped():
+    from _lib.rules import redact_with_report
+    cv = "Jo Doe\njo@x.com\nDate of birth: 1990-01-01\nReligion: Hindu\n[photo: jo.png]\n\nHOBBIES\nChess\n\nEXPERIENCE\nEngineer"
+    r, _ = redact_with_report(cv, "Jo Doe")
+    assert not any(w in r for w in ("1990", "Hindu", "jo.png", "Chess")) and "EXPERIENCE" in r

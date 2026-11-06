@@ -105,8 +105,8 @@
       "checklist": [],
       "decided_by": "a recruiter, not the system",
       "audit": {
-        "at": "2026-11-06T19:19:22Z",
-        "rules_version": "verity-rules 1.1",
+        "at": "2026-11-06T19:36:52Z",
+        "rules_version": "verity-rules 1.2",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -121,7 +121,7 @@
           "3 employer or university names stay visible (Lumen Care, Parcelly, University of Leeds). They are needed to verify experience, are not used in the score, and together could identify someone."
         ],
         "stored": false,
-        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept.",
         "decision": "pending: a recruiter decides"
       }
     }
@@ -243,8 +243,8 @@
       ],
       "decided_by": "a recruiter, not the system",
       "audit": {
-        "at": "2026-11-06T19:19:22Z",
-        "rules_version": "verity-rules 1.1",
+        "at": "2026-11-06T19:36:52Z",
+        "rules_version": "verity-rules 1.2",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -255,7 +255,7 @@
           "3 employer or university names stay visible (Byteworks, Desert Analytics, Pune University). They are needed to verify experience, are not used in the score, and together could identify someone."
         ],
         "stored": false,
-        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept.",
         "decision": "pending: a recruiter decides"
       }
     }
@@ -377,8 +377,8 @@
       ],
       "decided_by": "a recruiter, not the system",
       "audit": {
-        "at": "2026-11-06T19:19:22Z",
-        "rules_version": "verity-rules 1.1",
+        "at": "2026-11-06T19:36:52Z",
+        "rules_version": "verity-rules 1.2",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -389,7 +389,7 @@
           "3 employer or university names stay visible (Petra Pay, University of Jordan, Zarqa Telecom). They are needed to verify experience, are not used in the score, and together could identify someone."
         ],
         "stored": false,
-        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept.",
         "decision": "pending: a recruiter decides"
       }
     }
@@ -520,8 +520,8 @@
       ],
       "decided_by": "a recruiter, not the system",
       "audit": {
-        "at": "2026-11-06T19:19:22Z",
-        "rules_version": "verity-rules 1.1",
+        "at": "2026-11-06T19:36:52Z",
+        "rules_version": "verity-rules 1.2",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -532,7 +532,7 @@
           "4 employer or university names stay visible (Harbour Bank, Kopi Logistics, Merlion Retail, National University of Singapore). They are needed to verify experience, are not used in the score, and together could identify someone."
         ],
         "stored": false,
-        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept.",
         "decision": "pending: a recruiter decides"
       }
     }
@@ -654,8 +654,8 @@
       ],
       "decided_by": "a recruiter, not the system",
       "audit": {
-        "at": "2026-11-06T19:19:22Z",
-        "rules_version": "verity-rules 1.1",
+        "at": "2026-11-06T19:36:52Z",
+        "rules_version": "verity-rules 1.2",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -666,7 +666,7 @@
           "3 employer or university names stay visible (Indus Health, LUMS, Ravi Fintech). They are needed to verify experience, are not used in the score, and together could identify someone."
         ],
         "stored": false,
-        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept.",
         "decision": "pending: a recruiter decides"
       }
     }
@@ -776,8 +776,8 @@
       "checklist": [],
       "decided_by": "a recruiter, not the system",
       "audit": {
-        "at": "2026-11-06T19:19:22Z",
-        "rules_version": "verity-rules 1.1",
+        "at": "2026-11-06T19:36:52Z",
+        "rules_version": "verity-rules 1.2",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -788,7 +788,7 @@
           "2 employer or university names stay visible (FU Berlin, Spree Shop). They are needed to verify experience, are not used in the score, and together could identify someone."
         ],
         "stored": false,
-        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept.",
         "decision": "pending: a recruiter decides"
       }
     }
@@ -915,8 +915,8 @@
       ],
       "decided_by": "a recruiter, not the system",
       "audit": {
-        "at": "2026-11-06T19:19:22Z",
-        "rules_version": "verity-rules 1.1",
+        "at": "2026-11-06T19:36:52Z",
+        "rules_version": "verity-rules 1.2",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -927,7 +927,7 @@
           "2 employer or university names stay visible (BUET, Padma Telecom). They are needed to verify experience, are not used in the score, and together could identify someone."
         ],
         "stored": false,
-        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept.",
         "decision": "pending: a recruiter decides"
       }
     }
@@ -1038,8 +1038,8 @@
       "checklist": [],
       "decided_by": "a recruiter, not the system",
       "audit": {
-        "at": "2026-11-06T19:19:22Z",
-        "rules_version": "verity-rules 1.1",
+        "at": "2026-11-06T19:36:52Z",
+        "rules_version": "verity-rules 1.2",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -1054,7 +1054,7 @@
           "3 employer or university names stay visible (Lumen Care, Parcelly, University of Leeds). They are needed to verify experience, are not used in the score, and together could identify someone."
         ],
         "stored": false,
-        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models.",
+        "retention": "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept.",
         "decision": "pending: a recruiter decides"
       }
     }

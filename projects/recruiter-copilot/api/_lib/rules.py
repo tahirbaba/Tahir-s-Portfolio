@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 from .candidates import CERT_FORMATS, NOW, ROLE
 
-RULES_VERSION = "verity-rules 1.1"
+RULES_VERSION = "verity-rules 1.2"
 URL = re.compile(r"(https?://\S+|www\.\S+|\b(?:linkedin|github|gitlab|twitter|x|behance|medium)\.com/\S*)", re.I)
 PROTECTED_PATTERNS = [
     ("email", re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"), "[email]"),
@@ -20,9 +20,14 @@ PROTECTED_PATTERNS = [
     ("phone", re.compile(r"\+?\d[\d\s-]{8,}\d"), "[phone]"),
     ("gender", re.compile(r"\b(male|female|man|woman|non-binary)\b", re.I), "[removed]"),
     ("marital_status", re.compile(r"\b(married|single|divorced|widowed)\b", re.I), "[removed]"),
+    ("religion", re.compile(r"\b(muslim|christian|catholic|protestant|hindu|jewish|buddhist|sikh|atheist|religion:?)\b", re.I), "[removed]"),
     ("age", re.compile(r"\b\d{2}\s*(years old|y/o)?\b(?=[,\s]*(married|single|\[removed\]|$))", re.I), "[removed]"),
 ]
 CONTACT_LINE = "[contact details removed]"
+# Lines and sections that are never needed to judge skills. They are dropped, not just hidden.
+PERSONAL_LINE = re.compile(r"^\s*(date of birth|dob|born|nationality|religion|marital status|photo|picture|passport|visa status|gender|age)\b\s*[:\-]", re.I)
+PHOTO = re.compile(r"\[(photo|image|picture)[^\]]*\]|\S+\.(jpe?g|png|heic|webp)\b", re.I)
+PERSONAL_SECTION = re.compile(r"^\s*(hobbies|interests|hobbies and interests|personal( details| information)?)\s*:?\s*$", re.I)
 
 
 def redact_with_report(cv: str, name: str) -> tuple[str, dict]:
@@ -30,7 +35,28 @@ def redact_with_report(cv: str, name: str) -> tuple[str, dict]:
     Returns the redacted text and a count of what was removed, for the audit log."""
     counts: dict[str, int] = {}
     out = []
+    skipping = False
+
+    def bump(k):
+        counts[k] = counts.get(k, 0) + 1
     for i, line in enumerate(cv.splitlines()):
+        if PERSONAL_SECTION.match(line):
+            skipping = True
+            bump("non_essential_section")
+            continue
+        if skipping:
+            if line.strip() == "" or (line.isupper() and len(line.strip()) > 3):
+                skipping = False
+                if line.strip() == "":
+                    continue
+            else:
+                continue
+        if PERSONAL_LINE.match(line):
+            bump("personal_detail_line")
+            continue
+        line, n = PHOTO.subn("", line)
+        if n:
+            counts["photo"] = counts.get("photo", 0) + n
         if i == 0 and line.strip() == name:
             out.append("[candidate]")
             counts["name"] = counts.get("name", 0) + 1
@@ -66,7 +92,26 @@ def reidentification_notes(profile: dict) -> list[str]:
     return notes
 
 
-RETENTION = "Not stored. The CV is processed in memory and discarded when the response is sent; nothing is used to train models."
+RETENTION = "Not stored. The CV is processed in memory and discarded when the response is sent. Personal details not needed for the job are dropped, not kept."
+NOTICE = {
+    "ai_processing": "Your CV is screened with the help of AI (Anthropic's Claude). A recruiter reviews every result and makes the decision.",
+    "hidden": "Before the AI reads it, we remove your name, contact details, city, profile links, photo, gender, age, marital status, religion, nationality, date of birth and hobbies.",
+    "analysed": "The AI reads only your work history, dates, skills, education and certifications, and must quote your CV for every point it gives.",
+    "other_uses": "Your CV is not stored by Verity and is not used to train any model. Anthropic does not train on API data by default; Zero Data Retention can be arranged for enterprise deployments.",
+    "security": "Data is encrypted in transit (HTTPS/TLS). Verity keeps nothing at rest; a deployment that keeps CVs must encrypt them at rest and delete them on the agreed schedule.",
+}
+
+
+def bias_audit(records: list[dict], key: str, threshold: float = 0.8) -> dict:
+    """Selection rate per group and impact ratio against the best-treated group (the four-fifths rule).
+    Group labels are kept apart from screening and used only for this audit."""
+    groups: dict[str, list[bool]] = {}
+    for r in records:
+        groups.setdefault(r[key], []).append(r["progressed"])
+    rates = {g: sum(v) / len(v) for g, v in groups.items()}
+    top = max(rates.values()) or 1
+    rows = [{"group": g, "n": len(groups[g]), "rate": round(rates[g], 3), "impact_ratio": round(rates[g] / top, 3), "flag": rates[g] / top < threshold} for g in sorted(groups)]
+    return {"key": key, "threshold": threshold, "rows": rows, "ok": not any(r["flag"] for r in rows)}
 
 
 def audit_record(cand: dict, profile: dict, model: str | None) -> dict:

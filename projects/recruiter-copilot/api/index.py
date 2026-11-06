@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
 from _lib.candidates import CANDIDATES, TWIN  # noqa: E402
-from _lib.rules import audit_record, redact_cv, screen  # noqa: E402
+from _lib.rules import NOTICE, audit_record, redact_cv, screen  # noqa: E402
 
 app = FastAPI(title="Verity API", docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 _hits: dict[str, list[float]] = defaultdict(list)
@@ -28,6 +28,12 @@ def _limited(req: Request, n: int) -> bool:
 @app.get("/api/py/health")
 def health():
     return {"live": bool(os.environ.get("ANTHROPIC_API_KEY")), "checks": "up"}
+
+
+@app.get("/api/py/notice")
+def notice():
+    """What an applicant is told before their CV is screened."""
+    return NOTICE
 
 
 class Check(BaseModel):
@@ -58,11 +64,14 @@ class Cand(BaseModel):
     cv: str = Field(min_length=40, max_length=8000)
     claimed_years: int = Field(ge=0, le=60)
     degree_year: int = Field(ge=1950, le=2030)
+    consent: bool = False
 
 
 @app.post("/api/py/screen")
 def screen_live(body: Cand, request: Request):
     from _lib.agent import get_client, run_agent
+    if not body.consent:
+        return JSONResponse({"error": "The applicant notice must be shown and accepted before a CV is screened.", "notice": NOTICE}, status_code=400)
     client = get_client()
     if client is None:
         return JSONResponse({"error": "The live agent is offline: no API key is configured. The consistency checker works without one."}, status_code=503)

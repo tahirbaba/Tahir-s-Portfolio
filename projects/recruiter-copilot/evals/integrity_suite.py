@@ -4,7 +4,7 @@ import copy, json, os, sys, time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "api"))
 from _lib.candidates import CANDIDATES, TWIN  # noqa: E402
-from _lib.rules import audit_record, computed_years, redact_cv, redact_with_report, screen  # noqa: E402
+from _lib.rules import NOTICE, audit_record, bias_audit, computed_years, redact_cv, redact_with_report, screen  # noqa: E402
 
 C = {c["id"]: c for c in CANDIDATES}
 results = []
@@ -76,6 +76,14 @@ a = audit_record(C["amina"], C["amina"]["profile"], None)
 add("PRIV-3", "Privacy", a["stored"] is False and set(a["redacted_before_model"]) >= {"name", "email", "phone", "gender", "age", "marital_status"}, "every screening writes an audit record of what was hidden; nothing is stored")
 add("PRIV-4", "Privacy", all("never ask why" in x["item"] for x in screen(C["sara"], C["sara"]["profile"])["checklist"]), "a career gap is never questioned: the checklist says not to ask for family or health reasons")
 add("PRIV-5", "Privacy", all(screen(c, c["profile"])["decided_by"].startswith("a recruiter") for c in CANDIDATES), "no decision is automated; every outcome waits for a recruiter")
+cv = C["amina"]["cv"].replace("EXPERIENCE", "Date of birth: 1992-03-04\nNationality: Nigerian\nReligion: Christian\n[photo: amina.jpg]\n\nHOBBIES\nChess, hiking, church choir\n\nEXPERIENCE", 1)
+r, counts = redact_with_report(cv, "Amina Yusuf")
+add("PRIV-6", "Privacy", not any(w in r for w in ("1992", "Nigerian", "Christian", "amina.jpg", "Chess", "choir")), "date of birth, nationality, religion, photo and hobbies are dropped before screening")
+add("PRIV-7", "Privacy", all(NOTICE.get(k) for k in ("ai_processing", "hidden", "analysed", "other_uses", "security")), "applicants get a notice: AI use, what is hidden, what is analysed, other uses, security")
+fake = [{"g": "a", "progressed": True}] * 10 + [{"g": "b", "progressed": True}] * 5 + [{"g": "b", "progressed": False}] * 5
+add("BIAS-1", "Bias audit", not bias_audit(fake, "g")["ok"], "a group selected at half the rate of another is flagged (impact ratio 0.50 < 0.80)")
+bias = json.load(open(os.path.join(os.path.dirname(__file__), "results", "bias.json")))
+add("BIAS-2", "Bias audit", bias["redacted_text_identical"] and all(a["ok"] for a in bias["audits"]), f"{bias['cohort']} counterfactual screenings: impact ratio 1.00 for every gender, age band and marital status")
 
 out = {"runAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "total": len(results), "passed": sum(r["pass"] for r in results), "results": results}
 os.makedirs(os.path.join(os.path.dirname(__file__), "results"), exist_ok=True)

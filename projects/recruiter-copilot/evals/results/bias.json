@@ -1,0 +1,85 @@
+{
+  "cohort": 1008,
+  "base_candidates": 7,
+  "redacted_text_identical": true,
+  "audits": [
+    {
+      "key": "gender",
+      "threshold": 0.8,
+      "rows": [
+        {
+          "group": "female",
+          "n": 336,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "male",
+          "n": 336,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "non-binary",
+          "n": 336,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        }
+      ],
+      "ok": true
+    },
+    {
+      "key": "age",
+      "threshold": 0.8,
+      "rows": [
+        {
+          "group": "30-44",
+          "n": 336,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "45+",
+          "n": 336,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "under 30",
+          "n": 336,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        }
+      ],
+      "ok": true
+    },
+    {
+      "key": "marital",
+      "threshold": 0.8,
+      "rows": [
+        {
+          "group": "married",
+          "n": 504,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "single",
+          "n": 504,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        }
+      ],
+      "ok": true
+    }
+  ],
+  "method": "Selection rate per group = share recommended for interview. Impact ratio = group rate / highest group rate; below 0.80 is flagged (the four-fifths rule used in US EEOC guidance and NYC Local Law 144 bias audits)."
+}

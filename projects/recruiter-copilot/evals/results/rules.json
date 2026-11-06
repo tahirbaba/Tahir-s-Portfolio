@@ -1,7 +1,7 @@
 {
-  "runAt": "2026-11-06T19:19:22Z",
-  "total": 10,
-  "passed": 10,
+  "runAt": "2026-11-06T19:37:11Z",
+  "total": 12,
+  "passed": 12,
   "tests": [
     {
       "name": "redaction removes protected attributes",
@@ -50,6 +50,16 @@
     },
     {
       "name": "api check without model",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "bias audit four fifths",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "non essential personal data dropped",
       "file": "test_verity",
       "pass": true
     }

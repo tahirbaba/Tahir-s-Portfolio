@@ -4,6 +4,14 @@ import { useState } from "react";
 import Assessment from "./Assessment";
 import { CvDoc } from "./ReplayDemo";
 
+export const NOTICE = [
+  "This CV is screened with the help of AI (Anthropic's Claude). A recruiter reviews every result and makes the decision.",
+  "Hidden before the AI reads it: name, contact details, city, profile links, photo, gender, age, marital status, religion, nationality, date of birth and hobbies.",
+  "Analysed: work history, dates, skills, education and certifications. Every point must quote the CV.",
+  "Not stored by Verity and not used to train any model. Anthropic doesn't train on API data by default; Zero Data Retention is available for enterprise deployments.",
+  "Encrypted in transit (HTTPS/TLS). Verity keeps nothing at rest.",
+];
+
 export default function LiveAgent({ sample, sampleName }: { sample: string; sampleName: string }) {
   const [name, setName] = useState(sampleName);
   const [cv, setCv] = useState(sample);
@@ -12,9 +20,10 @@ export default function LiveAgent({ sample, sampleName }: { sample: string; samp
   const [out, setOut] = useState<any>(null);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const [consent, setConsent] = useState(false);
   async function run() {
     setBusy(true); setErr(""); setOut(null);
-    try { const res = await fetch("/api/py/screen", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, cv, claimed_years: years, degree_year: deg }) }); const d = await res.json(); if (!res.ok) setErr(d.error || "Request failed."); else setOut(d); }
+    try { const res = await fetch("/api/py/screen", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, cv, claimed_years: years, degree_year: deg, consent }) }); const d = await res.json(); if (!res.ok) setErr(d.error || "Request failed."); else setOut(d); }
     catch { setErr("Connection lost."); } finally { setBusy(false); }
   }
   return (
@@ -23,7 +32,10 @@ export default function LiveAgent({ sample, sampleName }: { sample: string; samp
         <input value={name} onChange={(e) => setName(e.target.value)} aria-label="Candidate name" className="rounded-xl border border-line-2 bg-panel px-3 py-2.5" />
         <textarea rows={14} value={cv} onChange={(e) => setCv(e.target.value)} aria-label="CV text" className="resize-none rounded-xl border border-line-2 bg-panel p-3 font-mono text-[12px]" />
         <div className="grid grid-cols-2 gap-3"><input type="number" aria-label="Claimed years" value={years} onChange={(e) => setYears(Number(e.target.value))} className="rounded-xl border border-line-2 bg-panel px-3 py-2.5 font-mono" /><input type="number" aria-label="Degree year" value={deg} onChange={(e) => setDeg(Number(e.target.value))} className="rounded-xl border border-line-2 bg-panel px-3 py-2.5 font-mono" /></div>
-        <button type="button" disabled={busy} onClick={run} className="btn btn-coral self-start disabled:opacity-50">{busy ? "Screening…" : "Screen with Claude"}</button>
+        <div className="rounded-xl border border-ice/30 bg-ice/5 p-3 text-[12.5px] leading-relaxed"><p className="mb-1 font-semibold">Applicant notice</p>
+          <ul className="list-disc space-y-0.5 pl-4 text-muted">{NOTICE.map((n) => <li key={n}>{n}</li>)}</ul>
+          <label className="mt-2 flex items-start gap-2"><input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5" /><span>The applicant has read this notice and agrees.</span></label></div>
+        <button type="button" disabled={busy || !consent} onClick={run} className="btn btn-coral self-start disabled:opacity-50">{busy ? "Screening…" : "Screen with Claude"}</button>
         {err && <p role="alert" className="text-[13px] text-coral">{err}</p>}
       </div>
       <div className="dark-zone flex min-h-[420px] flex-col gap-4 rounded-3xl border border-line bg-ink p-5">
