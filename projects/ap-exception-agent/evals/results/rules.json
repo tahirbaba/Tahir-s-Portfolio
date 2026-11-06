@@ -1,0 +1,52 @@
+{
+  "runAt": "2026-11-06T05:14:33Z",
+  "total": 9,
+  "passed": 9,
+  "tests": [
+    {
+      "name": "every demo invoice gets the expected decision",
+      "file": "test_controls",
+      "pass": true
+    },
+    {
+      "name": "math validation names the numbers",
+      "file": "test_controls",
+      "pass": true
+    },
+    {
+      "name": "partial receipt names the line",
+      "file": "test_controls",
+      "pass": true
+    },
+    {
+      "name": "iban formatting is normalised but changes are caught",
+      "file": "test_controls",
+      "pass": true
+    },
+    {
+      "name": "fraud beats duplicate and math",
+      "file": "test_controls",
+      "pass": true
+    },
+    {
+      "name": "tools enforce order and decision",
+      "file": "test_controls",
+      "pass": true
+    },
+    {
+      "name": "clean invoice cannot be sent to exceptions",
+      "file": "test_controls",
+      "pass": true
+    },
+    {
+      "name": "agent loop posts clean invoice",
+      "file": "test_controls",
+      "pass": true
+    },
+    {
+      "name": "controls api without model",
+      "file": "test_controls",
+      "pass": true
+    }
+  ]
+}

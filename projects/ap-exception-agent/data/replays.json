@@ -1,0 +1,1095 @@
+[
+  {
+    "id": "clean",
+    "title": "Clean invoice, auto-posted",
+    "doc": "GULF PACKAGING LLC\nAl Quoz Industrial 3, Dubai, UAE · TRN 100234567800003\nTAX INVOICE  GP-2340            Date: 2026-10-28\nBill to: Crescent Distribution · PO: PO-5001\n\nCorrugated boxes, large        2,000 x   3.20 AED    6,400.00\nPacking tape 48mm                300 x   6.50 AED    1,950.00\n                                     Subtotal        8,350.00\n                                     VAT 5%            417.50\n                                     TOTAL AED       8,767.50\nPay to IBAN AE07 0331 2345 6789 0123 456",
+    "kind": "scripted",
+    "model": null,
+    "reply": "GP-2340 from Gulf Packaging matched PO-5001 and the goods receipt, VAT is correct and the bank account is on file, so it was posted for payment (8,767.50 AED).",
+    "trace": [
+      {
+        "kind": "model",
+        "step": 1,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "submit_extraction",
+        "input": {
+          "vendor_name": "Gulf Packaging LLC",
+          "vendor_tax_id": "100234567800003",
+          "invoice_number": "GP-2340",
+          "invoice_date": "2026-10-28",
+          "po_number": "PO-5001",
+          "currency": "AED",
+          "lines": [
+            {
+              "description": "Corrugated boxes, large",
+              "qty": 2000,
+              "unit_price": 3.2
+            },
+            {
+              "description": "Packing tape 48mm",
+              "qty": 300,
+              "unit_price": 6.5
+            }
+          ],
+          "subtotal": 8350.0,
+          "tax": 417.5,
+          "total": 8767.5,
+          "bank_iban": "AE070331234567890123456"
+        },
+        "output": {
+          "ok": true,
+          "arithmetic_issues": []
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 2,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "run_controls",
+        "input": {},
+        "output": {
+          "ok": true,
+          "decision": "post",
+          "type": "clean",
+          "reasons": [
+            "Matched to PO and receipt, tax correct, bank account verified"
+          ]
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 3,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "post_to_erp",
+        "input": {},
+        "output": {
+          "ok": true,
+          "erp_id": "AP-7397",
+          "amount": 8767.5,
+          "currency": "AED"
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 4,
+        "ms": 0,
+        "stop": "end_turn"
+      }
+    ],
+    "decision": {
+      "decision": "post",
+      "type": "clean",
+      "reasons": [
+        "Matched to PO and receipt, tax correct, bank account verified"
+      ],
+      "checks": {
+        "extraction": [],
+        "bank": {
+          "ok": true,
+          "reason": "Matches the bank account on file"
+        },
+        "duplicate": {
+          "duplicate": false,
+          "reason": "No earlier invoice matches"
+        },
+        "match": {
+          "ok": true,
+          "issues": [],
+          "lines": [
+            {
+              "line": "Corrugated boxes, large",
+              "status": "matched"
+            },
+            {
+              "line": "Packing tape 48mm",
+              "status": "matched"
+            }
+          ]
+        },
+        "tax": {
+          "ok": true,
+          "reason": "5% AE tax correct"
+        }
+      }
+    },
+    "posted": {
+      "erp_id": "AP-7397",
+      "amount": 8767.5,
+      "currency": "AED"
+    },
+    "exception": null,
+    "fields": {
+      "vendor_name": "Gulf Packaging LLC",
+      "vendor_tax_id": "100234567800003",
+      "invoice_number": "GP-2340",
+      "invoice_date": "2026-10-28",
+      "po_number": "PO-5001",
+      "currency": "AED",
+      "lines": [
+        {
+          "description": "Corrugated boxes, large",
+          "qty": 2000,
+          "unit_price": 3.2
+        },
+        {
+          "description": "Packing tape 48mm",
+          "qty": 300,
+          "unit_price": 6.5
+        }
+      ],
+      "subtotal": 8350.0,
+      "tax": 417.5,
+      "total": 8767.5,
+      "bank_iban": "AE070331234567890123456"
+    }
+  },
+  {
+    "id": "partial",
+    "title": "Billed for goods not yet received",
+    "doc": "RIYADH OFFICE SUPPLIES CO · شركة الرياض للمستلزمات المكتبية\nVAT No. 300987654300003\nفاتورة ضريبية / TAX INVOICE  ROS-77810      Date: 2026-10-30\nPO: PO-5002\n\nA4 paper, 5-ream box              120 x    85.00 SAR    10,200.00\nToner cartridge                    20 x   410.00 SAR     8,200.00\n                              المجموع الفرعي / Subtotal  18,400.00\n                              ضريبة القيمة المضافة 15%     2,760.00\n                              الإجمالي / TOTAL SAR      21,160.00\nIBAN SA03 8000 0000 6080 1016 7519",
+    "kind": "scripted",
+    "model": null,
+    "reply": "ROS-77810 is in the exception queue: 20 toner cartridges were billed but only 14 have been received. A bilingual note to the vendor is drafted.",
+    "trace": [
+      {
+        "kind": "model",
+        "step": 1,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "submit_extraction",
+        "input": {
+          "vendor_name": "Riyadh Office Supplies Co",
+          "vendor_tax_id": "300987654300003",
+          "invoice_number": "ROS-77810",
+          "invoice_date": "2026-10-30",
+          "po_number": "PO-5002",
+          "currency": "SAR",
+          "lines": [
+            {
+              "description": "A4 paper, 5-ream box",
+              "qty": 120,
+              "unit_price": 85.0
+            },
+            {
+              "description": "Toner cartridge",
+              "qty": 20,
+              "unit_price": 410.0
+            }
+          ],
+          "subtotal": 18400.0,
+          "tax": 2760.0,
+          "total": 21160.0,
+          "bank_iban": "SA0380000000608010167519"
+        },
+        "output": {
+          "ok": true,
+          "arithmetic_issues": []
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 2,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "run_controls",
+        "input": {},
+        "output": {
+          "ok": true,
+          "decision": "exception",
+          "type": "match_failure",
+          "reasons": [
+            "Toner cartridge: billed 20, only 14 received"
+          ]
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 3,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "create_exception",
+        "input": {
+          "clerk_note": "Toner billed 20 but only 14 received on PO-5002. Paper line matches. Hold toner portion until the remaining 6 arrive or ask for a corrected invoice.",
+          "vendor_message": "مرحباً، استلمنا 14 خرطوشة حبر فقط من أصل 20 في أمر الشراء PO-5002. نرجو إرسال فاتورة معدلة بالكمية المستلمة، أو إشعارنا بموعد توريد الباقي. شكراً. / We received 14 of 20 toner cartridges on PO-5002; please send a corrected invoice or confirm delivery of the remaining 6."
+        },
+        "output": {
+          "ok": true,
+          "queue_id": "EXC-4552"
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 4,
+        "ms": 0,
+        "stop": "end_turn"
+      }
+    ],
+    "decision": {
+      "decision": "exception",
+      "type": "match_failure",
+      "reasons": [
+        "Toner cartridge: billed 20, only 14 received"
+      ],
+      "checks": {
+        "extraction": [],
+        "bank": {
+          "ok": true,
+          "reason": "Matches the bank account on file"
+        },
+        "duplicate": {
+          "duplicate": false,
+          "reason": "No earlier invoice matches"
+        },
+        "match": {
+          "ok": false,
+          "issues": [
+            "Toner cartridge: billed 20, only 14 received"
+          ],
+          "lines": [
+            {
+              "line": "A4 paper, 5-ream box",
+              "status": "matched"
+            },
+            {
+              "line": "Toner cartridge",
+              "status": "quantity not received"
+            }
+          ]
+        },
+        "tax": {
+          "ok": true,
+          "reason": "15% SA tax correct"
+        }
+      }
+    },
+    "posted": null,
+    "exception": {
+      "queue_id": "EXC-4552",
+      "type": "match_failure",
+      "decision": "exception",
+      "clerk_note": "Toner billed 20 but only 14 received on PO-5002. Paper line matches. Hold toner portion until the remaining 6 arrive or ask for a corrected invoice.",
+      "vendor_message": "مرحباً، استلمنا 14 خرطوشة حبر فقط من أصل 20 في أمر الشراء PO-5002. نرجو إرسال فاتورة معدلة بالكمية المستلمة، أو إشعارنا بموعد توريد الباقي. شكراً. / We received 14 of 20 toner cartridges on PO-5002; please send a corrected invoice or confirm delivery of the remaining 6."
+    },
+    "fields": {
+      "vendor_name": "Riyadh Office Supplies Co",
+      "vendor_tax_id": "300987654300003",
+      "invoice_number": "ROS-77810",
+      "invoice_date": "2026-10-30",
+      "po_number": "PO-5002",
+      "currency": "SAR",
+      "lines": [
+        {
+          "description": "A4 paper, 5-ream box",
+          "qty": 120,
+          "unit_price": 85.0
+        },
+        {
+          "description": "Toner cartridge",
+          "qty": 20,
+          "unit_price": 410.0
+        }
+      ],
+      "subtotal": 18400.0,
+      "tax": 2760.0,
+      "total": 21160.0,
+      "bank_iban": "SA0380000000608010167519"
+    }
+  },
+  {
+    "id": "price",
+    "title": "Unit price creeping above the PO",
+    "doc": "NORTHLINE IT SERVICES LTD\nVAT GB123456789 · Manchester, UK\nINVOICE NIT-1193                   Date: 2026-11-02\nYour PO: PO-5004\n\nManaged IT support, November        1 x 4,800.00 GBP   4,800.00\nLaptop setup                         8 x   105.00 GBP     840.00\n                                     Subtotal          5,640.00\n                                     VAT 20%           1,128.00\n                                     Total GBP         6,768.00\nBank: GB29 NWBK 6016 1331 9268 19",
+    "kind": "scripted",
+    "model": null,
+    "reply": "NIT-1193 is in the exception queue because laptop setup is billed 10.5% above the PO price. A note asking Northline to reissue at £95 is drafted.",
+    "trace": [
+      {
+        "kind": "model",
+        "step": 1,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "submit_extraction",
+        "input": {
+          "vendor_name": "Northline IT Services Ltd",
+          "vendor_tax_id": "GB123456789",
+          "invoice_number": "NIT-1193",
+          "invoice_date": "2026-11-02",
+          "po_number": "PO-5004",
+          "currency": "GBP",
+          "lines": [
+            {
+              "description": "Managed IT support, November",
+              "qty": 1,
+              "unit_price": 4800.0
+            },
+            {
+              "description": "Laptop setup",
+              "qty": 8,
+              "unit_price": 105.0
+            }
+          ],
+          "subtotal": 5640.0,
+          "tax": 1128.0,
+          "total": 6768.0,
+          "bank_iban": "GB29NWBK60161331926819"
+        },
+        "output": {
+          "ok": true,
+          "arithmetic_issues": []
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 2,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "run_controls",
+        "input": {},
+        "output": {
+          "ok": true,
+          "decision": "exception",
+          "type": "match_failure",
+          "reasons": [
+            "Laptop setup: billed at 105.00, PO price 95.00 (+10.5%)"
+          ]
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 3,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "create_exception",
+        "input": {
+          "clerk_note": "Laptop setup billed at 105.00 GBP vs PO price 95.00 (+10.5%). IT support line matches. Overcharge is 80.00 GBP plus VAT.",
+          "vendor_message": "Hi Northline team, invoice NIT-1193 bills laptop setup at £105 per unit, but PO-5004 agreed £95. Could you reissue the invoice at the PO price? Thanks."
+        },
+        "output": {
+          "ok": true,
+          "queue_id": "EXC-4486"
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 4,
+        "ms": 0,
+        "stop": "end_turn"
+      }
+    ],
+    "decision": {
+      "decision": "exception",
+      "type": "match_failure",
+      "reasons": [
+        "Laptop setup: billed at 105.00, PO price 95.00 (+10.5%)"
+      ],
+      "checks": {
+        "extraction": [],
+        "bank": {
+          "ok": true,
+          "reason": "Matches the bank account on file"
+        },
+        "duplicate": {
+          "duplicate": false,
+          "reason": "No earlier invoice matches"
+        },
+        "match": {
+          "ok": false,
+          "issues": [
+            "Laptop setup: billed at 105.00, PO price 95.00 (+10.5%)"
+          ],
+          "lines": [
+            {
+              "line": "Managed IT support, November",
+              "status": "matched"
+            },
+            {
+              "line": "Laptop setup",
+              "status": "price mismatch"
+            }
+          ]
+        },
+        "tax": {
+          "ok": true,
+          "reason": "20% GB tax correct"
+        }
+      }
+    },
+    "posted": null,
+    "exception": {
+      "queue_id": "EXC-4486",
+      "type": "match_failure",
+      "decision": "exception",
+      "clerk_note": "Laptop setup billed at 105.00 GBP vs PO price 95.00 (+10.5%). IT support line matches. Overcharge is 80.00 GBP plus VAT.",
+      "vendor_message": "Hi Northline team, invoice NIT-1193 bills laptop setup at £105 per unit, but PO-5004 agreed £95. Could you reissue the invoice at the PO price? Thanks."
+    },
+    "fields": {
+      "vendor_name": "Northline IT Services Ltd",
+      "vendor_tax_id": "GB123456789",
+      "invoice_number": "NIT-1193",
+      "invoice_date": "2026-11-02",
+      "po_number": "PO-5004",
+      "currency": "GBP",
+      "lines": [
+        {
+          "description": "Managed IT support, November",
+          "qty": 1,
+          "unit_price": 4800.0
+        },
+        {
+          "description": "Laptop setup",
+          "qty": 8,
+          "unit_price": 105.0
+        }
+      ],
+      "subtotal": 5640.0,
+      "tax": 1128.0,
+      "total": 6768.0,
+      "bank_iban": "GB29NWBK60161331926819"
+    }
+  },
+  {
+    "id": "duplicate",
+    "title": "The same invoice, sent twice",
+    "doc": "GULF PACKAGING LLC\nTRN 100234567800003\nTAX INVOICE  GP-2291   (REMINDER COPY)   Date: 2026-10-12\nPO: PO-5001\n\nCorrugated boxes, large          2,000 x 3.20 AED    6,400.00\n                                     Subtotal        6,400.00\n                                     VAT 5%            320.00\n                                     TOTAL AED       6,720.00\nIBAN AE07 0331 2345 6789 0123 456",
+    "kind": "scripted",
+    "model": null,
+    "reply": "GP-2291 was rejected as a duplicate: it was already posted on 12 October. A short note to the vendor is drafted.",
+    "trace": [
+      {
+        "kind": "model",
+        "step": 1,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "submit_extraction",
+        "input": {
+          "vendor_name": "Gulf Packaging LLC",
+          "vendor_tax_id": "100234567800003",
+          "invoice_number": "GP-2291",
+          "invoice_date": "2026-10-12",
+          "po_number": "PO-5001",
+          "currency": "AED",
+          "lines": [
+            {
+              "description": "Corrugated boxes, large",
+              "qty": 2000,
+              "unit_price": 3.2
+            }
+          ],
+          "subtotal": 6400.0,
+          "tax": 320.0,
+          "total": 6720.0,
+          "bank_iban": "AE070331234567890123456"
+        },
+        "output": {
+          "ok": true,
+          "arithmetic_issues": []
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 2,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "run_controls",
+        "input": {},
+        "output": {
+          "ok": true,
+          "decision": "reject",
+          "type": "duplicate",
+          "reasons": [
+            "Invoice GP-2291 from this vendor was already posted on 2026-10-12"
+          ]
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 3,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "create_exception",
+        "input": {
+          "clerk_note": "GP-2291 was already posted on 12 Oct. This is a reminder copy; do not pay again.",
+          "vendor_message": "Hello Gulf Packaging, invoice GP-2291 was paid in our 12 October run. Please check your records; nothing further is due on it."
+        },
+        "output": {
+          "ok": true,
+          "queue_id": "EXC-4402"
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 4,
+        "ms": 0,
+        "stop": "end_turn"
+      }
+    ],
+    "decision": {
+      "decision": "reject",
+      "type": "duplicate",
+      "reasons": [
+        "Invoice GP-2291 from this vendor was already posted on 2026-10-12"
+      ],
+      "checks": {
+        "extraction": [],
+        "bank": {
+          "ok": true,
+          "reason": "Matches the bank account on file"
+        },
+        "duplicate": {
+          "duplicate": true,
+          "reason": "Invoice GP-2291 from this vendor was already posted on 2026-10-12"
+        },
+        "match": {
+          "ok": true,
+          "issues": [],
+          "lines": [
+            {
+              "line": "Corrugated boxes, large",
+              "status": "matched"
+            }
+          ]
+        },
+        "tax": {
+          "ok": true,
+          "reason": "5% AE tax correct"
+        }
+      }
+    },
+    "posted": null,
+    "exception": {
+      "queue_id": "EXC-4402",
+      "type": "duplicate",
+      "decision": "reject",
+      "clerk_note": "GP-2291 was already posted on 12 Oct. This is a reminder copy; do not pay again.",
+      "vendor_message": "Hello Gulf Packaging, invoice GP-2291 was paid in our 12 October run. Please check your records; nothing further is due on it."
+    },
+    "fields": {
+      "vendor_name": "Gulf Packaging LLC",
+      "vendor_tax_id": "100234567800003",
+      "invoice_number": "GP-2291",
+      "invoice_date": "2026-10-12",
+      "po_number": "PO-5001",
+      "currency": "AED",
+      "lines": [
+        {
+          "description": "Corrugated boxes, large",
+          "qty": 2000,
+          "unit_price": 3.2
+        }
+      ],
+      "subtotal": 6400.0,
+      "tax": 320.0,
+      "total": 6720.0,
+      "bank_iban": "AE070331234567890123456"
+    }
+  },
+  {
+    "id": "bank",
+    "title": "New bank account: possible fraud",
+    "doc": "INDUS LOGISTICS (PVT) LTD · انڈس لاجسٹکس\nNTN PK-4471209-3 · Karachi\nSALES TAX INVOICE IL-8890          Date: 2026-11-01\nPO: PO-5003\n\nFreight Karachi to Lahore, 40ft     5 x 185,000.00 PKR    925,000.00\n                                     Subtotal            925,000.00\n                                     GST 18%             166,500.00\n                                     Total PKR         1,091,500.00\nPLEASE NOTE OUR NEW BANK ACCOUNT: PK18 MEZN 0001 2345 6789 0001",
+    "kind": "scripted",
+    "model": null,
+    "reply": "IL-8890 is on hold: it asks for payment to a new bank account. Please verify by calling Indus Logistics on the number in the vendor master. No message was drafted to the vendor on purpose.",
+    "trace": [
+      {
+        "kind": "model",
+        "step": 1,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "submit_extraction",
+        "input": {
+          "vendor_name": "Indus Logistics (Pvt) Ltd",
+          "vendor_tax_id": "PK-4471209-3",
+          "invoice_number": "IL-8890",
+          "invoice_date": "2026-11-01",
+          "po_number": "PO-5003",
+          "currency": "PKR",
+          "lines": [
+            {
+              "description": "Freight Karachi to Lahore, 40ft",
+              "qty": 5,
+              "unit_price": 185000.0
+            }
+          ],
+          "subtotal": 925000.0,
+          "tax": 166500.0,
+          "total": 1091500.0,
+          "bank_iban": "PK18MEZN0001234567890001"
+        },
+        "output": {
+          "ok": true,
+          "arithmetic_issues": []
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 2,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "run_controls",
+        "input": {},
+        "output": {
+          "ok": true,
+          "decision": "hold",
+          "type": "bank_change",
+          "reasons": [
+            "Bank account differs from the one on file (ends 6702). Verify by phone with the vendor before paying."
+          ]
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 3,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "create_exception",
+        "input": {
+          "clerk_note": "Invoice asks to pay a NEW bank account (Meezan, ends 0001) instead of the one on file (ends 6702). Classic payment-redirection fraud pattern. Call Indus Logistics on the number in the vendor master, not the one on the invoice, before any change.",
+          "vendor_message": ""
+        },
+        "output": {
+          "ok": true,
+          "queue_id": "EXC-4411"
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 4,
+        "ms": 0,
+        "stop": "end_turn"
+      }
+    ],
+    "decision": {
+      "decision": "hold",
+      "type": "bank_change",
+      "reasons": [
+        "Bank account differs from the one on file (ends 6702). Verify by phone with the vendor before paying."
+      ],
+      "checks": {
+        "extraction": [],
+        "bank": {
+          "ok": false,
+          "reason": "Bank account differs from the one on file (ends 6702). Verify by phone with the vendor before paying."
+        },
+        "duplicate": {
+          "duplicate": false,
+          "reason": "No earlier invoice matches"
+        },
+        "match": {
+          "ok": true,
+          "issues": [],
+          "lines": [
+            {
+              "line": "Freight Karachi to Lahore, 40ft",
+              "status": "matched"
+            }
+          ]
+        },
+        "tax": {
+          "ok": true,
+          "reason": "18% PK tax correct"
+        }
+      }
+    },
+    "posted": null,
+    "exception": {
+      "queue_id": "EXC-4411",
+      "type": "bank_change",
+      "decision": "hold",
+      "clerk_note": "Invoice asks to pay a NEW bank account (Meezan, ends 0001) instead of the one on file (ends 6702). Classic payment-redirection fraud pattern. Call Indus Logistics on the number in the vendor master, not the one on the invoice, before any change.",
+      "vendor_message": ""
+    },
+    "fields": {
+      "vendor_name": "Indus Logistics (Pvt) Ltd",
+      "vendor_tax_id": "PK-4471209-3",
+      "invoice_number": "IL-8890",
+      "invoice_date": "2026-11-01",
+      "po_number": "PO-5003",
+      "currency": "PKR",
+      "lines": [
+        {
+          "description": "Freight Karachi to Lahore, 40ft",
+          "qty": 5,
+          "unit_price": 185000.0
+        }
+      ],
+      "subtotal": 925000.0,
+      "tax": 166500.0,
+      "total": 1091500.0,
+      "bank_iban": "PK18MEZN0001234567890001"
+    }
+  },
+  {
+    "id": "approval",
+    "title": "Clean but above the auto-post limit",
+    "doc": "NORTHLINE IT SERVICES LTD\nVAT GB123456789\nINVOICE NIT-1201                   Date: 2026-11-03\nYour PO: PO-5004\n\nManaged IT support, November        1 x 4,800.00 GBP   4,800.00\nLaptop setup                         8 x    95.00 GBP     760.00\n                                     Subtotal          5,560.00\n                                     VAT 20%           1,112.00\n                                     Total GBP         6,672.00\nBank: GB29 NWBK 6016 1331 9268 19",
+    "kind": "scripted",
+    "model": null,
+    "reply": "NIT-1201 passed every control but is above the 5,000 GBP auto-post limit, so it is waiting for controller approval.",
+    "trace": [
+      {
+        "kind": "model",
+        "step": 1,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "submit_extraction",
+        "input": {
+          "vendor_name": "Northline IT Services Ltd",
+          "vendor_tax_id": "GB123456789",
+          "invoice_number": "NIT-1201",
+          "invoice_date": "2026-11-03",
+          "po_number": "PO-5004",
+          "currency": "GBP",
+          "lines": [
+            {
+              "description": "Managed IT support, November",
+              "qty": 1,
+              "unit_price": 4800.0
+            },
+            {
+              "description": "Laptop setup",
+              "qty": 8,
+              "unit_price": 95.0
+            }
+          ],
+          "subtotal": 5560.0,
+          "tax": 1112.0,
+          "total": 6672.0,
+          "bank_iban": "GB29NWBK60161331926819"
+        },
+        "output": {
+          "ok": true,
+          "arithmetic_issues": []
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 2,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "run_controls",
+        "input": {},
+        "output": {
+          "ok": true,
+          "decision": "approval",
+          "type": "over_limit",
+          "reasons": [
+            "Total 6,672.00 GBP is above the 5,000 auto-post limit"
+          ]
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 3,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "create_exception",
+        "input": {
+          "clerk_note": "Clean invoice: matched to PO-5004 and receipts, VAT correct, bank verified. Total 6,672 GBP is over the 5,000 auto-post limit, so it needs controller approval.",
+          "vendor_message": ""
+        },
+        "output": {
+          "ok": true,
+          "queue_id": "EXC-4476"
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 4,
+        "ms": 0,
+        "stop": "end_turn"
+      }
+    ],
+    "decision": {
+      "decision": "approval",
+      "type": "over_limit",
+      "reasons": [
+        "Total 6,672.00 GBP is above the 5,000 auto-post limit"
+      ],
+      "checks": {
+        "extraction": [],
+        "bank": {
+          "ok": true,
+          "reason": "Matches the bank account on file"
+        },
+        "duplicate": {
+          "duplicate": false,
+          "reason": "No earlier invoice matches"
+        },
+        "match": {
+          "ok": true,
+          "issues": [],
+          "lines": [
+            {
+              "line": "Managed IT support, November",
+              "status": "matched"
+            },
+            {
+              "line": "Laptop setup",
+              "status": "matched"
+            }
+          ]
+        },
+        "tax": {
+          "ok": true,
+          "reason": "20% GB tax correct"
+        }
+      }
+    },
+    "posted": null,
+    "exception": {
+      "queue_id": "EXC-4476",
+      "type": "over_limit",
+      "decision": "approval",
+      "clerk_note": "Clean invoice: matched to PO-5004 and receipts, VAT correct, bank verified. Total 6,672 GBP is over the 5,000 auto-post limit, so it needs controller approval.",
+      "vendor_message": ""
+    },
+    "fields": {
+      "vendor_name": "Northline IT Services Ltd",
+      "vendor_tax_id": "GB123456789",
+      "invoice_number": "NIT-1201",
+      "invoice_date": "2026-11-03",
+      "po_number": "PO-5004",
+      "currency": "GBP",
+      "lines": [
+        {
+          "description": "Managed IT support, November",
+          "qty": 1,
+          "unit_price": 4800.0
+        },
+        {
+          "description": "Laptop setup",
+          "qty": 8,
+          "unit_price": 95.0
+        }
+      ],
+      "subtotal": 5560.0,
+      "tax": 1112.0,
+      "total": 6672.0,
+      "bank_iban": "GB29NWBK60161331926819"
+    }
+  },
+  {
+    "id": "tax",
+    "title": "Wrong VAT rate",
+    "doc": "GULF PACKAGING LLC\nTRN 100234567800003\nTAX INVOICE  GP-2355            Date: 2026-11-02\nPO: PO-5005\n\nWooden pallets                    400 x  38.00 AED   15,200.00\n                                     Subtotal       15,200.00\n                                     VAT 10%         1,520.00\n                                     TOTAL AED      16,720.00\nIBAN AE07 0331 2345 6789 0123 456",
+    "kind": "scripted",
+    "model": null,
+    "reply": "GP-2355 is in the exception queue: VAT was charged at 10% instead of the UAE's 5%, overstating the total by 760 AED. A correction request is drafted.",
+    "trace": [
+      {
+        "kind": "model",
+        "step": 1,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "submit_extraction",
+        "input": {
+          "vendor_name": "Gulf Packaging LLC",
+          "vendor_tax_id": "100234567800003",
+          "invoice_number": "GP-2355",
+          "invoice_date": "2026-11-02",
+          "po_number": "PO-5005",
+          "currency": "AED",
+          "lines": [
+            {
+              "description": "Wooden pallets",
+              "qty": 400,
+              "unit_price": 38.0
+            }
+          ],
+          "subtotal": 15200.0,
+          "tax": 1520.0,
+          "total": 16720.0,
+          "bank_iban": "AE070331234567890123456"
+        },
+        "output": {
+          "ok": true,
+          "arithmetic_issues": []
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 2,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "run_controls",
+        "input": {},
+        "output": {
+          "ok": true,
+          "decision": "exception",
+          "type": "tax_error",
+          "reasons": [
+            "Tax should be 760.00 at 5% for AE, invoice says 1,520.00"
+          ]
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 3,
+        "ms": 0,
+        "stop": "tool_use"
+      },
+      {
+        "kind": "tool",
+        "name": "create_exception",
+        "input": {
+          "clerk_note": "VAT charged at 10% (1,520 AED); UAE VAT is 5%, so it should be 760 AED. Total overstated by 760 AED.",
+          "vendor_message": "Hello Gulf Packaging, invoice GP-2355 shows VAT at 10%. UAE VAT is 5% (760.00 AED on 15,200.00). Please send a corrected tax invoice. Thank you."
+        },
+        "output": {
+          "ok": true,
+          "queue_id": "EXC-4403"
+        },
+        "isError": false
+      },
+      {
+        "kind": "model",
+        "step": 4,
+        "ms": 0,
+        "stop": "end_turn"
+      }
+    ],
+    "decision": {
+      "decision": "exception",
+      "type": "tax_error",
+      "reasons": [
+        "Tax should be 760.00 at 5% for AE, invoice says 1,520.00"
+      ],
+      "checks": {
+        "extraction": [],
+        "bank": {
+          "ok": true,
+          "reason": "Matches the bank account on file"
+        },
+        "duplicate": {
+          "duplicate": false,
+          "reason": "No earlier invoice matches"
+        },
+        "match": {
+          "ok": true,
+          "issues": [],
+          "lines": [
+            {
+              "line": "Wooden pallets",
+              "status": "matched"
+            }
+          ]
+        },
+        "tax": {
+          "ok": false,
+          "reason": "Tax should be 760.00 at 5% for AE, invoice says 1,520.00"
+        }
+      }
+    },
+    "posted": null,
+    "exception": {
+      "queue_id": "EXC-4403",
+      "type": "tax_error",
+      "decision": "exception",
+      "clerk_note": "VAT charged at 10% (1,520 AED); UAE VAT is 5%, so it should be 760 AED. Total overstated by 760 AED.",
+      "vendor_message": "Hello Gulf Packaging, invoice GP-2355 shows VAT at 10%. UAE VAT is 5% (760.00 AED on 15,200.00). Please send a corrected tax invoice. Thank you."
+    },
+    "fields": {
+      "vendor_name": "Gulf Packaging LLC",
+      "vendor_tax_id": "100234567800003",
+      "invoice_number": "GP-2355",
+      "invoice_date": "2026-11-02",
+      "po_number": "PO-5005",
+      "currency": "AED",
+      "lines": [
+        {
+          "description": "Wooden pallets",
+          "qty": 400,
+          "unit_price": 38.0
+        }
+      ],
+      "subtotal": 15200.0,
+      "tax": 1520.0,
+      "total": 16720.0,
+      "bank_iban": "AE070331234567890123456"
+    }
+  }
+]

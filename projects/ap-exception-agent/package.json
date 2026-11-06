@@ -1,0 +1,27 @@
+{
+  "name": "ledger-ap-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Accounts-payable exception agent: reads invoices in English, Arabic and Urdu, runs 3-way match, duplicate, bank-change and tax controls in Python, posts clean invoices and explains exceptions.",
+  "scripts": {
+    "dev": "next dev",
+    "api": ".venv/bin/uvicorn api.index:app --reload --port 8000",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "motion": "^14.9.1",
+    "next": "^16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.4",
+    "typescript": "^5.9.2"
+  }
+}

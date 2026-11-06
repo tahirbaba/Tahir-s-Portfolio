@@ -1,0 +1,307 @@
+{
+  "runAt": "2026-11-06T05:14:33Z",
+  "total": 30,
+  "passed": 30,
+  "results": [
+    {
+      "id": "DEMO-clean",
+      "category": "Demo invoices",
+      "expected": "post",
+      "got": "post",
+      "type": "clean",
+      "reason": "Matched to PO and receipt, tax correct, bank account verified",
+      "pass": true,
+      "ms": 0.055
+    },
+    {
+      "id": "DEMO-partial",
+      "category": "Demo invoices",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "Toner cartridge: billed 20, only 14 received",
+      "pass": true,
+      "ms": 0.028
+    },
+    {
+      "id": "DEMO-price",
+      "category": "Demo invoices",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "Laptop setup: billed at 105.00, PO price 95.00 (+10.5%)",
+      "pass": true,
+      "ms": 0.024
+    },
+    {
+      "id": "DEMO-duplicate",
+      "category": "Demo invoices",
+      "expected": "reject",
+      "got": "reject",
+      "type": "duplicate",
+      "reason": "Invoice GP-2291 from this vendor was already posted on 2026-10-12",
+      "pass": true,
+      "ms": 0.013
+    },
+    {
+      "id": "DEMO-bank",
+      "category": "Demo invoices",
+      "expected": "hold",
+      "got": "hold",
+      "type": "bank_change",
+      "reason": "Bank account differs from the one on file (ends 6702). Verify by phone with the vendor before paying.",
+      "pass": true,
+      "ms": 0.014
+    },
+    {
+      "id": "DEMO-approval",
+      "category": "Demo invoices",
+      "expected": "approval",
+      "got": "approval",
+      "type": "over_limit",
+      "reason": "Total 6,672.00 GBP is above the 5,000 auto-post limit",
+      "pass": true,
+      "ms": 0.016
+    },
+    {
+      "id": "DEMO-tax",
+      "category": "Demo invoices",
+      "expected": "exception",
+      "got": "exception",
+      "type": "tax_error",
+      "reason": "Tax should be 760.00 at 5% for AE, invoice says 1,520.00",
+      "pass": true,
+      "ms": 0.013
+    },
+    {
+      "id": "PRICE-1",
+      "category": "Price tolerance",
+      "expected": "post",
+      "got": "post",
+      "type": "clean",
+      "reason": "Matched to PO and receipt, tax correct, bank account verified",
+      "pass": true,
+      "ms": 0.011
+    },
+    {
+      "id": "PRICE-2",
+      "category": "Price tolerance",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "Corrugated boxes, large: billed at 3.27, PO price 3.20 (+2.2%)",
+      "pass": true,
+      "ms": 0.015
+    },
+    {
+      "id": "PRICE-3",
+      "category": "Price tolerance",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "Packing tape 48mm: billed at 6.20, PO price 6.50 (-4.6%)",
+      "pass": true,
+      "ms": 0.012
+    },
+    {
+      "id": "QTY-1",
+      "category": "Quantities",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "Corrugated boxes, large: billed 2100, only 2000 received",
+      "pass": true,
+      "ms": 0.011
+    },
+    {
+      "id": "QTY-2",
+      "category": "Quantities",
+      "expected": "post",
+      "got": "post",
+      "type": "clean",
+      "reason": "Matched to PO and receipt, tax correct, bank account verified",
+      "pass": true,
+      "ms": 0.01
+    },
+    {
+      "id": "QTY-3",
+      "category": "Quantities",
+      "expected": "post",
+      "got": "post",
+      "type": "clean",
+      "reason": "Matched to PO and receipt, tax correct, bank account verified",
+      "pass": true,
+      "ms": 0.012
+    },
+    {
+      "id": "PO-1",
+      "category": "Purchase order",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "Purchase order PO-9999 does not exist",
+      "pass": true,
+      "ms": 0.008
+    },
+    {
+      "id": "PO-2",
+      "category": "Purchase order",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "PO PO-5002 belongs to Riyadh Office Supplies Co, not this vendor",
+      "pass": true,
+      "ms": 0.013
+    },
+    {
+      "id": "PO-3",
+      "category": "Purchase order",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "\u201cBubble wrap rolls\u201d is not on the purchase order",
+      "pass": true,
+      "ms": 0.012
+    },
+    {
+      "id": "CUR-1",
+      "category": "Currency",
+      "expected": "exception",
+      "got": "exception",
+      "type": "match_failure",
+      "reason": "Invoice currency USD differs from PO currency AED",
+      "pass": true,
+      "ms": 0.009
+    },
+    {
+      "id": "MATH-1",
+      "category": "Arithmetic",
+      "expected": "exception",
+      "got": "exception",
+      "type": "math_error",
+      "reason": "Line items add up to 8,350.00, but the subtotal says 8,530.00",
+      "pass": true,
+      "ms": 0.015
+    },
+    {
+      "id": "MATH-2",
+      "category": "Arithmetic",
+      "expected": "exception",
+      "got": "exception",
+      "type": "math_error",
+      "reason": "Subtotal plus tax is 8,767.50, but the total says 8,776.50",
+      "pass": true,
+      "ms": 0.011
+    },
+    {
+      "id": "TAX-1",
+      "category": "Tax",
+      "expected": "exception",
+      "got": "exception",
+      "type": "tax_error",
+      "reason": "Tax should be 417.50 at 5% for AE, invoice says 0.00",
+      "pass": true,
+      "ms": 0.012
+    },
+    {
+      "id": "TAX-2",
+      "category": "Tax",
+      "expected": "exception",
+      "got": "exception",
+      "type": "tax_error",
+      "reason": "Tax should be 1,530.00 at 15% for SA, invoice says 510.00",
+      "pass": true,
+      "ms": 0.04
+    },
+    {
+      "id": "DUP-1",
+      "category": "Duplicates",
+      "expected": "reject",
+      "got": "reject",
+      "type": "duplicate",
+      "reason": "Invoice GP-2291 from this vendor was already posted on 2026-10-12",
+      "pass": true,
+      "ms": 0.015
+    },
+    {
+      "id": "DUP-2",
+      "category": "Duplicates",
+      "expected": "reject",
+      "got": "reject",
+      "type": "duplicate",
+      "reason": "Same vendor and amount (6,720.00) as invoice GP-2291 posted on 2026-10-12",
+      "pass": true,
+      "ms": 0.017
+    },
+    {
+      "id": "DUP-3",
+      "category": "Duplicates",
+      "expected": "post",
+      "got": "post",
+      "type": "clean",
+      "reason": "Matched to PO and receipt, tax correct, bank account verified",
+      "pass": true,
+      "ms": 0.011
+    },
+    {
+      "id": "BANK-1",
+      "category": "Bank details",
+      "expected": "hold",
+      "got": "hold",
+      "type": "bank_change",
+      "reason": "Bank account differs from the one on file (ends 3456). Verify by phone with the vendor before paying.",
+      "pass": true,
+      "ms": 0.011
+    },
+    {
+      "id": "BANK-2",
+      "category": "Bank details",
+      "expected": "post",
+      "got": "post",
+      "type": "clean",
+      "reason": "Matched to PO and receipt, tax correct, bank account verified",
+      "pass": true,
+      "ms": 0.011
+    },
+    {
+      "id": "BANK-3",
+      "category": "Bank details",
+      "expected": "hold",
+      "got": "hold",
+      "type": "bank_change",
+      "reason": "Bank account differs from the one on file (ends 3456). Verify by phone with the vendor before paying.",
+      "pass": true,
+      "ms": 0.009
+    },
+    {
+      "id": "VEND-1",
+      "category": "Vendor master",
+      "expected": "exception",
+      "got": "exception",
+      "type": "unknown_vendor",
+      "reason": "Vendor tax ID is not in the vendor master",
+      "pass": true,
+      "ms": 0.004
+    },
+    {
+      "id": "LIMIT-1",
+      "category": "Approval limits",
+      "expected": "post",
+      "got": "post",
+      "type": "clean",
+      "reason": "Matched to PO and receipt, tax correct, bank account verified",
+      "pass": true,
+      "ms": 0.012
+    },
+    {
+      "id": "LIMIT-2",
+      "category": "Approval limits",
+      "expected": "post",
+      "got": "post",
+      "type": "clean",
+      "reason": "Matched to PO and receipt, tax correct, bank account verified",
+      "pass": true,
+      "ms": 0.012
+    }
+  ]
+}
