@@ -1,0 +1,926 @@
+[
+  {
+    "id": "amina",
+    "title": "Strong and consistent",
+    "name": "Amina Yusuf",
+    "cv": "Amina Yusuf\namina.yusuf@example.com · +44 7700 900456 · London · Female, 34, married\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
+    "redacted": "[candidate]\n[email] · [phone] · London · [removed], [removed], [removed]\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
+    "form": {
+      "claimed_years": 7,
+      "degree_year": 2018,
+      "current_title": "Senior Data Engineer",
+      "current_company": "Lumen Care"
+    },
+    "public": {
+      "roles": [
+        {
+          "company": "Lumen Care",
+          "title": "Senior Data Engineer"
+        },
+        {
+          "company": "Parcelly",
+          "title": "Data Engineer"
+        }
+      ]
+    },
+    "kind": "scripted",
+    "model": null,
+    "reply": "Recommend advancing. Every must-have is backed by the CV, including Spark and dbt pipelines on Snowflake and production Python, with mentoring and healthcare data as bonuses. No inconsistencies found.",
+    "result": {
+      "score": {
+        "total": 100,
+        "max": 100,
+        "rows": [
+          {
+            "id": "python",
+            "label": "Production Python",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Wrote production Python services",
+            "points": 20
+          },
+          {
+            "id": "spark_dbt",
+            "label": "Spark or dbt pipelines",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Built Spark and dbt pipelines",
+            "points": 20
+          },
+          {
+            "id": "warehouse",
+            "label": "Cloud warehouse (BigQuery, Snowflake, Redshift)",
+            "weight": 15,
+            "must": false,
+            "met": true,
+            "evidence": "on Snowflake",
+            "points": 15
+          },
+          {
+            "id": "data_quality",
+            "label": "Data quality and testing",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "Great Expectations data quality tests",
+            "points": 10
+          },
+          {
+            "id": "leadership",
+            "label": "Technical leadership or mentoring",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "Mentor three engineers",
+            "points": 10
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare or regulated data",
+            "weight": 5,
+            "must": false,
+            "met": true,
+            "evidence": "40M patient events a day",
+            "points": 5
+          },
+          {
+            "id": "years",
+            "label": "5+ years (computed from dates)",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "7.9 years of full-time work by the CV's own dates",
+            "points": 20
+          }
+        ],
+        "computed_years": 7.9,
+        "missing_must": [],
+        "unverified_evidence": []
+      },
+      "flags": [],
+      "recommendation": "advance",
+      "why": "Meets every must-have with verified evidence and no inconsistencies.",
+      "checklist": [],
+      "decided_by": "a recruiter, not the system"
+    }
+  },
+  {
+    "id": "rahul",
+    "title": "Claims more years than the dates show",
+    "name": "Rahul Verma",
+    "cv": "Rahul Verma\nrahul.v@example.com · Dubai\n\nEXPERIENCE\nData Engineer, Desert Analytics (2022-06 to present)\n- Production Python ETL jobs and Spark Structured Streaming on Redshift.\nJunior Developer, Byteworks (2021-01 to 2022-05)\n- Python scripts for reporting.\n\nEDUCATION\nBTech Information Technology, Pune University, 2020",
+    "redacted": "[candidate]\n[email] · Dubai\n\nEXPERIENCE\nData Engineer, Desert Analytics (2022-06 to present)\n- Production Python ETL jobs and Spark Structured Streaming on Redshift.\nJunior Developer, Byteworks (2021-01 to 2022-05)\n- Python scripts for reporting.\n\nEDUCATION\nBTech Information Technology, Pune University, 2020",
+    "form": {
+      "claimed_years": 8,
+      "degree_year": 2020,
+      "current_title": "Data Engineer",
+      "current_company": "Desert Analytics"
+    },
+    "public": {
+      "roles": [
+        {
+          "company": "Desert Analytics",
+          "title": "Data Engineer"
+        },
+        {
+          "company": "Byteworks",
+          "title": "Junior Developer"
+        }
+      ]
+    },
+    "kind": "scripted",
+    "model": null,
+    "reply": "Verify before interviewing. Skills match the core stack, but the application claims 8 years while the CV's own dates add up to about 6. Ask the candidate to walk through the timeline.",
+    "result": {
+      "score": {
+        "total": 75,
+        "max": 100,
+        "rows": [
+          {
+            "id": "python",
+            "label": "Production Python",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Production Python ETL jobs",
+            "points": 20
+          },
+          {
+            "id": "spark_dbt",
+            "label": "Spark or dbt pipelines",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Spark Structured Streaming",
+            "points": 20
+          },
+          {
+            "id": "warehouse",
+            "label": "Cloud warehouse (BigQuery, Snowflake, Redshift)",
+            "weight": 15,
+            "must": false,
+            "met": true,
+            "evidence": "on Redshift",
+            "points": 15
+          },
+          {
+            "id": "data_quality",
+            "label": "Data quality and testing",
+            "weight": 10,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "leadership",
+            "label": "Technical leadership or mentoring",
+            "weight": 10,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare or regulated data",
+            "weight": 5,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "years",
+            "label": "5+ years (computed from dates)",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "5.9 years of full-time work by the CV's own dates",
+            "points": 20
+          }
+        ],
+        "computed_years": 5.9,
+        "missing_must": [],
+        "unverified_evidence": []
+      },
+      "flags": [
+        {
+          "type": "years_inflated",
+          "severity": "high",
+          "detail": "Application claims 8 years; the CV's dates add up to 5.9."
+        }
+      ],
+      "recommendation": "verify_first",
+      "why": "Strong on paper, but serious inconsistencies must be resolved before an interview.",
+      "checklist": [
+        {
+          "item": "Ask the candidate to walk through their timeline; confirm dates with references.",
+          "because": "Application claims 8 years; the CV's dates add up to 5.9."
+        }
+      ],
+      "decided_by": "a recruiter, not the system"
+    }
+  },
+  {
+    "id": "omar",
+    "title": "Title on CV doesn't match public profile",
+    "name": "Omar Haddad",
+    "cv": "Omar Haddad\nomar.h@example.com · Amman\n\nEXPERIENCE\nLead Data Engineer, Petra Pay (2020-02 to present)\n- Led a team of six building dbt models on BigQuery with production Python orchestration.\n- Owned data quality SLAs and tests for regulatory reporting.\nData Analyst, Zarqa Telecom (2017-07 to 2020-01)\n\nEDUCATION\nBSc Software Engineering, University of Jordan, 2017",
+    "redacted": "[candidate]\n[email] · Amman\n\nEXPERIENCE\nLead Data Engineer, Petra Pay (2020-02 to present)\n- Led a team of six building dbt models on BigQuery with production Python orchestration.\n- Owned data quality SLAs and tests for regulatory reporting.\nData Analyst, Zarqa Telecom (2017-07 to 2020-01)\n\nEDUCATION\nBSc Software Engineering, University of Jordan, 2017",
+    "form": {
+      "claimed_years": 9,
+      "degree_year": 2017,
+      "current_title": "Lead Data Engineer",
+      "current_company": "Petra Pay"
+    },
+    "public": {
+      "roles": [
+        {
+          "company": "Petra Pay",
+          "title": "Data Engineer"
+        },
+        {
+          "company": "Zarqa Telecom",
+          "title": "Data Analyst"
+        }
+      ]
+    },
+    "kind": "scripted",
+    "model": null,
+    "reply": "Interview and verify. Strong evidence across dbt, BigQuery, data quality and leading a team of six. The CV says Lead Data Engineer at Petra Pay but the public profile says Data Engineer; confirm the title with a reference.",
+    "result": {
+      "score": {
+        "total": 95,
+        "max": 100,
+        "rows": [
+          {
+            "id": "python",
+            "label": "Production Python",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "production Python orchestration",
+            "points": 20
+          },
+          {
+            "id": "spark_dbt",
+            "label": "Spark or dbt pipelines",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "building dbt models",
+            "points": 20
+          },
+          {
+            "id": "warehouse",
+            "label": "Cloud warehouse (BigQuery, Snowflake, Redshift)",
+            "weight": 15,
+            "must": false,
+            "met": true,
+            "evidence": "on BigQuery",
+            "points": 15
+          },
+          {
+            "id": "data_quality",
+            "label": "Data quality and testing",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "Owned data quality SLAs and tests",
+            "points": 10
+          },
+          {
+            "id": "leadership",
+            "label": "Technical leadership or mentoring",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "Led a team of six",
+            "points": 10
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare or regulated data",
+            "weight": 5,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "years",
+            "label": "5+ years (computed from dates)",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "9.4 years of full-time work by the CV's own dates",
+            "points": 20
+          }
+        ],
+        "computed_years": 9.4,
+        "missing_must": [],
+        "unverified_evidence": []
+      },
+      "flags": [
+        {
+          "type": "title_inflation",
+          "severity": "medium",
+          "detail": "CV says Lead Data Engineer at Petra Pay; public profile says Data Engineer."
+        }
+      ],
+      "recommendation": "interview_and_verify",
+      "why": "Meets the bar; some claims need checking alongside the interview.",
+      "checklist": [
+        {
+          "item": "Confirm job title with the employer's HR or a reference.",
+          "because": "CV says Lead Data Engineer at Petra Pay; public profile says Data Engineer."
+        }
+      ],
+      "decided_by": "a recruiter, not the system"
+    }
+  },
+  {
+    "id": "li",
+    "title": "Two full-time jobs at the same time",
+    "name": "Li Wei",
+    "cv": "Li Wei\nli.wei@example.com · Singapore\n\nEXPERIENCE\nSenior Data Engineer, Harbour Bank (2021-04 to present)\n- Spark pipelines and production Python on Snowflake.\nSenior Data Engineer, Kopi Logistics (2021-09 to 2024-06)\n- dbt modelling and data testing.\nData Engineer, Merlion Retail (2017-05 to 2021-03)\n\nEDUCATION\nMSc Data Science, National University of Singapore, 2017",
+    "redacted": "[candidate]\n[email] · Singapore\n\nEXPERIENCE\nSenior Data Engineer, Harbour Bank (2021-04 to present)\n- Spark pipelines and production Python on Snowflake.\nSenior Data Engineer, Kopi Logistics (2021-09 to 2024-06)\n- dbt modelling and data testing.\nData Engineer, Merlion Retail (2017-05 to 2021-03)\n\nEDUCATION\nMSc Data Science, National University of Singapore, 2017",
+    "form": {
+      "claimed_years": 9,
+      "degree_year": 2017,
+      "current_title": "Senior Data Engineer",
+      "current_company": "Harbour Bank"
+    },
+    "public": {
+      "roles": [
+        {
+          "company": "Harbour Bank",
+          "title": "Senior Data Engineer"
+        },
+        {
+          "company": "Merlion Retail",
+          "title": "Data Engineer"
+        }
+      ]
+    },
+    "kind": "scripted",
+    "model": null,
+    "reply": "Verify before interviewing. Two full-time senior roles overlap for 33 months, and Kopi Logistics doesn't appear on the public profile. Confirm both employments and whether one was part-time.",
+    "result": {
+      "score": {
+        "total": 85,
+        "max": 100,
+        "rows": [
+          {
+            "id": "python",
+            "label": "Production Python",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "production Python on Snowflake",
+            "points": 20
+          },
+          {
+            "id": "spark_dbt",
+            "label": "Spark or dbt pipelines",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Spark pipelines",
+            "points": 20
+          },
+          {
+            "id": "warehouse",
+            "label": "Cloud warehouse (BigQuery, Snowflake, Redshift)",
+            "weight": 15,
+            "must": false,
+            "met": true,
+            "evidence": "on Snowflake",
+            "points": 15
+          },
+          {
+            "id": "data_quality",
+            "label": "Data quality and testing",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "data testing",
+            "points": 10
+          },
+          {
+            "id": "leadership",
+            "label": "Technical leadership or mentoring",
+            "weight": 10,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare or regulated data",
+            "weight": 5,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "years",
+            "label": "5+ years (computed from dates)",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "9.6 years of full-time work by the CV's own dates",
+            "points": 20
+          }
+        ],
+        "computed_years": 9.6,
+        "missing_must": [],
+        "unverified_evidence": []
+      },
+      "flags": [
+        {
+          "type": "overlapping_roles",
+          "severity": "high",
+          "detail": "Full-time roles at Harbour Bank and Kopi Logistics overlap for 33 months."
+        },
+        {
+          "type": "role_not_on_profile",
+          "severity": "medium",
+          "detail": "Senior Data Engineer at Kopi Logistics is not on the public profile. Verify employment."
+        }
+      ],
+      "recommendation": "verify_first",
+      "why": "Strong on paper, but serious inconsistencies must be resolved before an interview.",
+      "checklist": [
+        {
+          "item": "Confirm both employments and whether either was part-time or contract.",
+          "because": "Full-time roles at Harbour Bank and Kopi Logistics overlap for 33 months."
+        },
+        {
+          "item": "Verify employment with the company directly.",
+          "because": "Senior Data Engineer at Kopi Logistics is not on the public profile. Verify employment."
+        }
+      ],
+      "decided_by": "a recruiter, not the system"
+    }
+  },
+  {
+    "id": "sara",
+    "title": "Career break, strong skills",
+    "name": "Sara Khalid",
+    "cv": "Sara Khalid\nsara.k@example.com · Lahore\n\nEXPERIENCE\nData Engineer, Indus Health (2023-09 to present)\n- Spark and dbt pipelines for hospital claims data on BigQuery, written in production Python.\n- Added dbt tests and anomaly alerts for data quality.\nCareer break, caring for family (2021-06 to 2023-08)\nData Engineer, Ravi Fintech (2016-03 to 2021-05)\n- Mentored two graduate engineers.\n\nEDUCATION\nBS Computer Science, LUMS, 2015",
+    "redacted": "[candidate]\n[email] · Lahore\n\nEXPERIENCE\nData Engineer, Indus Health (2023-09 to present)\n- Spark and dbt pipelines for hospital claims data on BigQuery, written in production Python.\n- Added dbt tests and anomaly alerts for data quality.\nCareer break, caring for family (2021-06 to 2023-08)\nData Engineer, Ravi Fintech (2016-03 to 2021-05)\n- Mentored two graduate engineers.\n\nEDUCATION\nBS Computer Science, LUMS, 2015",
+    "form": {
+      "claimed_years": 8,
+      "degree_year": 2015,
+      "current_title": "Data Engineer",
+      "current_company": "Indus Health"
+    },
+    "public": {
+      "roles": [
+        {
+          "company": "Indus Health",
+          "title": "Data Engineer"
+        },
+        {
+          "company": "Ravi Fintech",
+          "title": "Data Engineer"
+        }
+      ]
+    },
+    "kind": "scripted",
+    "model": null,
+    "reply": "Recommend advancing. Spark and dbt on BigQuery for hospital claims data, production Python, data testing and mentoring are all evidenced. There is a two-year career break; it is noted for conversation only and does not affect the score.",
+    "result": {
+      "score": {
+        "total": 100,
+        "max": 100,
+        "rows": [
+          {
+            "id": "python",
+            "label": "Production Python",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "written in production Python",
+            "points": 20
+          },
+          {
+            "id": "spark_dbt",
+            "label": "Spark or dbt pipelines",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Spark and dbt pipelines",
+            "points": 20
+          },
+          {
+            "id": "warehouse",
+            "label": "Cloud warehouse (BigQuery, Snowflake, Redshift)",
+            "weight": 15,
+            "must": false,
+            "met": true,
+            "evidence": "on BigQuery",
+            "points": 15
+          },
+          {
+            "id": "data_quality",
+            "label": "Data quality and testing",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "Added dbt tests and anomaly alerts",
+            "points": 10
+          },
+          {
+            "id": "leadership",
+            "label": "Technical leadership or mentoring",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "Mentored two graduate engineers",
+            "points": 10
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare or regulated data",
+            "weight": 5,
+            "must": false,
+            "met": true,
+            "evidence": "hospital claims data",
+            "points": 5
+          },
+          {
+            "id": "years",
+            "label": "5+ years (computed from dates)",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "8.5 years of full-time work by the CV's own dates",
+            "points": 20
+          }
+        ],
+        "computed_years": 8.5,
+        "missing_must": [],
+        "unverified_evidence": []
+      },
+      "flags": [
+        {
+          "type": "career_gap",
+          "severity": "info",
+          "detail": "27-month gap between Ravi Fintech and Indus Health. Ask about it; don't penalise it."
+        }
+      ],
+      "recommendation": "advance",
+      "why": "Meets every must-have with verified evidence and no inconsistencies.",
+      "checklist": [
+        {
+          "item": "Ask about the gap in conversation. Not a negative signal.",
+          "because": "27-month gap between Ravi Fintech and Indus Health. Ask about it; don't penalise it."
+        }
+      ],
+      "decided_by": "a recruiter, not the system"
+    }
+  },
+  {
+    "id": "tom",
+    "title": "Early career, missing must-haves",
+    "name": "Tom Fischer",
+    "cv": "Tom Fischer\ntom.f@example.com · Berlin\n\nEXPERIENCE\nAnalytics Engineer, Spree Shop (2024-02 to present)\n- SQL dashboards in Looker and some Python notebooks.\n\nEDUCATION\nBSc Economics, FU Berlin, 2023",
+    "redacted": "[candidate]\n[email] · Berlin\n\nEXPERIENCE\nAnalytics Engineer, Spree Shop (2024-02 to present)\n- SQL dashboards in Looker and some Python notebooks.\n\nEDUCATION\nBSc Economics, FU Berlin, 2023",
+    "form": {
+      "claimed_years": 2,
+      "degree_year": 2023,
+      "current_title": "Analytics Engineer",
+      "current_company": "Spree Shop"
+    },
+    "public": {
+      "roles": [
+        {
+          "company": "Spree Shop",
+          "title": "Analytics Engineer"
+        }
+      ]
+    },
+    "kind": "scripted",
+    "model": null,
+    "reply": "Not a fit for this senior role yet. The CV shows about three years with Python notebooks and SQL dashboards, but no Spark or dbt pipeline work. Worth keeping in mind for a junior opening.",
+    "result": {
+      "score": {
+        "total": 31,
+        "max": 100,
+        "rows": [
+          {
+            "id": "python",
+            "label": "Production Python",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "some Python notebooks",
+            "points": 20
+          },
+          {
+            "id": "spark_dbt",
+            "label": "Spark or dbt pipelines",
+            "weight": 20,
+            "must": true,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "warehouse",
+            "label": "Cloud warehouse (BigQuery, Snowflake, Redshift)",
+            "weight": 15,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "data_quality",
+            "label": "Data quality and testing",
+            "weight": 10,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "leadership",
+            "label": "Technical leadership or mentoring",
+            "weight": 10,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare or regulated data",
+            "weight": 5,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "years",
+            "label": "5+ years (computed from dates)",
+            "weight": 20,
+            "must": true,
+            "met": false,
+            "evidence": "2.8 years of full-time work by the CV's own dates",
+            "points": 11
+          }
+        ],
+        "computed_years": 2.8,
+        "missing_must": [
+          "Spark or dbt pipelines",
+          "5+ years (computed from dates)"
+        ],
+        "unverified_evidence": []
+      },
+      "flags": [],
+      "recommendation": "not_a_fit_yet",
+      "why": "Missing must-haves: Spark or dbt pipelines, 5+ years (computed from dates).",
+      "checklist": [],
+      "decided_by": "a recruiter, not the system"
+    }
+  },
+  {
+    "id": "nadia",
+    "title": "Certificate and degree don't check out",
+    "name": "Nadia Rahman",
+    "cv": "Nadia Rahman\nnadia.r@example.com · Dhaka\n\nEXPERIENCE\nSenior Data Engineer, Padma Telecom (2019-01 to present)\n- Production Python and Spark pipelines on Redshift, with data quality checks.\n\nEDUCATION\nMSc Computer Science, BUET, 2016\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID 12345",
+    "redacted": "[candidate]\n[email] · Dhaka\n\nEXPERIENCE\nSenior Data Engineer, Padma Telecom (2019-01 to present)\n- Production Python and Spark pipelines on Redshift, with data quality checks.\n\nEDUCATION\nMSc Computer Science, BUET, 2016\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID 12345",
+    "form": {
+      "claimed_years": 8,
+      "degree_year": 2014,
+      "current_title": "Senior Data Engineer",
+      "current_company": "Padma Telecom"
+    },
+    "public": {
+      "roles": [
+        {
+          "company": "Padma Telecom",
+          "title": "Senior Data Engineer"
+        }
+      ]
+    },
+    "kind": "scripted",
+    "model": null,
+    "reply": "Interview and verify. The core stack is evidenced, but the degree year differs between the CV (2016) and the form (2014), and the SnowPro ID doesn't match the issuer's format. Check both before an offer.",
+    "result": {
+      "score": {
+        "total": 85,
+        "max": 100,
+        "rows": [
+          {
+            "id": "python",
+            "label": "Production Python",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Production Python and Spark pipelines",
+            "points": 20
+          },
+          {
+            "id": "spark_dbt",
+            "label": "Spark or dbt pipelines",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Spark pipelines",
+            "points": 20
+          },
+          {
+            "id": "warehouse",
+            "label": "Cloud warehouse (BigQuery, Snowflake, Redshift)",
+            "weight": 15,
+            "must": false,
+            "met": true,
+            "evidence": "on Redshift",
+            "points": 15
+          },
+          {
+            "id": "data_quality",
+            "label": "Data quality and testing",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "data quality checks",
+            "points": 10
+          },
+          {
+            "id": "leadership",
+            "label": "Technical leadership or mentoring",
+            "weight": 10,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare or regulated data",
+            "weight": 5,
+            "must": false,
+            "met": false,
+            "evidence": null,
+            "points": 0
+          },
+          {
+            "id": "years",
+            "label": "5+ years (computed from dates)",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "7.9 years of full-time work by the CV's own dates",
+            "points": 20
+          }
+        ],
+        "computed_years": 7.9,
+        "missing_must": [],
+        "unverified_evidence": []
+      },
+      "flags": [
+        {
+          "type": "degree_year_mismatch",
+          "severity": "medium",
+          "detail": "MSc Computer Science: CV says 2016, application form says 2014."
+        },
+        {
+          "type": "certificate_id_format",
+          "severity": "medium",
+          "detail": "Snowflake SnowPro Core ID “12345” doesn't match the issuer's ID format. Check with the issuer."
+        }
+      ],
+      "recommendation": "interview_and_verify",
+      "why": "Meets the bar; some claims need checking alongside the interview.",
+      "checklist": [
+        {
+          "item": "Request the degree certificate or verify with the university.",
+          "because": "MSc Computer Science: CV says 2016, application form says 2014."
+        },
+        {
+          "item": "Verify the certificate on the issuer's verification page.",
+          "because": "Snowflake SnowPro Core ID “12345” doesn't match the issuer's ID format. Check with the issuer."
+        }
+      ],
+      "decided_by": "a recruiter, not the system"
+    }
+  },
+  {
+    "id": "amina_twin",
+    "title": "Fairness twin of the first candidate",
+    "name": "Daniel Okafor",
+    "cv": "Daniel Okafor\nd.okafor@example.com · +44 7700 900456 · London · Male, 41, single\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
+    "redacted": "[candidate]\n[email] · [phone] · London · [removed], [removed], [removed]\n\nEXPERIENCE\nSenior Data Engineer, Lumen Care (2022-03 to present)\n- Built Spark and dbt pipelines processing 40M patient events a day on Snowflake.\n- Introduced Great Expectations data quality tests across 120 models.\n- Mentor three engineers and lead the weekly design review.\nData Engineer, Parcelly (2019-01 to 2022-02)\n- Wrote production Python services for shipment data on BigQuery.\n\nEDUCATION\nBSc Computer Science, University of Leeds, 2018\n\nCERTIFICATIONS\nSnowflake SnowPro Core, ID SPC-4821-7733",
+    "form": {
+      "claimed_years": 7,
+      "degree_year": 2018,
+      "current_title": "Senior Data Engineer",
+      "current_company": "Lumen Care"
+    },
+    "public": {
+      "roles": [
+        {
+          "company": "Lumen Care",
+          "title": "Senior Data Engineer"
+        },
+        {
+          "company": "Parcelly",
+          "title": "Data Engineer"
+        }
+      ]
+    },
+    "kind": "scripted",
+    "model": null,
+    "reply": "Recommend advancing. Identical evidence and identical score to the first candidate: the name, gender, age and marital status were removed before screening.",
+    "result": {
+      "score": {
+        "total": 100,
+        "max": 100,
+        "rows": [
+          {
+            "id": "python",
+            "label": "Production Python",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Wrote production Python services",
+            "points": 20
+          },
+          {
+            "id": "spark_dbt",
+            "label": "Spark or dbt pipelines",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "Built Spark and dbt pipelines",
+            "points": 20
+          },
+          {
+            "id": "warehouse",
+            "label": "Cloud warehouse (BigQuery, Snowflake, Redshift)",
+            "weight": 15,
+            "must": false,
+            "met": true,
+            "evidence": "on Snowflake",
+            "points": 15
+          },
+          {
+            "id": "data_quality",
+            "label": "Data quality and testing",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "Great Expectations data quality tests",
+            "points": 10
+          },
+          {
+            "id": "leadership",
+            "label": "Technical leadership or mentoring",
+            "weight": 10,
+            "must": false,
+            "met": true,
+            "evidence": "Mentor three engineers",
+            "points": 10
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare or regulated data",
+            "weight": 5,
+            "must": false,
+            "met": true,
+            "evidence": "40M patient events a day",
+            "points": 5
+          },
+          {
+            "id": "years",
+            "label": "5+ years (computed from dates)",
+            "weight": 20,
+            "must": true,
+            "met": true,
+            "evidence": "7.9 years of full-time work by the CV's own dates",
+            "points": 20
+          }
+        ],
+        "computed_years": 7.9,
+        "missing_must": [],
+        "unverified_evidence": []
+      },
+      "flags": [],
+      "recommendation": "advance",
+      "why": "Meets every must-have with verified evidence and no inconsistencies.",
+      "checklist": [],
+      "decided_by": "a recruiter, not the system"
+    }
+  }
+]

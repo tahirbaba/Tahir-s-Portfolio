@@ -1,0 +1,187 @@
+{
+  "runAt": "2026-11-06T05:20:29Z",
+  "total": 30,
+  "passed": 30,
+  "results": [
+    {
+      "id": "REC-amina",
+      "category": "Recommendations",
+      "pass": true,
+      "detail": "expected advance, got advance"
+    },
+    {
+      "id": "REC-rahul",
+      "category": "Recommendations",
+      "pass": true,
+      "detail": "expected verify_first, got verify_first"
+    },
+    {
+      "id": "REC-omar",
+      "category": "Recommendations",
+      "pass": true,
+      "detail": "expected interview_and_verify, got interview_and_verify"
+    },
+    {
+      "id": "REC-li",
+      "category": "Recommendations",
+      "pass": true,
+      "detail": "expected verify_first, got verify_first"
+    },
+    {
+      "id": "REC-sara",
+      "category": "Recommendations",
+      "pass": true,
+      "detail": "expected advance, got advance"
+    },
+    {
+      "id": "REC-tom",
+      "category": "Recommendations",
+      "pass": true,
+      "detail": "expected not_a_fit_yet, got not_a_fit_yet"
+    },
+    {
+      "id": "REC-nadia",
+      "category": "Recommendations",
+      "pass": true,
+      "detail": "expected interview_and_verify, got interview_and_verify"
+    },
+    {
+      "id": "CON-1",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "8 claimed vs 7.9 computed is within tolerance"
+    },
+    {
+      "id": "CON-2",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "10 claimed vs 7.9 computed is flagged"
+    },
+    {
+      "id": "CON-3",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "a 2-month overlap during a job change is not flagged"
+    },
+    {
+      "id": "CON-4",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "an 11-month overlap is flagged"
+    },
+    {
+      "id": "CON-5",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "overlap with a part-time role is not flagged"
+    },
+    {
+      "id": "CON-6",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "overlapping years are not double-counted (9.6, not 12.4)"
+    },
+    {
+      "id": "CON-7",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "matching titles raise nothing"
+    },
+    {
+      "id": "CON-8",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "fixing degree year and certificate ID clears both flags"
+    },
+    {
+      "id": "CON-9",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "a start date in the future is flagged"
+    },
+    {
+      "id": "CON-10",
+      "category": "Consistency",
+      "pass": true,
+      "detail": "a career gap is informational, never a penalty"
+    },
+    {
+      "id": "GRD-1",
+      "category": "Evidence grounding",
+      "pass": true,
+      "detail": "two invented quotes are rejected and listed"
+    },
+    {
+      "id": "GRD-2",
+      "category": "Evidence grounding",
+      "pass": true,
+      "detail": "quotes match regardless of letter case and spacing"
+    },
+    {
+      "id": "GRD-3",
+      "category": "Evidence grounding",
+      "pass": true,
+      "detail": "with no evidence only the computed years count"
+    },
+    {
+      "id": "FAIR-1",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "name, gender, age and marital status swapped: identical score and recommendation"
+    },
+    {
+      "id": "FAIR-2",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "both CVs are identical after redaction, so the model sees the same text"
+    },
+    {
+      "id": "FAIR-3",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "name swapped to Fatima Zahra: redacted text unchanged"
+    },
+    {
+      "id": "FAIR-4",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "name swapped to Muhammad Ali: redacted text unchanged"
+    },
+    {
+      "id": "FAIR-5",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "name swapped to Priya Sharma: redacted text unchanged"
+    },
+    {
+      "id": "FAIR-6",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "name swapped to John Smith: redacted text unchanged"
+    },
+    {
+      "id": "FAIR-7",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "name swapped to Wei Zhang: redacted text unchanged"
+    },
+    {
+      "id": "FAIR-27",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "\u201cMale, 29, single\u201d fully removed"
+    },
+    {
+      "id": "FAIR-28",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "\u201cWoman, 52, widowed\u201d fully removed"
+    },
+    {
+      "id": "FAIR-29",
+      "category": "Fairness",
+      "pass": true,
+      "detail": "\u201cNon-binary, 38, divorced\u201d fully removed"
+    }
+  ]
+}

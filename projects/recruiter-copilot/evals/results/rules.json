@@ -1,0 +1,47 @@
+{
+  "runAt": "2026-11-06T05:24:38Z",
+  "total": 8,
+  "passed": 8,
+  "tests": [
+    {
+      "name": "redaction removes protected attributes",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "years union of intervals",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "nobody is auto rejected",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "twin scores identically",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "checklist follows flags",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "tools order",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "agent sees only redacted cv",
+      "file": "test_verity",
+      "pass": true
+    },
+    {
+      "name": "api check without model",
+      "file": "test_verity",
+      "pass": true
+    }
+  ]
+}

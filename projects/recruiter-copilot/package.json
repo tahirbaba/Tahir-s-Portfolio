@@ -1,0 +1,27 @@
+{
+  "name": "verity-recruiter-copilot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Recruiter integrity copilot: blind screening with evidence-backed rubric scores, CV consistency checks, verification checklists and fairness tests. FastAPI + Next.js + Claude.",
+  "scripts": {
+    "dev": "next dev",
+    "api": ".venv/bin/uvicorn api.index:app --reload --port 8000",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "motion": "^14.9.1",
+    "next": "^16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.4",
+    "typescript": "^5.9.2"
+  }
+}
