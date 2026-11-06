@@ -1,0 +1,434 @@
+[
+  {
+    "id": "bands_emp",
+    "role": "employee",
+    "title": "Employee asks for salary bands",
+    "question": "What's the salary band for a Senior Software Engineer?",
+    "kind": "scripted",
+    "model": null,
+    "reply": "I couldn't find this in the documents you have access to. If you think it should be there, ask the document owner or HR.",
+    "raw_reply": "I couldn't find salary bands in the documents available to you. HR can tell you the band for your role.",
+    "guarded": true,
+    "citations": {
+      "cited": [],
+      "invalid": [],
+      "ok": false
+    },
+    "trace": [
+      {
+        "query": "salary band senior software engineer",
+        "hits": [
+          {
+            "id": "ENG-ONCALL#3",
+            "doc": "ENG-ONCALL",
+            "title": "On-call runbook: shipment tracking API",
+            "heading": "Escalation",
+            "text": "If a SEV1 is not mitigated within 45 minutes, escalate to the engineering manager on duty and notify customer support.",
+            "updated": "2026-09-20",
+            "superseded_by": null,
+            "score": 2.12
+          },
+          {
+            "id": "ENG-ONCALL#1",
+            "doc": "ENG-ONCALL",
+            "title": "On-call runbook: shipment tracking API",
+            "heading": "Severity levels",
+            "text": "SEV1 means customers cannot track any shipments; page the on-call engineer immediately and open an incident channel. SEV2 means degraded tracking for one region; respond within 30 minutes.",
+            "updated": "2026-09-20",
+            "superseded_by": null,
+            "score": 1.66
+          }
+        ],
+        "hidden_by_access": 2,
+        "hidden_as_outdated": 0,
+        "answerable": true
+      }
+    ]
+  },
+  {
+    "id": "bands_hr",
+    "role": "hr",
+    "title": "HR asks the same question",
+    "question": "What's the salary band for a Senior Software Engineer?",
+    "kind": "scripted",
+    "model": null,
+    "reply": "Senior Software Engineers are banded at 95,000 to 128,000 USD [HR-BANDS#1].",
+    "raw_reply": "Senior Software Engineers are banded at 95,000 to 128,000 USD [HR-BANDS#1].",
+    "guarded": false,
+    "citations": {
+      "cited": [
+        "HR-BANDS#1"
+      ],
+      "invalid": [],
+      "ok": true
+    },
+    "trace": [
+      {
+        "query": "salary band senior software engineer",
+        "hits": [
+          {
+            "id": "HR-BANDS#1",
+            "doc": "HR-BANDS",
+            "title": "Salary bands 2026",
+            "heading": "Engineering bands",
+            "text": "Software Engineer II: 70,000 to 92,000 USD. Senior Software Engineer: 95,000 to 128,000 USD. Staff Engineer: 130,000 to 165,000 USD.",
+            "updated": "2026-01-05",
+            "superseded_by": null,
+            "score": 14.86
+          },
+          {
+            "id": "HR-BANDS#2",
+            "doc": "HR-BANDS",
+            "title": "Salary bands 2026",
+            "heading": "Operations bands",
+            "text": "Operations Coordinator: 38,000 to 50,000 USD. Operations Manager: 62,000 to 84,000 USD.",
+            "updated": "2026-01-05",
+            "superseded_by": null,
+            "score": 6.1
+          },
+          {
+            "id": "ENG-ONCALL#3",
+            "doc": "ENG-ONCALL",
+            "title": "On-call runbook: shipment tracking API",
+            "heading": "Escalation",
+            "text": "If a SEV1 is not mitigated within 45 minutes, escalate to the engineering manager on duty and notify customer support.",
+            "updated": "2026-09-20",
+            "superseded_by": null,
+            "score": 2.12
+          },
+          {
+            "id": "ENG-ONCALL#1",
+            "doc": "ENG-ONCALL",
+            "title": "On-call runbook: shipment tracking API",
+            "heading": "Severity levels",
+            "text": "SEV1 means customers cannot track any shipments; page the on-call engineer immediately and open an incident channel. SEV2 means degraded tracking for one region; respond within 30 minutes.",
+            "updated": "2026-09-20",
+            "superseded_by": null,
+            "score": 1.66
+          }
+        ],
+        "hidden_by_access": 0,
+        "hidden_as_outdated": 0,
+        "answerable": true
+      }
+    ]
+  },
+  {
+    "id": "hotel",
+    "role": "employee",
+    "title": "Old policy quietly retired",
+    "question": "What's the hotel limit in London?",
+    "kind": "scripted",
+    "model": null,
+    "reply": "Hotels in London are reimbursed up to 180 USD per night [FIN-TRAVEL-2026#1]. Submit the claim in the finance portal within 30 days .",
+    "raw_reply": "Hotels in London are reimbursed up to 180 USD per night [FIN-TRAVEL-2026#1]. Submit the claim in the finance portal within 30 days [FIN-TRAVEL-2026#4].",
+    "guarded": false,
+    "citations": {
+      "cited": [
+        "FIN-TRAVEL-2026#1",
+        "FIN-TRAVEL-2026#4"
+      ],
+      "invalid": [
+        "FIN-TRAVEL-2026#4"
+      ],
+      "ok": false
+    },
+    "trace": [
+      {
+        "query": "hotel limit London per night",
+        "hits": [
+          {
+            "id": "FIN-TRAVEL-2026#1",
+            "doc": "FIN-TRAVEL-2026",
+            "title": "Travel and expenses policy (2026)",
+            "heading": "Hotels",
+            "text": "Hotel stays are reimbursed up to 180 USD per night in Dubai, London and New York, and up to 140 USD per night elsewhere.",
+            "updated": "2026-02-15",
+            "superseded_by": null,
+            "score": 10.02
+          }
+        ],
+        "hidden_by_access": 0,
+        "hidden_as_outdated": 1,
+        "answerable": true
+      }
+    ]
+  },
+  {
+    "id": "leave_ru",
+    "role": "employee",
+    "title": "Roman Urdu question",
+    "question": "Mujhe saal mein kitni chuttiyan milti hain?",
+    "kind": "scripted",
+    "model": null,
+    "reply": "Aap ko har saal 24 din ki paid annual leave milti hai, aur 5 din agle saal tak carry over ho sakte hain jo 31 March tak use karne hon ge [HR-LEAVE#1].",
+    "raw_reply": "Aap ko har saal 24 din ki paid annual leave milti hai, aur 5 din agle saal tak carry over ho sakte hain jo 31 March tak use karne hon ge [HR-LEAVE#1].",
+    "guarded": false,
+    "citations": {
+      "cited": [
+        "HR-LEAVE#1"
+      ],
+      "invalid": [],
+      "ok": true
+    },
+    "trace": [
+      {
+        "query": "annual leave days per year",
+        "hits": [
+          {
+            "id": "HR-LEAVE#1",
+            "doc": "HR-LEAVE",
+            "title": "Leave policy",
+            "heading": "Annual leave",
+            "text": "Full-time employees get 24 days of paid annual leave per calendar year, plus public holidays. Up to 5 unused days can be carried over to the next year and must be used by 31 March.",
+            "updated": "2026-01-10",
+            "superseded_by": null,
+            "score": 11.7
+          },
+          {
+            "id": "HR-LEAVE#2",
+            "doc": "HR-LEAVE",
+            "title": "Leave policy",
+            "heading": "Sick leave",
+            "text": "Employees get 12 days of paid sick leave per year. A doctor's note is required for absences longer than 2 consecutive days.",
+            "updated": "2026-01-10",
+            "superseded_by": null,
+            "score": 7.13
+          },
+          {
+            "id": "HR-LEAVE#4",
+            "doc": "HR-LEAVE",
+            "title": "Leave policy",
+            "heading": "Requesting leave",
+            "text": "Request leave in the HR portal at least 2 weeks in advance for absences of 3 days or more. Your manager approves it within 3 working days.",
+            "updated": "2026-01-10",
+            "superseded_by": null,
+            "score": 5.27
+          },
+          {
+            "id": "HR-LEAVE#3",
+            "doc": "HR-LEAVE",
+            "title": "Leave policy",
+            "heading": "Parental leave",
+            "text": "Birthing parents get 16 weeks of fully paid parental leave. Other parents get 6 weeks of fully paid leave, which can be taken within the first year.",
+            "updated": "2026-01-10",
+            "superseded_by": null,
+            "score": 4.71
+          }
+        ],
+        "hidden_by_access": 1,
+        "hidden_as_outdated": 0,
+        "answerable": true
+      }
+    ]
+  },
+  {
+    "id": "laptop",
+    "role": "employee",
+    "title": "Stolen laptop, urgent",
+    "question": "My laptop was stolen at the airport, what do I do?",
+    "kind": "scripted",
+    "model": null,
+    "reply": "Report it to the IT service desk within 1 hour on extension 4357 or it-help@halcyon.example; IT will wipe it remotely [IT-SEC#2].",
+    "raw_reply": "Report it to the IT service desk within 1 hour on extension 4357 or it-help@halcyon.example; IT will wipe it remotely [IT-SEC#2].",
+    "guarded": false,
+    "citations": {
+      "cited": [
+        "IT-SEC#2"
+      ],
+      "invalid": [],
+      "ok": true
+    },
+    "trace": [
+      {
+        "query": "lost stolen laptop report",
+        "hits": [
+          {
+            "id": "IT-SEC#2",
+            "doc": "IT-SEC",
+            "title": "IT security policy",
+            "heading": "Lost or stolen devices",
+            "text": "Report a lost or stolen laptop or phone to the IT service desk within 1 hour on extension 4357 or it-help@halcyon.example. IT will wipe the device remotely.",
+            "updated": "2026-03-02",
+            "superseded_by": null,
+            "score": 17.19
+          }
+        ],
+        "hidden_by_access": 0,
+        "hidden_as_outdated": 0,
+        "answerable": true
+      }
+    ]
+  },
+  {
+    "id": "oncall",
+    "role": "employee",
+    "title": "On-call engineer at 3 a.m.",
+    "question": "Webhook queue backlog is at 80k and tracking is degraded in one region. What now?",
+    "kind": "scripted",
+    "model": null,
+    "reply": "This is a SEV2: respond within 30 minutes [ENG-ONCALL#1]. With a backlog above 50,000, scale the consumers to 12 replicas after checking the dashboard [ENG-ONCALL#2].",
+    "raw_reply": "This is a SEV2: respond within 30 minutes [ENG-ONCALL#1]. With a backlog above 50,000, scale the consumers to 12 replicas after checking the dashboard [ENG-ONCALL#2].",
+    "guarded": false,
+    "citations": {
+      "cited": [
+        "ENG-ONCALL#1",
+        "ENG-ONCALL#2"
+      ],
+      "invalid": [],
+      "ok": true
+    },
+    "trace": [
+      {
+        "query": "carrier webhook queue backlog",
+        "hits": [
+          {
+            "id": "ENG-ONCALL#2",
+            "doc": "ENG-ONCALL",
+            "title": "On-call runbook: shipment tracking API",
+            "heading": "First steps",
+            "text": "Check the tracking API dashboard for error rate and latency, then check the carrier webhook queue. If the queue backlog is above 50,000 messages, scale the consumers to 12 replicas.",
+            "updated": "2026-09-20",
+            "superseded_by": null,
+            "score": 11.0
+          }
+        ],
+        "hidden_by_access": 0,
+        "hidden_as_outdated": 0,
+        "answerable": true
+      },
+      {
+        "query": "severity levels degraded tracking region",
+        "hits": [
+          {
+            "id": "ENG-ONCALL#1",
+            "doc": "ENG-ONCALL",
+            "title": "On-call runbook: shipment tracking API",
+            "heading": "Severity levels",
+            "text": "SEV1 means customers cannot track any shipments; page the on-call engineer immediately and open an incident channel. SEV2 means degraded tracking for one region; respond within 30 minutes.",
+            "updated": "2026-09-20",
+            "superseded_by": null,
+            "score": 14.09
+          },
+          {
+            "id": "ENG-ONCALL#2",
+            "doc": "ENG-ONCALL",
+            "title": "On-call runbook: shipment tracking API",
+            "heading": "First steps",
+            "text": "Check the tracking API dashboard for error rate and latency, then check the carrier webhook queue. If the queue backlog is above 50,000 messages, scale the consumers to 12 replicas.",
+            "updated": "2026-09-20",
+            "superseded_by": null,
+            "score": 2.19
+          },
+          {
+            "id": "ENG-ONCALL#3",
+            "doc": "ENG-ONCALL",
+            "title": "On-call runbook: shipment tracking API",
+            "heading": "Escalation",
+            "text": "If a SEV1 is not mitigated within 45 minutes, escalate to the engineering manager on duty and notify customer support.",
+            "updated": "2026-09-20",
+            "superseded_by": null,
+            "score": 1.86
+          }
+        ],
+        "hidden_by_access": 1,
+        "hidden_as_outdated": 0,
+        "answerable": true
+      }
+    ]
+  },
+  {
+    "id": "discount",
+    "role": "manager",
+    "title": "Sales manager checks discount authority",
+    "question": "Can I approve a 25% discount for a big customer?",
+    "kind": "scripted",
+    "model": null,
+    "reply": "No. Sales managers can approve up to 20%; anything above 20% needs CFO approval [FIN-PRICING#2].",
+    "raw_reply": "No. Sales managers can approve up to 20%; anything above 20% needs CFO approval [FIN-PRICING#2].",
+    "guarded": false,
+    "citations": {
+      "cited": [
+        "FIN-PRICING#2"
+      ],
+      "invalid": [],
+      "ok": true
+    },
+    "trace": [
+      {
+        "query": "discount authority approval",
+        "hits": [
+          {
+            "id": "FIN-PRICING#2",
+            "doc": "FIN-PRICING",
+            "title": "Enterprise pricing and discount authority",
+            "heading": "Discount authority",
+            "text": "Account managers may discount up to 10%. Sales managers may approve up to 20%. Anything above 20% needs CFO approval.",
+            "updated": "2026-07-01",
+            "superseded_by": null,
+            "score": 9.98
+          },
+          {
+            "id": "FIN-PRICING#1",
+            "doc": "FIN-PRICING",
+            "title": "Enterprise pricing and discount authority",
+            "heading": "List price",
+            "text": "Enterprise tracking is priced at 0.42 USD per shipment for the first 1 million shipments a month, then 0.31 USD.",
+            "updated": "2026-07-01",
+            "superseded_by": null,
+            "score": 4.59
+          },
+          {
+            "id": "FIN-TRAVEL-2026#3",
+            "doc": "FIN-TRAVEL-2026",
+            "title": "Travel and expenses policy (2026)",
+            "heading": "Flights",
+            "text": "Book economy class for flights under 6 hours. Business class is allowed for flights over 6 hours with director approval.",
+            "updated": "2026-02-15",
+            "superseded_by": null,
+            "score": 2.34
+          }
+        ],
+        "hidden_by_access": 0,
+        "hidden_as_outdated": 0,
+        "answerable": true
+      }
+    ]
+  },
+  {
+    "id": "wifi",
+    "role": "employee",
+    "title": "Not in the documents",
+    "question": "What's the office wifi password?",
+    "kind": "scripted",
+    "model": null,
+    "reply": "I couldn't find this in the documents you have access to. If you think it should be there, ask the document owner or HR.",
+    "raw_reply": "The wifi password is usually posted in the kitchen.",
+    "guarded": true,
+    "citations": {
+      "cited": [],
+      "invalid": [],
+      "ok": false
+    },
+    "trace": [
+      {
+        "query": "office wifi password",
+        "hits": [
+          {
+            "id": "IT-SEC#1",
+            "doc": "IT-SEC",
+            "title": "IT security policy",
+            "heading": "Passwords and MFA",
+            "text": "Use a password manager. Multi-factor authentication is mandatory for email, the VPN and all finance systems. Passwords must be at least 14 characters.",
+            "updated": "2026-03-02",
+            "superseded_by": null,
+            "score": 4.86
+          }
+        ],
+        "hidden_by_access": 0,
+        "hidden_as_outdated": 0,
+        "answerable": true
+      }
+    ]
+  }
+]

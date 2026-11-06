@@ -1,0 +1,37 @@
+{
+  "runAt": "2026-11-06T06:58:53Z",
+  "total": 6,
+  "passed": 6,
+  "tests": [
+    {
+      "name": "restricted never returned and counted",
+      "file": "test_compass",
+      "pass": true
+    },
+    {
+      "name": "superseded policy hidden",
+      "file": "test_compass",
+      "pass": true
+    },
+    {
+      "name": "citation check",
+      "file": "test_compass",
+      "pass": true
+    },
+    {
+      "name": "answer with valid citation passes",
+      "file": "test_compass",
+      "pass": true
+    },
+    {
+      "name": "uncited or hallucinated answers are replaced",
+      "file": "test_compass",
+      "pass": true
+    },
+    {
+      "name": "api search without model",
+      "file": "test_compass",
+      "pass": true
+    }
+  ]
+}
