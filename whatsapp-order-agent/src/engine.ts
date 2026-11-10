@@ -11,7 +11,7 @@ import { cartSummary } from "./cart.js";
 import { handleOwnerCommand, isOwner } from "./owner.js";
 import type { Transcriber } from "./stt.js";
 import type { LoadedVendor, VendorRegistry } from "./vendors.js";
-import { record } from "./usage.js";
+import { pktDay, record } from "./usage.js";
 import { splitText, type WhatsAppSender } from "./whatsapp/client.js";
 import type { InboundMessage } from "./whatsapp/webhook.js";
 
@@ -29,6 +29,10 @@ const consoleLogger: Logger = {
 
 export class Engine {
   private queues = new Map<string, Promise<void>>();
+  /** Recent message times per vendor:customer, for the hourly spam limit. */
+  private recent = new Map<string, number[]>();
+  /** When each vendor last received a customer message (go-live checklist). */
+  readonly lastInbound = new Map<string, number>();
 
   constructor(
     private deps: {
@@ -100,6 +104,8 @@ export class Engine {
     if (!store.markProcessed(msg.id)) return; // duplicate delivery from Meta
 
     wa.markRead(vendor, msg.id).catch(() => {}); // blue ticks; free, best-effort
+    this.lastInbound.set(vendor.slug, this.now().getTime());
+    record(store, vendor.slug, "wa_in", 1, this.now());
 
     // Owner commands ("#report", "#pause", ...) are answered by code, without the AI.
     if (msg.kind === "text" && msg.text && isOwner(vendor, msg.from)) {
@@ -108,6 +114,21 @@ export class Engine {
         await this.send(vendor, msg.from, answer);
         return;
       }
+    }
+
+    // Spam protection: one customer flooding the shop must not run up AI and WhatsApp costs.
+    const flood = this.floodCheck(vendor.slug, msg.from);
+    if (flood !== "ok") {
+      if (flood === "warn") {
+        await this.send(
+          vendor,
+          msg.from,
+          vendor.notifyLanguage === "roman_urdu"
+            ? "Bohat zyada messages aa gaye hain. Thori der baad dobara message karein, ya hamari team jaldi jawab degi."
+            : "We've received a lot of messages. Please try again a little later, or our team will reply soon.",
+        );
+      }
+      return;
     }
 
     const session = this.sessionFor(vendor, msg.from, msg.profileName);
@@ -122,6 +143,23 @@ export class Engine {
       session.mode = "bot";
       session.humanUntil = null;
       session.handoffReason = null;
+    }
+
+    // Vendor's daily AI budget: once used up, chats go to the staff instead of the AI.
+    const cap = vendor.limits.aiTurnsPerDay;
+    if (cap > 0 && (store.usageBetween(vendor.slug, pktDay(nowMs), pktDay(nowMs)).ai_turns ?? 0) >= cap) {
+      session.mode = "human";
+      session.humanUntil = nowMs + config.humanModeMinutes * 60_000;
+      session.handoffReason = "daily AI limit reached";
+      store.saveSession(session);
+      await this.send(
+        vendor,
+        msg.from,
+        vendor.notifyLanguage === "roman_urdu"
+          ? "Shukriya! Hamari team ka member jaldi isi chat mein jawab dega."
+          : "Thanks! A team member will reply in this chat shortly.",
+      );
+      return;
     }
 
     const input = await this.toTurnInput(vendor, session, msg);
@@ -267,6 +305,20 @@ export class Engine {
   /** Used by the kitchen/rider screen to tell the customer about their order. */
   async notifyCustomer(vendor: LoadedVendor, order: Order, text: string): Promise<void> {
     await this.send(vendor, order.customer, text);
+  }
+
+  /** "ok", "warn" (first message over the limit: tell the customer once) or "drop". */
+  private floodCheck(vendorSlug: string, customer: string): "ok" | "warn" | "drop" {
+    const limit = config.customerMessagesPerHour;
+    if (limit <= 0) return "ok";
+    const key = `${vendorSlug}:${customer}`;
+    const now = this.now().getTime();
+    const times = (this.recent.get(key) ?? []).filter((t) => now - t < 3600_000);
+    times.push(now);
+    this.recent.set(key, times);
+    if (this.recent.size > 50_000) this.recent.clear(); // memory guard
+    if (times.length <= limit) return "ok";
+    return times.length === limit + 1 ? "warn" : "drop";
   }
 
   /** Staff finished with a handed-off chat: the bot answers again. */

@@ -16,6 +16,8 @@ import { currentMonth, usageSummary } from "../usage.js";
 import { createReadStream } from "node:fs";
 import { backupNow, isBackupName, listBackups } from "../backup.js";
 import { invoiceFor, trialDaysLeft } from "../billing.js";
+import { sessionSummary, transcript } from "../chats.js";
+import { runChecklist, type Probes } from "../checklist.js";
 import { invoicePage } from "./invoice.js";
 import { adminPage } from "./page.js";
 
@@ -82,7 +84,10 @@ export function vendorTemplate(slug: string) {
   };
 }
 
-export function registerAdminRoutes(app: FastifyInstance, deps: { vendors: VendorRegistry; store: Store; engine: Engine }) {
+export function registerAdminRoutes(
+  app: FastifyInstance,
+  deps: { vendors: VendorRegistry; store: Store; engine: Engine; probes?: Probes },
+) {
   const { vendors, store, engine } = deps;
   const fileOf = (slug: string) => path.join(config.vendorsDir, `${slug}.json`);
 
@@ -132,6 +137,29 @@ export function registerAdminRoutes(app: FastifyInstance, deps: { vendors: Vendo
     } catch (err) {
       return reply.code(400).send({ error: (err as Error).message });
     }
+  });
+
+  // ---- go-live checklist ----
+
+  app.get("/admin/api/checklist", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    return { checks: await runChecklist(vendors, engine, deps.probes) };
+  });
+
+  // ---- chat viewer ----
+
+  app.get("/admin/api/chats", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    const vendor = vendors.get((req.query as { vendor?: string }).vendor ?? "");
+    if (!vendor) return reply.code(404).send({ error: "vendor not found" });
+    return { chats: store.recentSessions(vendor.slug, 50).map(sessionSummary) };
+  });
+
+  app.get("/admin/api/chats/:id", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    const s = store.getSession(Number((req.params as { id: string }).id));
+    if (!s) return reply.code(404).send({ error: "chat not found" });
+    return { chat: sessionSummary(s), lines: transcript(s) };
   });
 
   // ---- backups ----

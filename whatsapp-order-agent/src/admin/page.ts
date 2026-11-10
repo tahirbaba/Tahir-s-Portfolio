@@ -34,6 +34,19 @@ export function adminPage(): string {
   .msg.good { display:block; background:color-mix(in srgb, var(--ok) 14%, transparent); }
   a { color:var(--info); }
   h2 { font-size:16px; margin:0 0 10px; }
+  .chk { display:flex; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); font-size:14px; }
+  .chk b { min-width:260px; }
+  .st { width:22px; flex:none; }
+  .chatwrap { display:grid; gap:12px; grid-template-columns:minmax(0,1fr); margin-top:10px; }
+  @media (min-width: 900px) { .chatwrap { grid-template-columns: 340px minmax(0,1fr); } }
+  #chatList { max-height:480px; overflow-y:auto; }
+  #chatView { max-height:480px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; }
+  .msg-c, .msg-b, .msg-t, .msg-r { padding:8px 10px; border-radius:10px; font-size:14px; white-space:pre-wrap; max-width:85%; }
+  .msg-c { background:var(--line); align-self:flex-start; }
+  .msg-b { background:color-mix(in srgb, var(--ok) 18%, transparent); align-self:flex-end; }
+  .msg-t, .msg-r { font:12px/1.4 ui-monospace,Menlo,Consolas,monospace; color:var(--muted); align-self:flex-end; background:transparent; border:1px dashed var(--line); }
+  .msg-r.err { border-color:var(--bad); color:var(--bad); }
+  .ctx { font-size:11px; color:var(--muted); margin-top:4px; }
   table { border-collapse:collapse; width:100%; font-size:14px; min-width:760px; }
   th, td { text-align:right; padding:7px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
   th:first-child, td:first-child { text-align:left; }
@@ -43,6 +56,14 @@ export function adminPage(): string {
 <body>
 <header><h1>🛠️ Admin: Vendors</h1><span class="muted">Save karte hi naya menu/settings live ho jaate hain.</span></header>
 <div class="wrap">
+  <div class="card" style="grid-column:1/-1">
+    <div class="row" style="margin-top:0"><h2 style="margin:0;flex:1">✅ Go-live checklist</h2><button class="ok" id="runCheck">Check chalao</button></div>
+    <div id="checks" class="muted">Launch se pehle aur har naye vendor ke baad chalayein. Ye Claude aur Meta se asal mein poochh kar check karta hai.</div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="row" style="margin-top:0"><h2 style="margin:0;flex:1">💬 Chats</h2><select id="chatVendor" aria-label="Vendor"></select><button class="ghost" id="loadChats">Dikhao</button></div>
+    <div class="chatwrap"><div id="chatList" class="muted">Vendor chun kar "Dikhao" dabayein.</div><div id="chatView"></div></div>
+  </div>
   <div class="card" style="grid-column:1/-1">
     <div class="row" style="margin-top:0"><h2 style="margin:0;flex:1">📈 Usage aur kharcha (andaza)</h2>
       <input type="month" id="month" aria-label="Month"><button class="ghost" id="loadUsage">Dikhao</button></div>
@@ -177,7 +198,41 @@ document.getElementById("testReport").onclick = async () => {
   try { const r = await api("/admin/api/vendors/"+current+"/report-test", "POST", {}); msg("✅ Report template " + r.sent + " owner(s) ko bhej diya.", true); }
   catch (e) { msg("❌ " + e.message); }
 };
-loadList().catch(e => msg("Login masla: " + e.message));
+const ICON = { ok: "✅", warn: "⚠️", fail: "❌" };
+document.getElementById("runCheck").onclick = async () => {
+  const box = document.getElementById("checks"); box.textContent = "Check ho raha hai… (10-20 second)";
+  try {
+    const { checks } = await api("/admin/api/checklist");
+    const bad = checks.filter(c => c.status === "fail").length, warn = checks.filter(c => c.status === "warn").length;
+    box.innerHTML = '<div style="margin-bottom:8px"><b>'+(bad ? "❌ "+bad+" cheezein theek karni hain" : warn ? "⚠️ Launch ho sakta hai, "+warn+" warnings dekh lein" : "✅ Sab tayyar hai")+'</b></div>' +
+      checks.map(c => '<div class="chk"><span class="st">'+ICON[c.status]+'</span><b>'+esc(c.name)+'</b><span>'+esc(c.detail)+'</span></div>').join("");
+  } catch (e) { box.textContent = "❌ " + e.message; }
+};
+
+const ago = t => { const m = Math.round((Date.now() - t) / 60000); return m < 60 ? m + " min" : m < 1440 ? Math.round(m/60) + " ghante" : Math.round(m/1440) + " din"; };
+async function loadChats(){
+  const v = document.getElementById("chatVendor").value;
+  const { chats } = await api("/admin/api/chats?vendor=" + encodeURIComponent(v));
+  document.getElementById("chatList").innerHTML = chats.map(c =>
+    '<div class="v" data-chat="'+c.id+'"><b>'+esc(c.customerName || "+" + c.customer)+'</b><span class="muted">'+ago(c.lastAt)+' pehle · '+c.turns+' messages'+(c.mode === "human" ? ' · <span class="tag bad">staff</span>' : "")+'</span><div class="muted">'+esc(c.preview)+'</div></div>'
+  ).join("") || "Is vendor ki abhi koi chat nahi.";
+}
+document.getElementById("loadChats").onclick = () => loadChats().catch(e => msg(e.message));
+document.getElementById("chatList").addEventListener("click", async e => {
+  const el = e.target.closest("[data-chat]"); if (!el) return;
+  document.querySelectorAll("#chatList .v").forEach(x => x.classList.toggle("on", x === el));
+  const { chat, lines } = await api("/admin/api/chats/" + el.dataset.chat);
+  document.getElementById("chatView").innerHTML = '<div class="muted">+'+esc(chat.customer)+(chat.handoffReason ? " · staff: "+esc(chat.handoffReason) : "")+'</div>' + lines.map(l =>
+    l.who === "customer" ? '<div class="msg-c">'+(l.image ? "🖼️ " : "")+esc(l.text)+(l.context ? '<div class="ctx">'+esc(l.context)+'</div>' : "")+'</div>'
+    : l.who === "bot" ? '<div class="msg-b">'+esc(l.text)+'</div>'
+    : l.who === "tool" ? '<div class="msg-t">🔧 '+esc(l.name)+' '+esc(l.input)+'</div>'
+    : '<div class="msg-r '+(l.error ? "err" : "")+'">↳ '+esc(l.text)+'</div>').join("");
+});
+
+loadList().then(async () => {
+  const { vendors } = await api("/admin/api/vendors");
+  document.getElementById("chatVendor").innerHTML = vendors.map(v => '<option value="'+esc(v.slug)+'">'+esc(v.name)+'</option>').join("");
+}).catch(e => msg("Login masla: " + e.message));
 loadUsage().then(loadBilling).catch(() => {});
 loadBackups().catch(() => {});
 </script>

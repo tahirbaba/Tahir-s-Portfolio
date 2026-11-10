@@ -5,6 +5,7 @@ import { config } from "./config.js";
 import type { Store } from "./db.js";
 import type { Engine } from "./engine.js";
 import { registerAdminRoutes } from "./admin/routes.js";
+import type { Probes } from "./checklist.js";
 import { registerMenuRoutes } from "./menu/routes.js";
 import { registerOpsRoutes } from "./ops/routes.js";
 import { registerRiderRoutes } from "./rider/routes.js";
@@ -25,6 +26,8 @@ export function buildServer(deps: {
   /** Only for local testing without Meta. Never enable in production. */
   allowUnsignedWebhooks?: boolean;
   logger?: boolean;
+  /** Test doubles for the go-live checklist's Claude/Meta calls. */
+  probes?: Probes;
 }): FastifyInstance {
   const app = Fastify({
     logger:

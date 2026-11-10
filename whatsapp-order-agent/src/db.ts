@@ -335,6 +335,14 @@ export class Store {
       );
   }
 
+  /** Latest chats of a vendor, newest first (admin chat viewer). */
+  recentSessions(vendorSlug: string, limit = 50): Session[] {
+    const rows = this.db
+      .prepare("SELECT * FROM sessions WHERE vendor_slug = ? ORDER BY last_at DESC LIMIT ?")
+      .all(vendorSlug, limit) as Row[];
+    return rows.map(rowToSession);
+  }
+
   humanModeSessions(vendorSlug: string, now = Date.now()): Session[] {
     const rows = this.db
       .prepare(

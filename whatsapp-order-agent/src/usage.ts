@@ -6,6 +6,7 @@
 //   ai_input / ai_cache_read / ai_cache_write / ai_output   Claude tokens
 //   ai_turns     customer messages answered by the AI
 //   conversations  new chats started
+//   wa_in        customer messages received (free; shows activity)
 // Orders and sales come from the orders table.
 
 import { config } from "./config.js";
@@ -21,7 +22,8 @@ export type Metric =
   | "ai_cache_write"
   | "ai_output"
   | "ai_turns"
-  | "conversations";
+  | "conversations"
+  | "wa_in";
 
 export function pktDay(now: Date | number): string {
   return karachiTime(new Date(now)).date;

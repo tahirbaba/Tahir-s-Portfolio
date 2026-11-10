@@ -79,4 +79,6 @@ export const config = {
   sessionMaxMessages: num("SESSION_MAX_MESSAGES", 60),
   /** After a hand-off, the bot stays silent in that chat for this long. */
   humanModeMinutes: num("HUMAN_MODE_MINUTES", 120),
+  /** Spam protection: messages one customer may send per hour before the bot stops answering them. */
+  customerMessagesPerHour: num("CUSTOMER_MESSAGES_PER_HOUR", 30),
 };

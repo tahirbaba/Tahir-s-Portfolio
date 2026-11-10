@@ -120,6 +120,10 @@ export const VendorSchema = z.object({
       language: z.string().default("en"),
     })
     .default({ enabled: false, time: "23:45", template: "daily_sales_report", language: "en" }),
+  /** Cost protection. aiTurnsPerDay: after this many AI replies in a day, new chats go to staff. 0 = no limit. */
+  limits: z
+    .object({ aiTurnsPerDay: z.number().int().min(0).default(0) })
+    .default({ aiTurnsPerDay: 0 }),
   /** Loyalty: every Nth order of a customer gets a free menu item. */
   loyalty: z
     .object({

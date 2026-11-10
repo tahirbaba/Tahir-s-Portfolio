@@ -84,6 +84,7 @@ npm run dev
 3. [docs/ADD-VENDOR.md](docs/ADD-VENDOR.md): naya vendor add karna
 4. [docs/PHASE3.md](docs/PHASE3.md): riders, usage meter, owner ki report
 5. [docs/PHASE4.md](docs/PHASE4.md): tracking page, loyalty, backup, billing
+6. [docs/PHASE5.md](docs/PHASE5.md): **testing ka tareeqa**, go-live checklist, chat viewer
 
 ## Phase 2 features
 
@@ -114,6 +115,15 @@ Sold-out items aur pause ka asar har jagah hota hai: bot unhein add nahi karta, 
 | **Loyalty** | Vendor file `loyalty` | Har Nth order pe free item khud add, confirmation mein shukriya, bot ko progress maloom |
 | **Automatic backup** | Admin → Backups | Roz 05:00 database ki copy, aakhri 14, download aur "abhi lo" button |
 | **Billing / invoice** | Admin → Billing | Vendor ka plan, trial (pro-rata), extra orders, aur print/PDF hone wala invoice |
+
+## Phase 5: testing aur launch ke tools ([docs/PHASE5.md](docs/PHASE5.md))
+
+| Feature | Kahan | Kaise |
+|---|---|---|
+| **AI scenario test** | `npm run scenarios` | 12 asli conversations (Roman Urdu/English) aap ki Claude key se, har ek PASS/FAIL ke saath, aur kharcha bhi |
+| **Go-live checklist** | Admin → "Check chalao" | Claude key, Meta token/number, https, keys, backup, webhook: asal mein check |
+| **Chat viewer** | Admin → Chats | Har chat ki poori baat-cheet, AI ke tool calls ke saath |
+| **Spam/kharche se hifazat** | `.env` + vendor `limits` | Ek customer ke ghante ke max messages; vendor ki rozana AI limit ke baad chats staff ko |
 
 ## Agle ideas
 - Kai vendors ke liye ek hi Meta app (Tech Provider bannay ke baad Embedded Signup)
