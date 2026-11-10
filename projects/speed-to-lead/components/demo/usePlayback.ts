@@ -9,12 +9,15 @@ export function usePlayback(replays: Replay[], playing: boolean, speed = 1) {
   const [index, setIndex] = useState(0);
   const [frames, setFrames] = useState<Frame[]>([]);
   const [done, setDone] = useState(false);
+  // which replay the frames belong to: on a switch, the first render must not use the old replay's frames
+  const [owner, setOwner] = useState(0);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
     timers.current.forEach(clearTimeout); timers.current = [];
     const r = replays[index];
     const reduce = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setOwner(index);
     if (reduce) { setFrames(r.turns.map((t, i) => ({ turn: i, leadShown: true, typing: false, traceShown: t.trace.length, replyShown: true }))); setDone(true); return; }
     setFrames([]); setDone(false);
     const at = (ms: number, fn: () => void) => timers.current.push(setTimeout(fn, ms / speed));
@@ -32,5 +35,5 @@ export function usePlayback(replays: Replay[], playing: boolean, speed = 1) {
     return () => timers.current.forEach(clearTimeout);
   }, [index, playing, replays, speed]);
 
-  return { replay: replays[index], frames, done, index, setIndex };
+  return { replay: replays[index], frames: owner === index ? frames : [], done: owner === index && done, index, setIndex };
 }
