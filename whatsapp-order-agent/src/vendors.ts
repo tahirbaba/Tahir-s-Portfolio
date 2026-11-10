@@ -99,6 +99,16 @@ export const VendorSchema = z.object({
   upsell: z.string().optional(),
   /** Language of automatic status messages (rider on the way, etc.). */
   notifyLanguage: z.enum(["roman_urdu", "english"]).default("roman_urdu"),
+  /** Owner/manager WhatsApp numbers (digits with country code, e.g. 923001234567). They can send commands like "report". */
+  owners: z.array(z.string().regex(/^\d{10,15}$/, "digits with country code, e.g. 923001234567")).default([]),
+  /** Orders for a later time (today or tomorrow). */
+  preorder: z
+    .object({
+      enabled: z.boolean().default(true),
+      /** Kept under 24h so status messages stay inside WhatsApp's free-reply window. */
+      maxHoursAhead: z.number().positive().max(22).default(20),
+    })
+    .default({ enabled: true, maxHoursAhead: 20 }),
 });
 
 export type Vendor = z.infer<typeof VendorSchema>;
@@ -149,6 +159,18 @@ export class VendorRegistry {
       return parseVendor(JSON.parse(readFileSync(full, "utf8")), full);
     });
     return new VendorRegistry(vendors);
+  }
+
+  /** Adds or replaces a vendor while the server runs (admin panel). Throws on a clash. */
+  upsert(v: LoadedVendor): void {
+    const other = this.byPhoneId.get(v.whatsapp.phoneNumberId);
+    if (other && other.slug !== v.slug) {
+      throw new Error(`phoneNumberId ${v.whatsapp.phoneNumberId} already belongs to "${other.slug}"`);
+    }
+    const old = this.bySlug.get(v.slug);
+    if (old) this.byPhoneId.delete(old.whatsapp.phoneNumberId);
+    this.bySlug.set(v.slug, v);
+    this.byPhoneId.set(v.whatsapp.phoneNumberId, v);
   }
 
   byPhoneNumberId(id: string): LoadedVendor | undefined {

@@ -34,6 +34,9 @@ export const config = {
     model: process.env.STT_MODEL ?? "whisper-large-v3",
   },
 
+  /** Secret for the admin panel (/admin). Empty = admin panel off. */
+  adminKey: process.env.ADMIN_KEY ?? "",
+
   dbPath: process.env.DB_PATH ?? "data/agent.db",
   vendorsDir: process.env.VENDORS_DIR ?? "vendors",
 

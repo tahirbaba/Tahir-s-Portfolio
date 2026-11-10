@@ -8,7 +8,7 @@ services:
       DB_PATH: /app/data/agent.db
     volumes:
       - ./data:/app/data          # database survives restarts/updates
-      - ./vendors:/app/vendors:ro # edit vendor files without rebuilding (then: docker compose restart app)
+      - ./vendors:/app/vendors    # vendor files; the admin panel saves here
     expose:
       - "3000"
 

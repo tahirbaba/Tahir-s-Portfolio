@@ -58,8 +58,29 @@ export interface Order {
   status: OrderStatus;
   etaMin: number;
   etaMax: number;
+  /** Pre-orders: when the customer wants it (ms). Null = as soon as possible. */
+  scheduledFor: number | null;
   createdAt: number;
   updatedAt: number;
+}
+
+export interface VendorState {
+  /** Owner paused new orders (e.g. kitchen overloaded). */
+  paused: boolean;
+  /** Menu item ids switched off for now (sold out). */
+  unavailable: string[];
+}
+
+/** A cart built on the menu web page, waiting for the customer's WhatsApp message. */
+export interface PendingCart {
+  code: string;
+  vendorSlug: string;
+  cart: CartLine[];
+  fulfilment: Fulfilment | null;
+  customerName: string | null;
+  paymentMethod: PaymentMethod | null;
+  note: string | null;
+  createdAt: number;
 }
 
 const SCHEMA = `
@@ -115,7 +136,25 @@ CREATE TABLE IF NOT EXISTS counters (
   vendor_slug TEXT PRIMARY KEY,
   next_number INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS vendor_state (
+  vendor_slug TEXT PRIMARY KEY,
+  paused INTEGER NOT NULL DEFAULT 0,
+  unavailable TEXT NOT NULL DEFAULT '[]',
+  updated_at INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS pending_carts (
+  code TEXT NOT NULL,
+  vendor_slug TEXT NOT NULL,
+  payload TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY (vendor_slug, code)
+);
 `;
+
+/** Columns added after the first release; added to older databases on start. */
+const MIGRATIONS: { table: string; column: string; ddl: string }[] = [
+  { table: "orders", column: "scheduled_for", ddl: "ALTER TABLE orders ADD COLUMN scheduled_for INTEGER" },
+];
 
 type Row = Record<string, unknown>;
 
@@ -160,6 +199,7 @@ function rowToOrder(r: Row): Order {
     status: r.status as OrderStatus,
     etaMin: Number(r.eta_min),
     etaMax: Number(r.eta_max),
+    scheduledFor: r.scheduled_for == null ? null : Number(r.scheduled_for),
     createdAt: Number(r.created_at),
     updatedAt: Number(r.updated_at),
   };
@@ -176,6 +216,10 @@ export class Store {
     this.db = new DatabaseSync(file);
     this.db.exec("PRAGMA journal_mode = WAL; PRAGMA busy_timeout = 5000;");
     this.db.exec(SCHEMA);
+    for (const m of MIGRATIONS) {
+      const cols = this.db.prepare(`PRAGMA table_info(${m.table})`).all() as Row[];
+      if (!cols.some((c) => c.name === m.column)) this.db.exec(m.ddl);
+    }
   }
 
   /** True the first time a WhatsApp message id is seen (Meta sometimes delivers twice). */
@@ -282,8 +326,8 @@ export class Store {
       .prepare(
         `INSERT INTO orders (vendor_slug, number, customer, customer_name, branch_id, fulfilment, items,
           subtotal, delivery_fee, total, payment_method, payment_status, payment_note, location, address_note,
-          status, eta_min, eta_max, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          status, eta_min, eta_max, scheduled_for, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .run(
         o.vendorSlug,
@@ -304,6 +348,7 @@ export class Store {
         o.status,
         o.etaMin,
         o.etaMax,
+        o.scheduledFor,
         now,
         now,
       );
@@ -363,6 +408,50 @@ export class Store {
       )
       .run(next.status, next.paymentStatus, next.paymentNote, next.etaMin, next.etaMax, now, id);
     return this.getOrder(id)!;
+  }
+
+  ordersBetween(vendorSlug: string, fromMs: number, toMs: number): Order[] {
+    const rows = this.db
+      .prepare("SELECT * FROM orders WHERE vendor_slug = ? AND created_at >= ? AND created_at < ? ORDER BY id ASC")
+      .all(vendorSlug, fromMs, toMs) as Row[];
+    return rows.map(rowToOrder);
+  }
+
+  // ---- vendor live state (pause, sold-out items) ----
+
+  vendorState(vendorSlug: string): VendorState {
+    const r = this.db.prepare("SELECT * FROM vendor_state WHERE vendor_slug = ?").get(vendorSlug) as Row | undefined;
+    return r ? { paused: Number(r.paused) === 1, unavailable: JSON.parse(String(r.unavailable)) } : { paused: false, unavailable: [] };
+  }
+
+  setVendorState(vendorSlug: string, state: VendorState, now = Date.now()): VendorState {
+    const clean = { paused: state.paused, unavailable: [...new Set(state.unavailable)].sort() };
+    this.db
+      .prepare(
+        `INSERT INTO vendor_state (vendor_slug, paused, unavailable, updated_at) VALUES (?, ?, ?, ?)
+         ON CONFLICT(vendor_slug) DO UPDATE SET paused = excluded.paused, unavailable = excluded.unavailable, updated_at = excluded.updated_at`,
+      )
+      .run(vendorSlug, clean.paused ? 1 : 0, JSON.stringify(clean.unavailable), now);
+    return clean;
+  }
+
+  // ---- carts from the menu web page ----
+
+  savePendingCart(p: Omit<PendingCart, "createdAt">, now = Date.now()): void {
+    this.db.prepare("DELETE FROM pending_carts WHERE created_at < ?").run(now - 24 * 3600_000);
+    const { code, vendorSlug, ...payload } = p;
+    this.db
+      .prepare("INSERT INTO pending_carts (code, vendor_slug, payload, created_at) VALUES (?, ?, ?, ?)")
+      .run(code, vendorSlug, JSON.stringify(payload), now);
+  }
+
+  /** Returns the cart once and removes it (a code works one time only). */
+  takePendingCart(vendorSlug: string, code: string, maxAgeMs: number, now = Date.now()): PendingCart | undefined {
+    const r = this.db
+      .prepare("DELETE FROM pending_carts WHERE vendor_slug = ? AND code = ? RETURNING *")
+      .get(vendorSlug, code.toUpperCase()) as Row | undefined;
+    if (!r || now - Number(r.created_at) > maxAgeMs) return undefined;
+    return { code: String(r.code), vendorSlug: String(r.vendor_slug), createdAt: Number(r.created_at), ...JSON.parse(String(r.payload)) };
   }
 
   /** Simple daily numbers for the owner. */

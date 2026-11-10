@@ -33,11 +33,18 @@ export interface TurnResult {
 
 const systemCache = new Map<string, string>();
 
+export function menuPageUrl(vendor: LoadedVendor): string | undefined {
+  // The page sends the order back via wa.me, which needs the shop's real number.
+  if (!vendor.whatsapp.displayNumber || !config.publicUrl.startsWith("https://")) return undefined;
+  return `${config.publicUrl}/m/${vendor.slug}`;
+}
+
 function systemPromptFor(vendor: LoadedVendor): string {
-  const key = `${vendor.slug}:${vendor.configHash}`;
+  const url = menuPageUrl(vendor);
+  const key = `${vendor.slug}:${vendor.configHash}:${url ?? ""}`;
   let s = systemCache.get(key);
   if (!s) {
-    s = buildSystemPrompt(vendor);
+    s = buildSystemPrompt(vendor, url);
     systemCache.set(key, s);
   }
   return s;
@@ -48,9 +55,13 @@ export function contextLine(vendor: LoadedVendor, session: Session, store: Store
   const t = karachiTime(now);
   const open = vendor.branches.filter((b) => isOpen(b, now)).map((b) => b.id);
   const last = store.lastOrderOf(vendor.slug, session.customer);
+  const state = store.vendorState(vendor.slug);
+  const soldOut = state.unavailable.map((id) => vendor.menu.find((m) => m.id === id)?.name ?? id);
   const parts = [
-    `time ${t.label} PKT`,
+    `now ${t.date} ${t.label} PKT`,
     `open branches: ${open.length ? open.join(", ") : "NONE (shop closed)"}`,
+    ...(state.paused ? ["NEW ORDERS PAUSED by the shop"] : []),
+    ...(soldOut.length ? [`sold out today: ${soldOut.join(", ")}`] : []),
     `customer name: ${session.customerName ?? "unknown"}`,
     `location pin: ${session.location ? "shared" : "not shared"}`,
     `fulfilment: ${session.fulfilment ?? "not chosen"}`,

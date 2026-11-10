@@ -77,12 +77,13 @@ Bharein:
 - `WHATSAPP_VERIFY_TOKEN`, `META_APP_SECRET`
 - Har vendor ka `WA_TOKEN_…` aur `OPS_KEY_…`. Ops key ke liye lambi random line chahiye, jo `openssl rand -hex 16` se ban jati hai.
 - `DOMAIN=140-238-1-2.sslip.io`. Apne IP ke **dots ki jagah dashes** likhein. Ye free domain khud aap ke IP pe point karta hai, aur Caddy is ka HTTPS certificate khud le leta hai.
-- `PUBLIC_URL=https://140-238-1-2.sslip.io`
+- `PUBLIC_URL=https://140-238-1-2.sslip.io`. Menu page ka link isi se banta hai.
+- `ADMIN_KEY=`: aap ke admin panel ki lambi random key (`openssl rand -hex 16`).
 
-Database folder ki permission set karein (container `node` user se chalta hai):
+Database aur vendors folder ki permission set karein. Container `node` user se chalta hai, aur admin panel vendors folder mein save karta hai:
 
 ```bash
-mkdir -p data && sudo chown -R 1000:1000 data
+mkdir -p data && sudo chown -R 1000:1000 data vendors
 ```
 
 ## 5. Chalayein
@@ -99,7 +100,10 @@ curl https://140-238-1-2.sslip.io/health
 
 `{"ok":true,...}` aaye to server tayyar hai. Ab Meta mein webhook URL `https://140-238-1-2.sslip.io/webhook` set karein ([SETUP-META.md](SETUP-META.md)).
 
-Kitchen screen ka link: `https://140-238-1-2.sslip.io/ops/demo-pizza?key=<OPS_KEY_DEMO_PIZZA>`. Ye link kitchen ke mobile pe bookmark kar dein.
+Links:
+- Kitchen screen: `https://140-238-1-2.sslip.io/ops/demo-pizza?key=<OPS_KEY_DEMO_PIZZA>`. Kitchen ke mobile pe bookmark kar dein.
+- Menu page (customers ke liye, public): `https://140-238-1-2.sslip.io/m/demo-pizza`
+- Admin panel (sirf aap): `https://140-238-1-2.sslip.io/admin?key=<ADMIN_KEY>`
 
 ## Rozana ke kaam
 
@@ -109,7 +113,7 @@ Logs dekhna:
 docker compose logs -f app
 ```
 
-Vendor file badli (menu ya price), to rebuild ki zaroorat nahi:
+Vendor ka menu ya price admin panel se badlein, wahan "Save" dabate hi live ho jata hai. File haath se edit ki ho to:
 
 ```bash
 docker compose restart app

@@ -2,6 +2,8 @@
 
 Code ko haath nahi lagana. Bas ek file aur do settings.
 
+**Aasan tareeqa: admin panel.** `https://<domain>/admin?key=<ADMIN_KEY>` kholein. Neeche slug likh kar **+ Naya vendor** dabayein, template mein shop ki details bharein, **Check karo** dabayein, phir **Save karo**. Vendor foran live ho jata hai, restart ki zaroorat nahi. Neeche har field ki tafseel hai.
+
 ## 1. File banayein
 `vendors/demo-pizza.json` copy kar ke naya naam dein, jaise `vendors/karachi-broast.json`. Phir badlein:
 
@@ -11,6 +13,9 @@ Code ko haath nahi lagana. Bas ek file aur do settings.
 | `name` | Shop ka naam, jo customer dekhega |
 | `orderPrefix` | 2–4 bade harf, jaise `KB`, to orders `KB-1001` ban jayenge |
 | `whatsapp.phoneNumberId` | Meta se mila Phone number ID |
+| `whatsapp.displayNumber` | shop ka WhatsApp number, jaise `+92 300 1234567`. **Menu page isi number pe order bhejta hai** |
+| `owners` | owner/manager ke WhatsApp numbers, jaise `["923001234567"]`. Ye `#report` jaise commands bhej sakte hain |
+| `preorder` | `{ "enabled": true, "maxHoursAhead": 20 }`. Baad ke waqt ka order (max 22 ghante) |
 | `whatsapp.accessTokenEnv` | `.env` mein token ka naam, jaise `WA_TOKEN_KARACHI_BROAST` |
 | `opsKeyEnv` | kitchen screen key ka naam, jaise `OPS_KEY_KARACHI_BROAST` |
 | `branches` | har branch: naam, address, **lat/lng** (Google Maps pe right-click karne se milta hai), timings, delivery rules, prep time |
@@ -81,4 +86,21 @@ docker compose restart app
 - Kitchen link `https://<domain>/ops/karachi-broast?key=<OPS_KEY>` kitchen ke mobile pe kholein aur **Sound on** dabayein.
 
 ## Menu ya price badalna
-JSON file edit karein, phir `docker compose restart app`. Jin customers ki chat chal rahi thi, unki agli baat nai chat se shuru hogi, taake purani prices kabhi na aayein.
+Admin panel mein edit karke **Save** karein. File haath se badli ho to `docker compose restart app` chalayein. Jin customers ki chat chal rahi thi, unki agli baat nai chat se shuru hogi, taake purani prices kabhi na aayein.
+
+## Roz ke kaam owner khud kar sakta hai
+
+**Kitchen screen → Menu tab:** item "Khatam" karna ya wapas available karna, aur rush mein naye orders band ya chalu karna.
+
+**WhatsApp commands** (sirf `owners` wale numbers se, shop ke number pe bhejein):
+
+| Command | Kaam |
+|---|---|
+| `#report` | aaj ki sale, orders, top items |
+| `#report kal` / `#report week` | kal ki ya 7 din ki report |
+| `#off zinger` / `#on zinger` | item khatam ya wapas available |
+| `#pause` / `#resume` | naye orders band ya chalu |
+| `#status` | kya band hai |
+| `#help` | saari commands |
+
+Owner ka command ek normal incoming message hai, aur jawab 24 ghante ki window ke andar jata hai.

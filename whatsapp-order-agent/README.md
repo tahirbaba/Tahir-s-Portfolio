@@ -62,7 +62,7 @@ cp .env.example .env
 npm run chat -- demo-pizza
 ```
 
-Terminal mein customer ban kar likhein: `2 large tikka pizza chahiye`. Location ke liye `/loc 24.925,67.095` likhein. Orders dekhne ke liye `/orders`, order ka status badalne ke liye `/set CC-1001 out_for_delivery`, aur dusri shop ke liye `/vendor demo-fastfood`.
+Terminal mein customer ban kar likhein: `2 large tikka pizza chahiye`. Location ke liye `/loc 24.925,67.095` likhein. Orders dekhne ke liye `/orders`, order ka status badalne ke liye `/set CC-1001 out_for_delivery`, aur dusri shop ke liye `/vendor demo-fastfood`. Owner commands test karne ke liye `/as 923000000091` likhein (demo-pizza ka owner), phir `#report` ya `#off tikka`. Pre-order ke liye bot se kahein: "kal dopahar 2 baje pickup chahiye".
 
 ## Commands
 
@@ -83,8 +83,19 @@ npm run dev
 2. [docs/DEPLOY-ORACLE.md](docs/DEPLOY-ORACLE.md): Oracle Cloud free server pe 24/7
 3. [docs/ADD-VENDOR.md](docs/ADD-VENDOR.md): naya vendor add karna
 
-## Abhi kya nahi hai (Phase 2)
-- Menu ka web page (customer link se khud items chune; messages aur bhi kam)
-- Owner ki daily WhatsApp report
-- Vendor ke liye admin panel (abhi JSON file edit hoti hai)
-- Pre-order (kal ke liye order)
+## Phase 2 features
+
+| Feature | Kahan | Kaise |
+|---|---|---|
+| **Menu web page** | `/m/<vendor>` (public) | Customer items aur size chunta hai, phir "WhatsApp pe bhejein" se order code ke saath WhatsApp pe chala jata hai. Code se cart exact load hota hai, AI ko text parhna nahi parta. Bot "menu" maangne pe khud link bhejta hai. Is ke liye `whatsapp.displayNumber` aur https `PUBLIC_URL` zaroori hain |
+| **Owner commands** | Shop ka WhatsApp | `#report`, `#report kal`, `#off zinger`, `#on zinger`, `#pause`, `#resume`, `#status`, `#help`. Sirf `owners` numbers se |
+| **Kitchen screen: Menu + Report tabs** | `/ops/<vendor>?key=…` | Item khatam/available, orders band/chalu, aur aaj/kal/7 din ki sale aur top items |
+| **Admin panel** | `/admin?key=<ADMIN_KEY>` | Saare vendors, settings check, vendor ki file edit/naya vendor. Save karte hi live, restart nahi |
+| **Pre-order** | Chat | "kal 2 baje", "raat 9 baje". Max 20 ghante aage, sirf jab branch us waqt khuli ho. Kitchen screen pe ⏰ nishan |
+
+Sold-out items aur pause ka asar har jagah hota hai: bot unhein add nahi karta, menu page pe "Khatam" dikhta hai, aur order lagne se pehle dobara check hota hai.
+
+## Agle ideas
+- Owner ko raat ko khud report (ye Meta ka approved "utility template" maangta hai, us ke baad add karenge)
+- Rider ke liye alag mobile view aur rider ki assignment
+- Customer ka pichla order "same as last time"

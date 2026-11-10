@@ -56,6 +56,10 @@ export const TOOLS: Anthropic.Tool[] = [
     payment_method: { type: "string", enum: ["cod", "online"] },
     address_note: { ...nullableStr, description: "House/flat/street/landmark the customer typed, or null" },
     pickup_branch_id: nullableStr,
+    scheduled_for: {
+      ...nullableStr,
+      description: 'Pre-order time in Pakistan time as "YYYY-MM-DD HH:MM" (use the date in the [context] line), or null for as soon as possible',
+    },
   }),
   tool("order_status", "Get the status of the customer's order. Pass the order number, or null for their latest order.", {
     order_number: nullableStr,
@@ -100,7 +104,7 @@ function dispatch(name: string, input: Input, ctx: ToolContext): string {
   const { store, vendor, session } = ctx;
   switch (name) {
     case "add_to_cart": {
-      const r = resolveLine(vendor, input as any);
+      const r = resolveLine(vendor, input as any, store.vendorState(vendor.slug).unavailable);
       if (!r.ok) return json({ ok: false, error: r.error });
       session.cart = addLine(session.cart, r.value);
       return json({ ok: true, cart: cartSummary(session.cart, vendor.currency) });

@@ -9,6 +9,9 @@
     "displayNumber": "+92 300 0000002"
   },
   "opsKeyEnv": "OPS_KEY_DEMO_FASTFOOD",
+  "owners": [
+    "923000000092"
+  ],
   "branches": [
     {
       "id": "main",
@@ -17,16 +20,39 @@
       "lat": 24.9178,
       "lng": 67.0972,
       "hours": {
-        "mon": { "open": "16:00", "close": "02:00" },
-        "tue": { "open": "16:00", "close": "02:00" },
-        "wed": { "open": "16:00", "close": "02:00" },
-        "thu": { "open": "16:00", "close": "02:00" },
-        "fri": { "open": "16:00", "close": "03:00" },
-        "sat": { "open": "16:00", "close": "03:00" },
-        "sun": { "open": "16:00", "close": "02:00" }
+        "mon": {
+          "open": "16:00",
+          "close": "02:00"
+        },
+        "tue": {
+          "open": "16:00",
+          "close": "02:00"
+        },
+        "wed": {
+          "open": "16:00",
+          "close": "02:00"
+        },
+        "thu": {
+          "open": "16:00",
+          "close": "02:00"
+        },
+        "fri": {
+          "open": "16:00",
+          "close": "03:00"
+        },
+        "sat": {
+          "open": "16:00",
+          "close": "03:00"
+        },
+        "sun": {
+          "open": "16:00",
+          "close": "02:00"
+        }
       },
       "delivery": {
-        "rule": { "type": "free" },
+        "rule": {
+          "type": "free"
+        },
         "maxKm": 4,
         "minOrder": 500
       },
@@ -35,17 +61,83 @@
     }
   ],
   "menu": [
-    { "id": "zinger", "name": "Zinger Burger", "category": "Burgers", "price": 550 },
-    { "id": "zinger-cheese", "name": "Zinger Cheese Burger", "category": "Burgers", "price": 650 },
-    { "id": "beef-smash", "name": "Beef Smash Burger", "category": "Burgers", "price": 750 },
-    { "id": "chicken-shawarma", "name": "Chicken Shawarma", "category": "Wraps", "variants": [ { "name": "Regular", "price": 300 }, { "name": "Platter", "price": 750 } ] },
-    { "id": "broast-quarter", "name": "Chicken Broast (Quarter)", "category": "Broast", "price": 600, "description": "With fries, bun and garlic sauce" },
-    { "id": "broast-half", "name": "Chicken Broast (Half)", "category": "Broast", "price": 1100 },
-    { "id": "loaded-fries", "name": "Loaded Fries", "category": "Sides", "price": 550 },
-    { "id": "nuggets", "name": "Nuggets (6 pcs)", "category": "Sides", "price": 450 },
-    { "id": "deal-combo", "name": "Combo: Zinger + Fries + 345ml Drink", "category": "Deals", "price": 799 },
-    { "id": "drink-345", "name": "Soft Drink 345ml", "category": "Drinks", "price": 120 },
-    { "id": "mint-margarita", "name": "Mint Margarita", "category": "Drinks", "price": 350, "available": false }
+    {
+      "id": "zinger",
+      "name": "Zinger Burger",
+      "category": "Burgers",
+      "price": 550
+    },
+    {
+      "id": "zinger-cheese",
+      "name": "Zinger Cheese Burger",
+      "category": "Burgers",
+      "price": 650
+    },
+    {
+      "id": "beef-smash",
+      "name": "Beef Smash Burger",
+      "category": "Burgers",
+      "price": 750
+    },
+    {
+      "id": "chicken-shawarma",
+      "name": "Chicken Shawarma",
+      "category": "Wraps",
+      "variants": [
+        {
+          "name": "Regular",
+          "price": 300
+        },
+        {
+          "name": "Platter",
+          "price": 750
+        }
+      ]
+    },
+    {
+      "id": "broast-quarter",
+      "name": "Chicken Broast (Quarter)",
+      "category": "Broast",
+      "price": 600,
+      "description": "With fries, bun and garlic sauce"
+    },
+    {
+      "id": "broast-half",
+      "name": "Chicken Broast (Half)",
+      "category": "Broast",
+      "price": 1100
+    },
+    {
+      "id": "loaded-fries",
+      "name": "Loaded Fries",
+      "category": "Sides",
+      "price": 550
+    },
+    {
+      "id": "nuggets",
+      "name": "Nuggets (6 pcs)",
+      "category": "Sides",
+      "price": 450
+    },
+    {
+      "id": "deal-combo",
+      "name": "Combo: Zinger + Fries + 345ml Drink",
+      "category": "Deals",
+      "price": 799
+    },
+    {
+      "id": "drink-345",
+      "name": "Soft Drink 345ml",
+      "category": "Drinks",
+      "price": 120
+    },
+    {
+      "id": "mint-margarita",
+      "name": "Mint Margarita",
+      "category": "Drinks",
+      "price": 350,
+      "available": false
+    }
   ],
   "payment": {
     "cod": true

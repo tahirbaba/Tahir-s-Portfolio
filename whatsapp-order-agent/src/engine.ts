@@ -7,6 +7,8 @@ import { runTurn, type TurnInput } from "./agent/agent.js";
 import type { LLM } from "./agent/llm.js";
 import { config } from "./config.js";
 import type { Order, Session, Store } from "./db.js";
+import { cartSummary } from "./cart.js";
+import { handleOwnerCommand, isOwner } from "./owner.js";
 import type { Transcriber } from "./stt.js";
 import type { LoadedVendor, VendorRegistry } from "./vendors.js";
 import type { WhatsAppSender } from "./whatsapp/client.js";
@@ -97,6 +99,15 @@ export class Engine {
 
     wa.markRead(vendor, msg.id).catch(() => {}); // blue ticks; free, best-effort
 
+    // Owner commands ("#report", "#pause", ...) are answered by code, without the AI.
+    if (msg.kind === "text" && msg.text && isOwner(vendor, msg.from)) {
+      const answer = handleOwnerCommand(store, vendor, msg.text, this.now().getTime());
+      if (answer) {
+        await this.send(vendor, msg.from, answer);
+        return;
+      }
+    }
+
     const session = this.sessionFor(vendor, msg.from, msg.profileName);
     const nowMs = this.now().getTime();
     session.lastAt = nowMs;
@@ -131,7 +142,11 @@ export class Engine {
       const fresh = store.getSession(session.id);
       if (fresh) {
         fresh.lastAt = nowMs;
-        fresh.location = session.location; // keep a pin the customer just shared
+        // Keep what the customer already gave us (pin, menu-page cart), but not the half-finished AI turn.
+        fresh.location = session.location;
+        fresh.cart = session.cart;
+        fresh.fulfilment = session.fulfilment;
+        fresh.customerName = session.customerName;
         store.saveSession(fresh);
       }
       reply =
@@ -149,8 +164,11 @@ export class Engine {
   private async toTurnInput(vendor: LoadedVendor, session: Session, msg: InboundMessage): Promise<TurnInput | null> {
     const { wa, stt } = this.deps;
     switch (msg.kind) {
-      case "text":
-        return msg.text?.trim() ? { text: msg.text } : null;
+      case "text": {
+        if (!msg.text?.trim()) return null;
+        const fromMenu = this.loadMenuPageCart(vendor, session, msg.text);
+        return { text: fromMenu ?? msg.text };
+      }
       case "location": {
         const loc = msg.location!;
         if (!Number.isFinite(loc.lat) || !Number.isFinite(loc.lng)) return null;
@@ -190,6 +208,30 @@ export class Engine {
       default:
         return { text: `(customer sent a ${msg.originalType} message, which this bot cannot read)` };
     }
+  }
+
+  /**
+   * The menu web page sends "... (code ABCDE)" to WhatsApp. If the code is ours, the cart is loaded
+   * by code (exact items and prices), so the AI does not have to read the order text.
+   */
+  private loadMenuPageCart(vendor: LoadedVendor, session: Session, text: string): string | null {
+    const m = /\bcode[:\s#]*([A-HJ-NP-Z2-9]{5})\b/i.exec(text);
+    if (!m) return null;
+    const pending = this.deps.store.takePendingCart(vendor.slug, m[1]!, 6 * 3600_000, this.now().getTime());
+    if (!pending) {
+      return `${text}\n(menu page code ${m[1]!.toUpperCase()} was not found or already used; the cart was NOT loaded. Ask the customer to confirm the items in chat or open the menu link again.)`;
+    }
+    session.cart = pending.cart;
+    if (pending.fulfilment) session.fulfilment = pending.fulfilment;
+    if (pending.customerName) session.customerName = pending.customerName;
+    const details = [
+      `cart loaded: ${cartSummary(pending.cart, vendor.currency).replace(/\n/g, " | ")}`,
+      `wants: ${pending.fulfilment ?? "not chosen"}`,
+      `name: ${pending.customerName ?? "not given"}`,
+      `payment: ${pending.paymentMethod ?? "not chosen"}`,
+      pending.note ? `note: ${pending.note}` : null,
+    ].filter(Boolean);
+    return `(order from the menu page)\n[${details.join("; ")}]`;
   }
 
   private async send(vendor: LoadedVendor, to: string, text: string): Promise<void> {

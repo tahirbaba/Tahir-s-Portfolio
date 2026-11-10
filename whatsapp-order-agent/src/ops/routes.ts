@@ -6,7 +6,9 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { lineLabel } from "../cart.js";
 import { OPEN_STATUSES, type Order, type OrderStatus, type Store } from "../db.js";
 import type { Engine } from "../engine.js";
+import { formatKarachi } from "../hours.js";
 import { changeStatus, setPayment } from "../orders.js";
+import { buildReport, type ReportRange } from "../report.js";
 import type { LoadedVendor, VendorRegistry } from "../vendors.js";
 import { opsPage } from "./page.js";
 
@@ -46,6 +48,8 @@ function view(vendor: LoadedVendor, o: Order) {
     addressNote: o.addressNote,
     etaMin: o.etaMin,
     etaMax: o.etaMax,
+    scheduledFor: o.scheduledFor,
+    scheduledLabel: o.scheduledFor ? formatKarachi(o.scheduledFor) : null,
     createdAt: o.createdAt,
     updatedAt: o.updatedAt,
   };
@@ -95,6 +99,7 @@ export function registerOpsRoutes(app: FastifyInstance, deps: { store: Store; ve
       done: done.map((o) => view(vendor, o)),
       handoffs,
       today: store.dailyStats(vendor.slug, today),
+      paused: store.vendorState(vendor.slug).paused,
     };
   });
 
@@ -134,6 +139,42 @@ export function registerOpsRoutes(app: FastifyInstance, deps: { store: Store; ve
     } catch (err) {
       return reply.code(400).send({ error: (err as Error).message });
     }
+  });
+
+  app.get("/ops/:slug/api/report", async (req, reply) => {
+    const vendor = auth(req, reply);
+    if (!vendor) return;
+    const q = (req.query as { range?: string }).range;
+    const range: ReportRange = q === "yesterday" || q === "week" ? q : "today";
+    return buildReport(store, vendor, range);
+  });
+
+  app.get("/ops/:slug/api/menu", async (req, reply) => {
+    const vendor = auth(req, reply);
+    if (!vendor) return;
+    const st = store.vendorState(vendor.slug);
+    return {
+      paused: st.paused,
+      items: vendor.menu
+        .filter((m) => m.available) // items switched off in the vendor file are not shown
+        .map((m) => ({ id: m.id, name: m.name, category: m.category, soldOut: st.unavailable.includes(m.id) })),
+    };
+  });
+
+  app.post("/ops/:slug/api/menu", async (req, reply) => {
+    const vendor = auth(req, reply);
+    if (!vendor) return;
+    const body = (req.body ?? {}) as { paused?: unknown; itemId?: unknown; soldOut?: unknown };
+    const st = store.vendorState(vendor.slug);
+    if (typeof body.paused === "boolean") st.paused = body.paused;
+    if (typeof body.itemId === "string" && typeof body.soldOut === "boolean") {
+      if (!vendor.menu.some((m) => m.id === body.itemId)) return reply.code(400).send({ error: "unknown item" });
+      const ids = new Set(st.unavailable);
+      body.soldOut ? ids.add(body.itemId) : ids.delete(body.itemId);
+      st.unavailable = [...ids];
+    }
+    const saved = store.setVendorState(vendor.slug, st);
+    return { ok: true, paused: saved.paused, unavailable: saved.unavailable };
   });
 
   app.post("/ops/:slug/api/handoffs/:sessionId/release", async (req, reply) => {

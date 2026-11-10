@@ -17,10 +17,14 @@ export type CartResult<T> = { ok: true; value: T } | { ok: false; error: string 
 export function resolveLine(
   vendor: Vendor,
   input: { item_id: string; variant?: string | null; qty: number; note?: string | null },
+  /** Item ids the owner switched off today (sold out). */
+  soldOut: readonly string[] = [],
 ): CartResult<CartLine> {
   const item = menuItem(vendor, input.item_id);
   if (!item) return { ok: false, error: `No menu item with id "${input.item_id}".` };
-  if (!item.available) return { ok: false, error: `${item.name} is not available right now.` };
+  if (!item.available || soldOut.includes(item.id)) {
+    return { ok: false, error: `${item.name} is not available right now.` };
+  }
   if (!Number.isInteger(input.qty) || input.qty < 1 || input.qty > 50) {
     return { ok: false, error: "Quantity must be a whole number from 1 to 50." };
   }

@@ -58,6 +58,8 @@ export function opsPage(vendorName: string): string {
   <button data-v="rider">Rider</button>
   <button data-v="chats">Chats</button>
   <button data-v="done">Aaj complete</button>
+  <button data-v="menu">Menu</button>
+  <button data-v="report">Report</button>
 </div>
 <main id="list"><div class="empty">Loading…</div></main>
 <script>
@@ -118,7 +120,8 @@ function card(o){
   const wa = "https://wa.me/" + encodeURIComponent(o.customer);
   return '<div class="card '+(o.status==="new"?"new":"")+'">' +
     '<div class="row"><span class="num">'+esc(o.number)+'</span><span class="badge '+cls+'">'+label+'</span></div>' +
-    '<div class="muted">'+esc(o.fulfilment === "delivery" ? "🛵 Delivery" : "🏪 Pickup")+' · '+esc(o.branch)+' · '+ago(o.createdAt)+' · ETA '+o.etaMin+'-'+o.etaMax+' min</div>' +
+    (o.scheduledLabel ? '<div class="badge warn" style="align-self:flex-start">⏰ Pre-order: '+esc(o.scheduledLabel)+'</div>' : "") +
+    '<div class="muted">'+esc(o.fulfilment === "delivery" ? "🛵 Delivery" : "🏪 Pickup")+' · '+esc(o.branch)+' · '+ago(o.createdAt)+(o.scheduledLabel ? "" : ' · ETA '+o.etaMin+'-'+o.etaMax+' min')+'</div>' +
     '<ul>'+o.items.map(i => '<li>'+esc(i)+'</li>').join("")+'</ul>' +
     '<div class="row"><b>'+money(o.total)+'</b><span class="badge">'+esc(PAY[o.paymentStatus] || o.paymentStatus)+'</span></div>' +
     (o.paymentNote ? '<div class="muted">'+esc(o.paymentNote)+'</div>' : "") +
@@ -136,10 +139,50 @@ function chatCard(h){
     '<div class="muted">Jawab apni WhatsApp Business app se dein. Kaam khatam ho to "Bot ko wapas do" dabayein.</div></div>';
 }
 
+let menuState = null, reportState = null, reportRange = "today";
+
+async function loadMenu(){ menuState = await api("/api/menu"); render(); }
+async function loadReport(){ reportState = await api("/api/report?range=" + reportRange); render(); }
+
+function menuView(){
+  if (!menuState) return '<div class="empty">Loading…</div>';
+  let h = '<div class="card '+(menuState.paused?"new":"")+'"><div class="row"><b>Naye orders</b><span class="badge '+(menuState.paused?"warn":"ok")+'">'+(menuState.paused?"BAND":"Chalu")+'</span></div>' +
+    '<div class="muted">Kitchen bohat busy ho to orders thori der ke liye band kar dein. Bot customers ko bata dega.</div>' +
+    '<div class="btns"><button class="'+(menuState.paused?"ok":"bad")+'" data-a="pause" data-p="'+(menuState.paused?"0":"1")+'">'+(menuState.paused?"Orders chalu karo":"Orders band karo")+'</button></div></div>';
+  const cats = [...new Set(menuState.items.map(i => i.category))];
+  for (const c of cats) {
+    h += '<div class="section">'+esc(c)+'</div>';
+    h += menuState.items.filter(i => i.category === c).map(i =>
+      '<div class="card"><div class="row"><span>'+esc(i.name)+'</span><span class="badge '+(i.soldOut?"warn":"ok")+'">'+(i.soldOut?"Khatam":"Available")+'</span></div>' +
+      '<div class="btns"><button class="'+(i.soldOut?"ok":"ghost")+'" data-a="item" data-id="'+esc(i.id)+'" data-s="'+(i.soldOut?"0":"1")+'">'+(i.soldOut?"Wapas available karo":"Khatam (sold out) karo")+'</button></div></div>').join("");
+  }
+  return h;
+}
+
+function reportView(){
+  const tabs = [["today","Aaj"],["yesterday","Kal"],["week","7 din"]].map(([k,l]) =>
+    '<button class="'+(k===reportRange?"":"ghost")+'" data-a="range" data-id="'+k+'">'+l+'</button>').join("");
+  let h = '<div class="card"><div class="btns">'+tabs+'</div></div>';
+  if (!reportState) return h + '<div class="empty">Loading…</div>';
+  const r = reportState;
+  h += '<div class="card"><div class="row"><b>'+esc(r.label)+'</b></div>' +
+    '<div class="row"><span>Orders</span><b>'+r.orders+'</b></div>' +
+    '<div class="row"><span>Sale</span><b>'+money(r.revenue)+'</b></div>' +
+    '<div class="row"><span>Average order</span><span>'+money(r.avgOrder)+'</span></div>' +
+    '<div class="row"><span>Delivery / Pickup</span><span>'+r.delivery+' / '+r.pickup+'</span></div>' +
+    '<div class="row"><span>COD / Online</span><span>'+r.cod+' / '+r.online+'</span></div>' +
+    (r.preorders ? '<div class="row"><span>Pre-orders</span><span>'+r.preorders+'</span></div>' : "") +
+    (r.rejected ? '<div class="row"><span>Reject</span><span>'+r.rejected+'</span></div>' : "") + '</div>';
+  h += '<div class="card"><b>🔥 Top items</b>' + (r.topItems.length ? '<ul>'+r.topItems.map(t => '<li>'+esc(t.name)+' × '+t.qty+'</li>').join("")+'</ul>' : '<div class="muted">Abhi koi order nahi.</div>') + '</div>';
+  return h;
+}
+
 function render(){
+  if (view === "menu") { document.getElementById("list").innerHTML = menuView(); return; }
+  if (view === "report") { document.getElementById("list").innerHTML = reportView(); return; }
   if (!state) return;
   const t = state.today;
-  document.getElementById("stats").textContent = "Aaj: " + t.orders + " orders · " + money(t.revenue);
+  document.getElementById("stats").textContent = (state.paused ? "⏸️ ORDERS BAND · " : "") + "Aaj: " + t.orders + " orders · " + money(t.revenue);
   const open = state.open;
   let html = "";
   const kitchen = open.filter(o => o.status === "new" || o.status === "accepted");
@@ -184,6 +227,9 @@ document.getElementById("list").addEventListener("click", async (e) => {
     if (a === "paid") await api("/api/orders/"+id+"/payment", { status:"verified" });
     if (a === "unpaid" && confirm("Customer ko batana hai ke payment nahi mili?")) await api("/api/orders/"+id+"/payment", { status:"not_received" });
     if (a === "release") await api("/api/handoffs/"+id+"/release", {});
+    if (a === "pause") { await api("/api/menu", { paused: btn.dataset.p === "1" }); await loadMenu(); }
+    if (a === "item") { await api("/api/menu", { itemId: id, soldOut: btn.dataset.s === "1" }); await loadMenu(); }
+    if (a === "range") { reportRange = id; reportState = null; render(); await loadReport(); }
   } catch (err) { alert(err.message); }
   await load();
 });
@@ -193,6 +239,8 @@ document.getElementById("tabs").addEventListener("click", (e) => {
   view = b.dataset.v; localStorageSet("view", view);
   document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("on", x === b));
   render();
+  if (view === "menu") loadMenu().catch(e => alert(e.message));
+  if (view === "report") loadReport().catch(e => alert(e.message));
 });
 document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("on", x.dataset.v === view));
 document.getElementById("sound").addEventListener("click", (e) => {
@@ -200,6 +248,7 @@ document.getElementById("sound").addEventListener("click", (e) => {
 });
 
 load(); setInterval(load, 5000);
+if (view === "menu") loadMenu(); if (view === "report") loadReport();
 </script>
 </body>
 </html>`;

@@ -4,7 +4,7 @@
 import { cartSummary, lineLabel, subtotal } from "./cart.js";
 import type { Order, OrderStatus, PaymentMethod, Session, Store } from "./db.js";
 import { estimateMinutes, quoteDelivery } from "./delivery.js";
-import { hoursText, isOpen } from "./hours.js";
+import { formatKarachi, hoursText, isOpen, parseKarachiDateTime } from "./hours.js";
 import type { Branch, LoadedVendor } from "./vendors.js";
 
 export type PlaceResult =
@@ -25,11 +25,21 @@ export function placeOrder(
     payment_method: PaymentMethod;
     address_note?: string | null;
     pickup_branch_id?: string | null;
+    /** Pre-order time "YYYY-MM-DD HH:MM" in Pakistan time, or null for as soon as possible. */
+    scheduled_for?: string | null;
   },
   now = new Date(),
 ): PlaceResult {
   const cart = session.cart;
   if (cart.length === 0) return { ok: false, error: "Cart is empty. Add items first." };
+  const state = store.vendorState(vendor.slug);
+  if (state.paused) {
+    return { ok: false, error: "The shop has paused new orders for now (kitchen busy). Apologise and ask the customer to try again a bit later." };
+  }
+  const soldOut = cart.filter((l) => state.unavailable.includes(l.itemId));
+  if (soldOut.length) {
+    return { ok: false, error: `Sold out now: ${soldOut.map((l) => l.name).join(", ")}. Remove them (remove_from_cart) and offer something else.` };
+  }
   if (!session.fulfilment) return { ok: false, error: "Ask whether the customer wants delivery or pickup, then call set_fulfilment." };
   if (input.payment_method === "online" && !vendor.payment.online) {
     return { ok: false, error: "This shop does not take online payment. Only cash is available." };
@@ -74,15 +84,32 @@ export function placeOrder(
     branch = b;
   }
 
-  if (!isOpen(branch, now)) {
-    return { ok: false, error: `${branch.name} is closed right now. Hours: ${hoursText(branch)}. Do not take the order.` };
-  }
-
   const eta = estimateMinutes({
     prepMinutes: branch.prepMinutes,
     activeOrders: store.countActiveKitchen(vendor.slug, branch.id),
     travelMinutes,
   });
+
+  let scheduledFor: number | null = null;
+  if (input.scheduled_for) {
+    if (!vendor.preorder.enabled) return { ok: false, error: "This shop does not take pre-orders." };
+    const when = parseKarachiDateTime(input.scheduled_for);
+    if (!when) return { ok: false, error: 'scheduled_for must look like "2026-11-13 14:30" (Pakistan time).' };
+    const earliest = now.getTime() + eta.min * 60_000;
+    if (when.getTime() < earliest) {
+      return { ok: false, error: `That time is too soon. The earliest is about ${formatKarachi(earliest)}; or order now (scheduled_for null).` };
+    }
+    if (when.getTime() > now.getTime() + vendor.preorder.maxHoursAhead * 3600_000) {
+      return { ok: false, error: `Pre-orders can be at most ${vendor.preorder.maxHoursAhead} hours ahead.` };
+    }
+    if (!isOpen(branch, when)) {
+      return { ok: false, error: `${branch.name} is closed at ${formatKarachi(when.getTime())}. Hours: ${hoursText(branch)}.` };
+    }
+    scheduledFor = when.getTime();
+  } else if (!isOpen(branch, now)) {
+    const hint = vendor.preorder.enabled ? " You can offer a pre-order for a time when the branch is open (scheduled_for)." : " Do not take the order.";
+    return { ok: false, error: `${branch.name} is closed right now. Hours: ${hoursText(branch)}.${hint}` };
+  }
   const number = store.nextOrderNumber(vendor.slug, vendor.orderPrefix);
   const order = store.createOrder(
     {
@@ -104,6 +131,7 @@ export function placeOrder(
       status: "new",
       etaMin: eta.min,
       etaMax: eta.max,
+      scheduledFor,
     },
     now.getTime(),
   );
@@ -122,8 +150,11 @@ export function confirmationText(vendor: LoadedVendor, order: Order, branch: Bra
     order.fulfilment === "delivery"
       ? `\n${ur ? "Delivery" : "Delivery"}: ${order.deliveryFee === 0 ? (ur ? "Free" : "Free") : money(vendor, order.deliveryFee)}`
       : "";
-  const when =
-    order.fulfilment === "delivery"
+  const when = order.scheduledFor
+    ? ur
+      ? `⏰ Pre-order: ${order.fulfilment === "delivery" ? "delivery" : `${branch.name} pe pickup`} ${formatKarachi(order.scheduledFor)} (±10 min).`
+      : `⏰ Pre-order: ${order.fulfilment === "delivery" ? "delivery" : `pickup at ${branch.name}`} at ${formatKarachi(order.scheduledFor)} (±10 min).`
+    : order.fulfilment === "delivery"
       ? ur
         ? `⏱️ Andazan ${order.etaMin}–${order.etaMax} minute mein pohanch jayega.`
         : `⏱️ Estimated delivery: ${order.etaMin}–${order.etaMax} minutes.`
@@ -177,7 +208,7 @@ export function changeStatus(
   const patch: Parameters<Store["updateOrder"]>[1] = { status: to };
   let notify: string | null = null;
 
-  if (to === "accepted" && opts.prepMinutes) {
+  if (to === "accepted" && opts.prepMinutes && !order.scheduledFor) {
     // Kitchen gave a real prep time. Tell the customer only if it is clearly later than promised.
     const elapsed = Math.round((now - order.createdAt) / 60_000);
     const branch = vendor.branches.find((b) => b.id === order.branchId);
@@ -244,7 +275,10 @@ export function orderStatusText(order: Order): string {
     rejected: "rejected by the shop",
   };
   const ageMin = Math.round((Date.now() - order.createdAt) / 60_000);
-  return `Order ${order.number}: ${labels[order.status]}. Placed ${ageMin} min ago, estimate was ${order.etaMin}-${order.etaMax} min. Payment: ${order.paymentMethod} (${order.paymentStatus}). Items: ${order.items.map(lineLabel).join("; ")}. Total ${order.total}.`;
+  const timing = order.scheduledFor
+    ? `Pre-order for ${formatKarachi(order.scheduledFor)}.`
+    : `Placed ${ageMin} min ago, estimate was ${order.etaMin}-${order.etaMax} min.`;
+  return `Order ${order.number}: ${labels[order.status]}. ${timing} Payment: ${order.paymentMethod} (${order.paymentStatus}). Items: ${order.items.map(lineLabel).join("; ")}. Total ${order.total}.`;
 }
 
 export { cartSummary };

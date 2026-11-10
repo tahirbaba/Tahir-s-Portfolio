@@ -173,7 +173,7 @@ describe("kitchen / rider status", () => {
       vendorSlug: "demo-pizza", number: "CC-2000", customer: "923009", customerName: "Ali", branchId: "gulshan",
       fulfilment: "delivery", items: [{ itemId: "fries", name: "Fries", variant: "Large", qty: 1, unitPrice: 380 }],
       subtotal: 380, deliveryFee: 100, total: 480, paymentMethod: "cod", paymentStatus: "cod", paymentNote: null,
-      location: { lat: 1, lng: 1 }, addressNote: null, status: "new", etaMin: 35, etaMax: 45,
+      location: { lat: 1, lng: 1 }, addressNote: null, status: "new", etaMin: 35, etaMax: 45, scheduledFor: null,
     }, NOW.getTime());
     void session;
     const accepted = changeStatus(store, vendor, order, "accepted", { prepMinutes: 15 }, NOW.getTime());
