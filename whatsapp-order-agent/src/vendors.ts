@@ -105,6 +105,8 @@ export const VendorSchema = z.object({
   riders: z
     .array(z.object({ name: z.string().min(1).max(40), phone: z.string().regex(/^\d{10,15}$/, "digits with country code") }))
     .default([]),
+  /** Env var holding the owner portal key (/o/<slug>). Leave out to switch the portal off. */
+  ownerKeyEnv: z.string().regex(/^[A-Z0-9_]+$/).optional(),
   /** Env var holding the shared secret of the rider page. Leave out to switch the rider page off. */
   riderKeyEnv: z.string().regex(/^[A-Z0-9_]+$/).optional(),
   /**

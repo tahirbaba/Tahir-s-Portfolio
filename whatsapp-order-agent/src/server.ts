@@ -8,6 +8,7 @@ import { registerAdminRoutes } from "./admin/routes.js";
 import type { Probes } from "./checklist.js";
 import { registerMenuRoutes } from "./menu/routes.js";
 import { registerOpsRoutes } from "./ops/routes.js";
+import { registerPortalRoutes } from "./portal/routes.js";
 import { registerRiderRoutes } from "./rider/routes.js";
 import { registerTrackRoutes } from "./track/routes.js";
 import type { VendorRegistry } from "./vendors.js";
@@ -79,5 +80,6 @@ export function buildServer(deps: {
   registerAdminRoutes(app, deps);
   registerRiderRoutes(app, deps);
   registerTrackRoutes(app, deps);
+  registerPortalRoutes(app, deps);
   return app;
 }

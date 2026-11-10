@@ -85,6 +85,7 @@ npm run dev
 4. [docs/PHASE3.md](docs/PHASE3.md): riders, usage meter, owner ki report
 5. [docs/PHASE4.md](docs/PHASE4.md): tracking page, loyalty, backup, billing
 6. [docs/PHASE5.md](docs/PHASE5.md): **testing ka tareeqa**, go-live checklist, chat viewer
+7. [docs/PHASE6.md](docs/PHASE6.md): owner portal (menu/timing khud badalna)
 
 ## Phase 2 features
 
@@ -125,7 +126,15 @@ Sold-out items aur pause ka asar har jagah hota hai: bot unhein add nahi karta, 
 | **Chat viewer** | Admin → Chats | Har chat ki poori baat-cheet, AI ke tool calls ke saath |
 | **Spam/kharche se hifazat** | `.env` + vendor `limits` | Ek customer ke ghante ke max messages; vendor ki rozana AI limit ke baad chats staff ko |
 
+## Phase 6: owner portal ([docs/PHASE6.md](docs/PHASE6.md))
+
+| Feature | Kahan | Kaise |
+|---|---|---|
+| **Owner portal** | `/o/<vendor>?key=…` | Owner khud mobile se menu, prices, sizes, timings, delivery charges, payment aur FAQ badalta hai. Save karte hi live |
+| **Hisaab** | Owner portal | Aaj aur 7 din ki sale, aap ke bills |
+| **History + Undo** | Owner portal (admin saves bhi) | Har tabdeeli ka record, aakhri 30 versions, ek click se wapas |
+| **Mehfooz fields** | Server | WhatsApp IDs, keys, billing, limits sirf admin badal sakta hai |
+
 ## Agle ideas
 - Kai vendors ke liye ek hi Meta app (Tech Provider bannay ke baad Embedded Signup)
 - Backups ka khud Google Drive pe jana
-- Vendor ke liye apna dashboard login (abhi kitchen screen + admin)

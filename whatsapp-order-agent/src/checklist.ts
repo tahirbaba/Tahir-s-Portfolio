@@ -68,6 +68,9 @@ async function vendorChecks(v: LoadedVendor, engine: Engine, probes: Probes, now
   }
 
   add("Kitchen screen key", process.env[v.opsKeyEnv] ? "ok" : "fail", process.env[v.opsKeyEnv] ? "set" : `${v.opsKeyEnv} .env mein nahi hai.`);
+  if (v.ownerKeyEnv) {
+    add("Owner portal key", process.env[v.ownerKeyEnv] ? "ok" : "warn", process.env[v.ownerKeyEnv] ? `${config.publicUrl}/o/${v.slug}?key=…` : `${v.ownerKeyEnv} .env mein nahi: owner khud menu nahi badal sakega.`);
+  }
   if (v.riderKeyEnv) {
     add("Rider page key", process.env[v.riderKeyEnv] ? "ok" : "fail", process.env[v.riderKeyEnv] ? `${v.riders.length} rider(s)` : `${v.riderKeyEnv} .env mein nahi hai.`);
   }

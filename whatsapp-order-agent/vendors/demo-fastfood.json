@@ -9,6 +9,7 @@
     "displayNumber": "+92 300 0000002"
   },
   "opsKeyEnv": "OPS_KEY_DEMO_FASTFOOD",
+  "ownerKeyEnv": "OWNER_KEY_DEMO_FASTFOOD",
   "owners": [
     "923000000092"
   ],

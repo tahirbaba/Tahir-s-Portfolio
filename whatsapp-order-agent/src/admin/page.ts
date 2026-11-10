@@ -132,7 +132,7 @@ async function showLinks(){
   try {
     const { vendors } = await api("/admin/api/vendors");
     const v = vendors.find(x => x.slug === current);
-    document.getElementById("links").innerHTML = v ? 'Kitchen: <code>'+esc(v.opsUrl)+'</code>' + (v.menuUrl ? ' · Menu page: <a href="'+esc(v.menuUrl)+'" target="_blank" rel="noopener">'+esc(v.menuUrl)+'</a>' : ' · Menu page: displayNumber add karein') + ' · Prompt ~'+v.promptTokens+' tokens' : "Abhi save nahi hua.";
+    document.getElementById("links").innerHTML = v ? 'Kitchen: <code>'+esc(v.opsUrl)+'</code>' + (v.ownerUrl ? ' · Owner portal: <code>'+esc(v.ownerUrl)+'</code>' : "") + (v.menuUrl ? ' · Menu page: <a href="'+esc(v.menuUrl)+'" target="_blank" rel="noopener">'+esc(v.menuUrl)+'</a>' : ' · Menu page: displayNumber add karein') + ' · Prompt ~'+v.promptTokens+' tokens' : "Abhi save nahi hua.";
   } catch {}
 }
 

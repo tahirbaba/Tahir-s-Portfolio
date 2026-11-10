@@ -9,6 +9,7 @@
     "displayNumber": "+92 300 0000001"
   },
   "opsKeyEnv": "OPS_KEY_DEMO_PIZZA",
+  "ownerKeyEnv": "OWNER_KEY_DEMO_PIZZA",
   "owners": [
     "923000000091"
   ],

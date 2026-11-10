@@ -2,13 +2,13 @@
 // Link: https://<server>/admin?key=<ADMIN_KEY>. Changes are saved to vendors/<slug>.json and apply at once.
 
 import { timingSafeEqual } from "node:crypto";
-import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { buildSystemPrompt } from "../agent/prompt.js";
 import { config } from "../config.js";
 import { waNumber } from "../menu/routes.js";
-import { parseVendor, type LoadedVendor, type VendorRegistry } from "../vendors.js";
+import type { LoadedVendor, VendorRegistry } from "../vendors.js";
 import type { Store } from "../db.js";
 import type { Engine } from "../engine.js";
 import { sendReport } from "../scheduler.js";
@@ -18,6 +18,7 @@ import { backupNow, isBackupName, listBackups } from "../backup.js";
 import { invoiceFor, trialDaysLeft } from "../billing.js";
 import { sessionSummary, transcript } from "../chats.js";
 import { runChecklist, type Probes } from "../checklist.js";
+import { saveVendorRaw, validateVendorRaw, type ValidateResult } from "../vendorFiles.js";
 import { invoicePage } from "./invoice.js";
 import { adminPage } from "./page.js";
 
@@ -47,6 +48,7 @@ function summary(v: LoadedVendor) {
     dailyReport: v.dailyReport.enabled ? `${v.dailyReport.time} (${v.dailyReport.template})` : null,
     trialDaysLeft: trialDaysLeft(v),
     opsUrl: `${config.publicUrl}/ops/${v.slug}?key=…`,
+    ownerUrl: v.ownerKeyEnv ? `${config.publicUrl}/o/${v.slug}?key=…` : null,
     menuUrl: waNumber(v) ? `${config.publicUrl}/m/${v.slug}` : null,
     promptTokens: Math.round(buildSystemPrompt(v).length / 4),
   };
@@ -98,24 +100,14 @@ export function registerAdminRoutes(
   }
 
   /** Validates JSON text; on success returns the parsed vendor. */
-  function check(text: string, slug: string): { ok: true; vendor: LoadedVendor } | { ok: false; error: string } {
+  function check(text: string, slug: string): ValidateResult {
     let raw: unknown;
     try {
       raw = JSON.parse(text);
     } catch (err) {
       return { ok: false, error: `JSON format galat hai: ${(err as Error).message}` };
     }
-    try {
-      const v = parseVendor(raw, `${slug}.json`);
-      if (v.slug !== slug) return { ok: false, error: `"slug" ("${v.slug}") file ke naam ("${slug}") jaisa hona chahiye.` };
-      const other = vendors.byPhoneNumberId(v.whatsapp.phoneNumberId);
-      if (other && other.slug !== slug) return { ok: false, error: `phoneNumberId pehle se "${other.slug}" ka hai.` };
-      const prefixClash = vendors.all().find((x) => x.slug !== slug && x.orderPrefix === v.orderPrefix);
-      if (prefixClash) return { ok: false, error: `orderPrefix "${v.orderPrefix}" pehle se "${prefixClash.slug}" use kar raha hai.` };
-      return { ok: true, vendor: v };
-    } catch (err) {
-      return { ok: false, error: (err as Error).message };
-    }
+    return validateVendorRaw(raw, slug, vendors);
   }
 
   app.get("/admin", async (req, reply) => {
@@ -249,13 +241,14 @@ export function registerAdminRoutes(
     if (!guard(req, reply)) return;
     const slug = (req.params as { slug: string }).slug;
     if (!/^[a-z0-9-]+$/.test(slug)) return reply.code(400).send({ error: "bad slug" });
-    const r = check(String((req.body as { json?: unknown })?.json ?? ""), slug);
+    let raw: unknown;
+    try {
+      raw = JSON.parse(String((req.body as { json?: unknown })?.json ?? ""));
+    } catch (err) {
+      return reply.code(400).send({ error: `JSON format galat hai: ${(err as Error).message}` });
+    }
+    const r = saveVendorRaw(raw, slug, vendors, "admin");
     if (!r.ok) return reply.code(400).send({ error: r.error });
-    const file = fileOf(slug);
-    const tmp = `${file}.tmp`;
-    writeFileSync(tmp, JSON.stringify(JSON.parse(String((req.body as { json: string }).json)), null, 2) + "\n");
-    renameSync(tmp, file); // atomic: never a half-written file
-    vendors.upsert(r.vendor);
     req.log.info({ slug }, "vendor saved from admin panel");
     return { ok: true, summary: summary(r.vendor) };
   });

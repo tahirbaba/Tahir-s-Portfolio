@@ -15,6 +15,7 @@ Code ko haath nahi lagana. Bas ek file aur do settings.
 | `whatsapp.phoneNumberId` | Meta se mila Phone number ID |
 | `whatsapp.displayNumber` | shop ka WhatsApp number, jaise `+92 300 1234567`. **Menu page isi number pe order bhejta hai** |
 | `owners` | owner/manager ke WhatsApp numbers, jaise `["923001234567"]`. Ye `#report` jaise commands bhej sakte hain |
+| `ownerKeyEnv` | owner portal ki key ka naam: owner khud menu/timing badal sake (optional, docs/PHASE6.md) |
 | `riders`, `riderKeyEnv` | delivery riders aur rider page ki key ka naam (optional, docs/PHASE3.md) |
 | `limits` | `{ "aiTurnsPerDay": 500 }`: rozana AI jawab ki hadd, us ke baad chats staff ko (optional, docs/PHASE5.md) |
 | `loyalty` | har Nth order pe free item (optional, docs/PHASE4.md) |
@@ -91,7 +92,7 @@ docker compose restart app
 - Kitchen link `https://<domain>/ops/karachi-broast?key=<OPS_KEY>` kitchen ke mobile pe kholein aur **Sound on** dabayein.
 
 ## Menu ya price badalna
-Admin panel mein edit karke **Save** karein. File haath se badli ho to `docker compose restart app` chalayein. Jin customers ki chat chal rahi thi, unki agli baat nai chat se shuru hogi, taake purani prices kabhi na aayein.
+Sab se aasaan: **owner khud** apne owner portal se (docs/PHASE6.md). Ya aap admin panel mein edit karke **Save** karein. File haath se badli ho to `docker compose restart app` chalayein. Jin customers ki chat chal rahi thi, unki agli baat nai chat se shuru hogi, taake purani prices kabhi na aayein.
 
 ## Roz ke kaam owner khud kar sakta hai
 

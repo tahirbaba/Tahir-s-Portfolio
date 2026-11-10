@@ -27,6 +27,7 @@ async function main() {
   for (const v of vendors.all()) {
     if (!process.env[v.whatsapp.accessTokenEnv]) missing.push(`${v.whatsapp.accessTokenEnv} (WhatsApp token, ${v.slug})`);
     if (!process.env[v.opsKeyEnv]) missing.push(`${v.opsKeyEnv} (kitchen screen key, ${v.slug})`);
+    if (v.ownerKeyEnv && !process.env[v.ownerKeyEnv]) missing.push(`${v.ownerKeyEnv} (owner portal key, ${v.slug})`);
     if (v.riderKeyEnv && !process.env[v.riderKeyEnv]) missing.push(`${v.riderKeyEnv} (rider page key, ${v.slug})`);
   }
   if (missing.length) console.warn(`⚠️  Missing settings:\n  - ${missing.join("\n  - ")}\n`);
