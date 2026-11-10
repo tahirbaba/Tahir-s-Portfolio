@@ -4,6 +4,7 @@ import { AnthropicLLM } from "./agent/llm.js";
 import { config } from "./config.js";
 import { Store } from "./db.js";
 import { Engine } from "./engine.js";
+import { runDailyReports } from "./scheduler.js";
 import { buildServer } from "./server.js";
 import { HttpTranscriber } from "./stt.js";
 import { VendorRegistry } from "./vendors.js";
@@ -25,6 +26,7 @@ async function main() {
   for (const v of vendors.all()) {
     if (!process.env[v.whatsapp.accessTokenEnv]) missing.push(`${v.whatsapp.accessTokenEnv} (WhatsApp token, ${v.slug})`);
     if (!process.env[v.opsKeyEnv]) missing.push(`${v.opsKeyEnv} (kitchen screen key, ${v.slug})`);
+    if (v.riderKeyEnv && !process.env[v.riderKeyEnv]) missing.push(`${v.riderKeyEnv} (rider page key, ${v.slug})`);
   }
   if (missing.length) console.warn(`⚠️  Missing settings:\n  - ${missing.join("\n  - ")}\n`);
 
@@ -39,6 +41,13 @@ async function main() {
 
   // Forget processed message ids after 3 days.
   setInterval(() => store.pruneProcessed(3 * 86_400_000), 3_600_000).unref();
+
+  // Owners' nightly report (only vendors with dailyReport.enabled).
+  setInterval(() => {
+    runDailyReports(engine, store, vendors)
+      .then((sent) => sent.length && console.log(`📊 daily report sent: ${sent.join(", ")}`))
+      .catch((err) => console.error("daily report failed", err));
+  }, 60_000).unref();
 
   await app.listen({ port: config.port, host: config.host });
   for (const v of vendors.all()) {

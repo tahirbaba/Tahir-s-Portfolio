@@ -1,6 +1,6 @@
 // Sales report for the owner (WhatsApp "#report" command and the Report tab on the kitchen screen).
 
-import type { Store } from "./db.js";
+import type { Order, Store } from "./db.js";
 import type { LoadedVendor } from "./vendors.js";
 
 const PKT_OFFSET_MS = 5 * 3600_000;
@@ -32,6 +32,8 @@ export interface Report {
   preorders: number;
   rejected: number;
   topItems: { name: string; qty: number }[];
+  /** Per rider: delivered orders and COD cash (collected / still to hand over). */
+  riders: { name: string; deliveries: number; cash: number; cashPending: number }[];
 }
 
 export function buildReport(store: Store, vendor: LoadedVendor, range: ReportRange, now = Date.now()): Report {
@@ -57,11 +59,27 @@ export function buildReport(store: Store, vendor: LoadedVendor, range: ReportRan
     online: ok.filter((o) => o.paymentMethod === "online").length,
     preorders: ok.filter((o) => o.scheduledFor != null).length,
     rejected: all.length - ok.length,
+    riders: riderTotals(ok),
     topItems: [...qty.entries()]
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
       .map(([name, q]) => ({ name, qty: q })),
   };
+}
+
+function riderTotals(orders: Order[]): Report["riders"] {
+  const m = new Map<string, Report["riders"][number]>();
+  for (const o of orders) {
+    if (!o.riderName || o.status !== "delivered") continue;
+    const r = m.get(o.riderName) ?? { name: o.riderName, deliveries: 0, cash: 0, cashPending: 0 };
+    r.deliveries++;
+    if (o.paymentMethod === "cod") {
+      if (o.cashCollected) r.cash += o.total;
+      else r.cashPending += o.total;
+    }
+    m.set(o.riderName, r);
+  }
+  return [...m.values()].sort((a, b) => b.deliveries - a.deliveries);
 }
 
 export function reportText(vendor: LoadedVendor, r: Report): string {
@@ -79,6 +97,15 @@ export function reportText(vendor: LoadedVendor, r: Report): string {
     ``,
     `🔥 Top items:`,
     top,
+    ...(r.riders.length
+      ? [
+          ``,
+          `🛵 Riders:`,
+          ...r.riders.map(
+            (x) => `${x.name}: ${x.deliveries} delivery · cash ${money(x.cash)}${x.cashPending ? ` (baqi ${money(x.cashPending)})` : ""}`,
+          ),
+        ]
+      : []),
   ]
     .filter((x) => x !== null)
     .join("\n");

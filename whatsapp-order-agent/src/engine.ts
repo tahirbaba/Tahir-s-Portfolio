@@ -11,7 +11,8 @@ import { cartSummary } from "./cart.js";
 import { handleOwnerCommand, isOwner } from "./owner.js";
 import type { Transcriber } from "./stt.js";
 import type { LoadedVendor, VendorRegistry } from "./vendors.js";
-import type { WhatsAppSender } from "./whatsapp/client.js";
+import { record } from "./usage.js";
+import { splitText, type WhatsAppSender } from "./whatsapp/client.js";
 import type { InboundMessage } from "./whatsapp/webhook.js";
 
 export interface Logger {
@@ -79,6 +80,7 @@ export class Engine {
       s.messages.length >= config.sessionMaxMessages;
     if (!stale) return s;
     const last = store.lastOrderOf(vendor.slug, customer);
+    record(store, vendor.slug, "conversations", 1, now);
     return store.createSession(
       vendor.slug,
       customer,
@@ -132,6 +134,12 @@ export class Engine {
     try {
       const result = await runTurn(this.deps.llm, store, vendor, session, input, this.now());
       reply = result.reply;
+      const at = this.now();
+      record(store, vendor.slug, "ai_turns", 1, at);
+      record(store, vendor.slug, "ai_input", result.usage.input, at);
+      record(store, vendor.slug, "ai_cache_read", result.usage.cacheRead, at);
+      record(store, vendor.slug, "ai_cache_write", result.usage.cacheWrite, at);
+      record(store, vendor.slug, "ai_output", result.usage.output, at);
       this.log.info(
         { vendor: vendor.slug, customer: msg.from, handoff: result.handedOff ?? null, order: result.orderPlaced, usage: result.usage },
         "turn done",
@@ -237,8 +245,22 @@ export class Engine {
   private async send(vendor: LoadedVendor, to: string, text: string): Promise<void> {
     try {
       await this.deps.wa.sendText(vendor, to, text);
+      // Every outgoing message may be billed by Meta: count it for the usage meter.
+      record(this.deps.store, vendor.slug, "wa_service", splitText(text).length, this.now());
     } catch (err) {
       this.log.error({ err: String(err), vendor: vendor.slug, to }, "WhatsApp send failed");
+    }
+  }
+
+  /** Sends an approved template (allowed outside the 24h window). Returns false when Meta refused it. */
+  async sendTemplate(vendor: LoadedVendor, to: string, template: string, language: string, params: string[]): Promise<boolean> {
+    try {
+      await this.deps.wa.sendTemplate(vendor, to, template, language, params);
+      record(this.deps.store, vendor.slug, "wa_template", 1, this.now());
+      return true;
+    } catch (err) {
+      this.log.error({ err: String(err), vendor: vendor.slug, to, template }, "WhatsApp template failed");
+      return false;
     }
   }
 

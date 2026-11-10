@@ -34,11 +34,21 @@ export function adminPage(): string {
   .msg.good { display:block; background:color-mix(in srgb, var(--ok) 14%, transparent); }
   a { color:var(--info); }
   h2 { font-size:16px; margin:0 0 10px; }
+  table { border-collapse:collapse; width:100%; font-size:14px; min-width:760px; }
+  th, td { text-align:right; padding:7px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th:first-child, td:first-child { text-align:left; }
+  th { color:var(--muted); font-weight:600; }
 </style>
 </head>
 <body>
 <header><h1>🛠️ Admin: Vendors</h1><span class="muted">Save karte hi naya menu/settings live ho jaate hain.</span></header>
 <div class="wrap">
+  <div class="card" style="grid-column:1/-1">
+    <div class="row" style="margin-top:0"><h2 style="margin:0;flex:1">📈 Usage aur kharcha (andaza)</h2>
+      <input type="month" id="month" aria-label="Month"><button class="ghost" id="loadUsage">Dikhao</button></div>
+    <div style="overflow-x:auto"><table id="usage"></table></div>
+    <div class="muted">Kharcha = Meta (har number ke mahana free messages ke baad; bracket mein free wale) + Claude AI. Rates .env mein (RATE_…) badal sakte hain. Ye andaza hai; asal bill Meta aur Anthropic ke dashboard mein dekhein.</div>
+  </div>
   <div>
     <div class="card">
       <h2>Vendors</h2>
@@ -51,7 +61,7 @@ export function adminPage(): string {
     <h2 id="title">Vendor chunein</h2>
     <div id="links" class="muted"></div>
     <textarea id="editor" spellcheck="false" placeholder="Vendor ki JSON yahan aayegi" aria-label="Vendor JSON"></textarea>
-    <div class="row"><button class="ghost" id="validate">Check karo</button><button class="ok" id="save">Save karo</button></div>
+    <div class="row"><button class="ghost" id="validate">Check karo</button><button class="ok" id="save">Save karo</button><button class="ghost" id="testReport">Owner report test bhejo</button></div>
     <div id="msg" class="msg"></div>
     <div class="muted">Fields ki tafseel: docs/ADD-VENDOR.md. Tokens aur keys (.env) yahan nahi daalte; sirf un ke naam.</div>
   </div>
@@ -73,7 +83,7 @@ async function loadList(){
   const { vendors } = await api("/admin/api/vendors");
   document.getElementById("list").innerHTML = vendors.map(v =>
     '<div class="v '+(v.slug===current?"on":"")+'" data-slug="'+esc(v.slug)+'"><b>'+esc(v.name)+'</b><span class="muted">'+esc(v.slug)+' · '+v.branches+' branch · '+v.menuItems+' items</span>' +
-    '<div class="tags">'+tag(v.phoneReady,"Number ✓","Number ID missing")+tag(v.tokenSet,"Token ✓",esc(v.tokenEnv)+" missing")+tag(v.opsKeySet,"Kitchen key ✓",esc(v.opsKeyEnv)+" missing")+tag(v.owners>0,"Owner ✓","No owner")+'</div></div>'
+    '<div class="tags">'+tag(v.phoneReady,"Number ✓","Number ID missing")+tag(v.tokenSet,"Token ✓",esc(v.tokenEnv)+" missing")+tag(v.opsKeySet,"Kitchen key ✓",esc(v.opsKeyEnv)+" missing")+tag(v.owners>0,"Owner ✓","No owner")+(v.riders ? tag(true, v.riders+" rider", "") : "")+(v.dailyReport ? tag(true,"Report "+esc(v.dailyReport),"") : "")+'</div></div>'
   ).join("") || "Koi vendor nahi.";
 }
 
@@ -112,7 +122,23 @@ document.getElementById("save").onclick = async () => {
   try { await api("/admin/api/vendors/"+current, "PUT", { json: document.getElementById("editor").value }); msg("✅ Save ho gaya aur live hai.", true); await loadList(); showLinks(); }
   catch (e) { msg("❌ " + e.message); }
 };
+const pkr = n => "Rs " + Number(n).toLocaleString("en-US");
+async function loadUsage(){
+  const m = document.getElementById("month").value;
+  const u = await api("/admin/api/usage" + (m ? "?month=" + m : ""));
+  if (!m) document.getElementById("month").value = u.month;
+  const head = "<tr><th>Vendor</th><th>Chats</th><th>AI jawab</th><th>Orders</th><th>Sale</th><th>WA msgs (free)</th><th>Meta</th><th>AI</th><th>Total kharcha</th><th>Per order</th></tr>";
+  document.getElementById("usage").innerHTML = head + u.vendors.map(v =>
+    "<tr><td>"+esc(v.name)+"</td><td>"+v.conversations+"</td><td>"+v.aiTurns+"</td><td>"+v.orders+"</td><td>"+pkr(v.revenue)+"</td><td>"+v.waService+" ("+v.waFree+")"+(v.waTemplate ? " +"+v.waTemplate+" tmpl" : "")+"</td><td>"+pkr(v.cost.meta)+"</td><td>"+pkr(v.cost.ai)+"</td><td><b>"+pkr(v.cost.total)+"</b></td><td>"+pkr(v.cost.perOrder)+"</td></tr>").join("");
+}
+document.getElementById("loadUsage").onclick = () => loadUsage().catch(e => msg(e.message));
+document.getElementById("testReport").onclick = async () => {
+  if (!current) return msg("Pehle vendor chunein.");
+  try { const r = await api("/admin/api/vendors/"+current+"/report-test", "POST", {}); msg("✅ Report template " + r.sent + " owner(s) ko bhej diya.", true); }
+  catch (e) { msg("❌ " + e.message); }
+};
 loadList().catch(e => msg("Login masla: " + e.message));
+loadUsage().catch(() => {});
 </script>
 </body>
 </html>`;

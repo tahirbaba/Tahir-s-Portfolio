@@ -82,6 +82,7 @@ npm run dev
 1. [docs/SETUP-META.md](docs/SETUP-META.md): Meta app, test number aur webhook
 2. [docs/DEPLOY-ORACLE.md](docs/DEPLOY-ORACLE.md): Oracle Cloud free server pe 24/7
 3. [docs/ADD-VENDOR.md](docs/ADD-VENDOR.md): naya vendor add karna
+4. [docs/PHASE3.md](docs/PHASE3.md): riders, usage meter, owner ki report
 
 ## Phase 2 features
 
@@ -95,7 +96,16 @@ npm run dev
 
 Sold-out items aur pause ka asar har jagah hota hai: bot unhein add nahi karta, menu page pe "Khatam" dikhta hai, aur order lagne se pehle dobara check hota hai.
 
+## Phase 3 features ([docs/PHASE3.md](docs/PHASE3.md))
+
+| Feature | Kahan | Kaise |
+|---|---|---|
+| **Rider page** | `/r/<vendor>?key=…` | Rider order uthata hai ("Main le ja raha hoon"), customer ko rider ka naam aur number jata hai, phir delivered + cash mila. Owner ko har rider ka cash aur baqi hisaab |
+| **Usage meter** | Admin panel | Har vendor ke mahine ke chats, AI jawab, WhatsApp messages (free/billable), AI tokens, aur andaza kharcha PKR mein, per order bhi. Package pricing isi se |
+| **Reorder** | Chat | "pichla order dobara": aaj ki prices ke saath cart, aur khatam items chhod deta hai |
+| **Owner ki raat wali report** | WhatsApp template | Tay waqt pe din mein ek dafa: orders, sale, top item. Meta mein utility template banana zaroori hai. Admin panel mein "test bhejo" button |
+
 ## Agle ideas
-- Owner ko raat ko khud report (ye Meta ka approved "utility template" maangta hai, us ke baad add karenge)
-- Rider ke liye alag mobile view aur rider ki assignment
-- Customer ka pichla order "same as last time"
+- Customer ki location ke hisaab se rider ki live ETA
+- Loyalty (10th order pe free item)
+- Kai vendors ke liye ek hi Meta app (Tech Provider bannay ke baad Embedded Signup)

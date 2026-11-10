@@ -60,6 +60,10 @@ export interface Order {
   etaMax: number;
   /** Pre-orders: when the customer wants it (ms). Null = as soon as possible. */
   scheduledFor: number | null;
+  riderName: string | null;
+  riderPhone: string | null;
+  /** Rider confirmed the cash for a COD order. */
+  cashCollected: boolean;
   createdAt: number;
   updatedAt: number;
 }
@@ -142,6 +146,19 @@ CREATE TABLE IF NOT EXISTS vendor_state (
   unavailable TEXT NOT NULL DEFAULT '[]',
   updated_at INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS usage_daily (
+  vendor_slug TEXT NOT NULL,
+  day TEXT NOT NULL,
+  metric TEXT NOT NULL,
+  value INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (vendor_slug, day, metric)
+);
+CREATE TABLE IF NOT EXISTS report_log (
+  vendor_slug TEXT NOT NULL,
+  day TEXT NOT NULL,
+  sent_at INTEGER NOT NULL,
+  PRIMARY KEY (vendor_slug, day)
+);
 CREATE TABLE IF NOT EXISTS pending_carts (
   code TEXT NOT NULL,
   vendor_slug TEXT NOT NULL,
@@ -154,6 +171,9 @@ CREATE TABLE IF NOT EXISTS pending_carts (
 /** Columns added after the first release; added to older databases on start. */
 const MIGRATIONS: { table: string; column: string; ddl: string }[] = [
   { table: "orders", column: "scheduled_for", ddl: "ALTER TABLE orders ADD COLUMN scheduled_for INTEGER" },
+  { table: "orders", column: "rider_name", ddl: "ALTER TABLE orders ADD COLUMN rider_name TEXT" },
+  { table: "orders", column: "rider_phone", ddl: "ALTER TABLE orders ADD COLUMN rider_phone TEXT" },
+  { table: "orders", column: "cash_collected", ddl: "ALTER TABLE orders ADD COLUMN cash_collected INTEGER NOT NULL DEFAULT 0" },
 ];
 
 type Row = Record<string, unknown>;
@@ -200,6 +220,9 @@ function rowToOrder(r: Row): Order {
     etaMin: Number(r.eta_min),
     etaMax: Number(r.eta_max),
     scheduledFor: r.scheduled_for == null ? null : Number(r.scheduled_for),
+    riderName: (r.rider_name as string | null) ?? null,
+    riderPhone: (r.rider_phone as string | null) ?? null,
+    cashCollected: Number(r.cash_collected ?? 0) === 1,
     createdAt: Number(r.created_at),
     updatedAt: Number(r.updated_at),
   };
@@ -321,7 +344,10 @@ export class Store {
     return `${prefix}-${Number(r.n)}`;
   }
 
-  createOrder(o: Omit<Order, "id" | "createdAt" | "updatedAt">, now = Date.now()): Order {
+  createOrder(
+    o: Omit<Order, "id" | "createdAt" | "updatedAt" | "riderName" | "riderPhone" | "cashCollected">,
+    now = Date.now(),
+  ): Order {
     const res = this.db
       .prepare(
         `INSERT INTO orders (vendor_slug, number, customer, customer_name, branch_id, fulfilment, items,
@@ -348,7 +374,7 @@ export class Store {
         o.status,
         o.etaMin,
         o.etaMax,
-        o.scheduledFor,
+        o.scheduledFor ?? null,
         now,
         now,
       );
@@ -374,6 +400,13 @@ export class Store {
     return r ? rowToOrder(r) : undefined;
   }
 
+  recentOrdersOf(vendorSlug: string, customer: string, limit = 5): Order[] {
+    const rows = this.db
+      .prepare("SELECT * FROM orders WHERE vendor_slug = ? AND customer = ? ORDER BY id DESC LIMIT ?")
+      .all(vendorSlug, customer, limit) as Row[];
+    return rows.map(rowToOrder);
+  }
+
   ordersByStatus(vendorSlug: string, statuses: OrderStatus[], sinceMs = 0): Order[] {
     const marks = statuses.map(() => "?").join(",");
     const rows = this.db
@@ -396,7 +429,9 @@ export class Store {
 
   updateOrder(
     id: number,
-    patch: Partial<Pick<Order, "status" | "paymentStatus" | "paymentNote" | "etaMin" | "etaMax">>,
+    patch: Partial<
+      Pick<Order, "status" | "paymentStatus" | "paymentNote" | "etaMin" | "etaMax" | "riderName" | "riderPhone" | "cashCollected">
+    >,
     now = Date.now(),
   ): Order {
     const cur = this.getOrder(id);
@@ -404,9 +439,21 @@ export class Store {
     const next = { ...cur, ...patch };
     this.db
       .prepare(
-        "UPDATE orders SET status = ?, payment_status = ?, payment_note = ?, eta_min = ?, eta_max = ?, updated_at = ? WHERE id = ?",
+        `UPDATE orders SET status = ?, payment_status = ?, payment_note = ?, eta_min = ?, eta_max = ?,
+         rider_name = ?, rider_phone = ?, cash_collected = ?, updated_at = ? WHERE id = ?`,
       )
-      .run(next.status, next.paymentStatus, next.paymentNote, next.etaMin, next.etaMax, now, id);
+      .run(
+        next.status,
+        next.paymentStatus,
+        next.paymentNote,
+        next.etaMin,
+        next.etaMax,
+        next.riderName,
+        next.riderPhone,
+        next.cashCollected ? 1 : 0,
+        now,
+        id,
+      );
     return this.getOrder(id)!;
   }
 
@@ -415,6 +462,42 @@ export class Store {
       .prepare("SELECT * FROM orders WHERE vendor_slug = ? AND created_at >= ? AND created_at < ? ORDER BY id ASC")
       .all(vendorSlug, fromMs, toMs) as Row[];
     return rows.map(rowToOrder);
+  }
+
+  // ---- usage meter (messages, AI tokens, conversations) ----
+
+  addUsage(vendorSlug: string, day: string, metric: string, value: number): void {
+    if (!value) return;
+    this.db
+      .prepare(
+        `INSERT INTO usage_daily (vendor_slug, day, metric, value) VALUES (?, ?, ?, ?)
+         ON CONFLICT(vendor_slug, day, metric) DO UPDATE SET value = value + excluded.value`,
+      )
+      .run(vendorSlug, day, metric, Math.round(value));
+  }
+
+  /** Sums each metric for days in [fromDay, toDay] (YYYY-MM-DD, inclusive). */
+  usageBetween(vendorSlug: string, fromDay: string, toDay: string): Record<string, number> {
+    const rows = this.db
+      .prepare(
+        "SELECT metric, SUM(value) AS v FROM usage_daily WHERE vendor_slug = ? AND day >= ? AND day <= ? GROUP BY metric",
+      )
+      .all(vendorSlug, fromDay, toDay) as Row[];
+    return Object.fromEntries(rows.map((r) => [String(r.metric), Number(r.v)]));
+  }
+
+  // ---- daily owner report log ----
+
+  /** True the first time for this vendor and day; false if the report was already sent. */
+  claimReportDay(vendorSlug: string, day: string, now = Date.now()): boolean {
+    const res = this.db
+      .prepare("INSERT OR IGNORE INTO report_log (vendor_slug, day, sent_at) VALUES (?, ?, ?)")
+      .run(vendorSlug, day, now);
+    return Number(res.changes) === 1;
+  }
+
+  releaseReportDay(vendorSlug: string, day: string): void {
+    this.db.prepare("DELETE FROM report_log WHERE vendor_slug = ? AND day = ?").run(vendorSlug, day);
   }
 
   // ---- vendor live state (pause, sold-out items) ----

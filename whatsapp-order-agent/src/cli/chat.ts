@@ -38,6 +38,9 @@ const printer: WhatsAppSender = {
   async sendText(v: Vendor, to: string, text: string) {
     console.log(`\n\x1b[32m[${v.name} → ${to}]\x1b[0m\n${text}\n`);
   },
+  async sendTemplate(v: Vendor, to: string, template: string, _lang: string, params: string[]) {
+    console.log(`\n\x1b[35m[template ${template} ${v.name} → ${to}]\x1b[0m ${params.join(" | ")}\n`);
+  },
   async markRead() {},
   async downloadMedia(_v, id) {
     const f = images.get(id);

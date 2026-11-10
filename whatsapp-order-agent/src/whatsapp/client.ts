@@ -11,6 +11,8 @@ export interface MediaFile {
 /** What the rest of the app needs from WhatsApp. Swapped for a fake in tests and the CLI simulator. */
 export interface WhatsAppSender {
   sendText(vendor: Vendor, to: string, text: string): Promise<void>;
+  /** Approved template message: the only kind allowed outside the 24h reply window. */
+  sendTemplate(vendor: Vendor, to: string, template: string, language: string, params: string[]): Promise<void>;
   markRead(vendor: Vendor, messageId: string): Promise<void>;
   downloadMedia(vendor: Vendor, mediaId: string): Promise<MediaFile>;
 }
@@ -29,6 +31,11 @@ export function splitText(text: string, max = MAX_TEXT): string[] {
   }
   if (rest) parts.push(rest);
   return parts;
+}
+
+/** Meta rejects template variables with new lines, tabs or more than 4 spaces in a row. */
+export function templateParam(text: string): string {
+  return text.replace(/[\r\n\t]+/g, " ").replace(/ {4,}/g, "   ").trim().slice(0, 1000) || "-";
 }
 
 export class CloudApiSender implements WhatsAppSender {
@@ -62,6 +69,20 @@ export class CloudApiSender implements WhatsAppSender {
         text: { body: part, preview_url: false },
       });
     }
+  }
+
+  async sendTemplate(vendor: Vendor, to: string, template: string, language: string, params: string[]): Promise<void> {
+    await this.post(vendor, {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to,
+      type: "template",
+      template: {
+        name: template,
+        language: { code: language },
+        components: [{ type: "body", parameters: params.map((text) => ({ type: "text", text: templateParam(text) })) }],
+      },
+    });
   }
 
   async markRead(vendor: Vendor, messageId: string): Promise<void> {

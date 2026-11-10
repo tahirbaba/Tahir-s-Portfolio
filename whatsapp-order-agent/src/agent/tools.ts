@@ -44,6 +44,11 @@ export const TOOLS: Anthropic.Tool[] = [
   }),
   tool("view_cart", "Show the current cart with line numbers and subtotal.", {}),
   tool(
+    "reorder_last",
+    "Copy the customer's previous order into the cart at today's prices. Use when they ask for the same as last time (\"pichla order\", \"wahi jo pichli dafa\").",
+    {},
+  ),
+  tool(
     "set_fulfilment",
     "Set delivery or pickup. For delivery it uses the customer's shared location and returns the branch, fee and estimated time. For pickup give the branch id (or null if there is only one branch).",
     {
@@ -114,6 +119,24 @@ function dispatch(name: string, input: Input, ctx: ToolContext): string {
       if (!session.cart[idx]) return json({ ok: false, error: "No such line", cart: cartSummary(session.cart, vendor.currency) });
       session.cart = session.cart.filter((_, i) => i !== idx);
       return json({ ok: true, cart: cartSummary(session.cart, vendor.currency) });
+    }
+    case "reorder_last": {
+      const prev = store.recentOrdersOf(vendor.slug, session.customer).find((o) => o.status !== "rejected");
+      if (!prev) return json({ ok: false, error: "This customer has no previous order here." });
+      const soldOut = store.vendorState(vendor.slug).unavailable;
+      const skipped: string[] = [];
+      for (const l of prev.items) {
+        const r = resolveLine(vendor, { item_id: l.itemId, variant: l.variant ?? null, qty: l.qty, note: l.note ?? null }, soldOut);
+        if (r.ok) session.cart = addLine(session.cart, r.value);
+        else skipped.push(`${l.name}: ${r.error}`);
+      }
+      return json({
+        ok: true,
+        previous_order: prev.number,
+        cart: cartSummary(session.cart, vendor.currency),
+        not_added: skipped,
+        note: "Prices are today's prices. Tell the customer if any item could not be added.",
+      });
     }
     case "view_cart":
       return json({ cart: cartSummary(session.cart, vendor.currency) });

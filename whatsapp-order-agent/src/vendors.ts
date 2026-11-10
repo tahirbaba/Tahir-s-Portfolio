@@ -101,6 +101,25 @@ export const VendorSchema = z.object({
   notifyLanguage: z.enum(["roman_urdu", "english"]).default("roman_urdu"),
   /** Owner/manager WhatsApp numbers (digits with country code, e.g. 923001234567). They can send commands like "report". */
   owners: z.array(z.string().regex(/^\d{10,15}$/, "digits with country code, e.g. 923001234567")).default([]),
+  /** Delivery riders. They use the rider page /r/<slug>?key=<riderKeyEnv value>. */
+  riders: z
+    .array(z.object({ name: z.string().min(1).max(40), phone: z.string().regex(/^\d{10,15}$/, "digits with country code") }))
+    .default([]),
+  /** Env var holding the shared secret of the rider page. Leave out to switch the rider page off. */
+  riderKeyEnv: z.string().regex(/^[A-Z0-9_]+$/).optional(),
+  /**
+   * Nightly sales report to the owners on WhatsApp. Needs an approved Meta "utility" template
+   * with 5 body variables: shop, date, orders, sale, top item (see docs/PHASE3.md).
+   */
+  dailyReport: z
+    .object({
+      enabled: z.boolean().default(false),
+      /** Pakistan time. Before 06:00 the report covers the previous day. */
+      time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).default("23:45"),
+      template: z.string().regex(/^[a-z0-9_]+$/).default("daily_sales_report"),
+      language: z.string().default("en"),
+    })
+    .default({ enabled: false, time: "23:45", template: "daily_sales_report", language: "en" }),
   /** Orders for a later time (today or tomorrow). */
   preorder: z
     .object({

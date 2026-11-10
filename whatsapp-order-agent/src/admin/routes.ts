@@ -9,6 +9,10 @@ import { buildSystemPrompt } from "../agent/prompt.js";
 import { config } from "../config.js";
 import { waNumber } from "../menu/routes.js";
 import { parseVendor, type LoadedVendor, type VendorRegistry } from "../vendors.js";
+import type { Store } from "../db.js";
+import type { Engine } from "../engine.js";
+import { sendReport } from "../scheduler.js";
+import { currentMonth, usageSummary } from "../usage.js";
 import { adminPage } from "./page.js";
 
 function allowed(req: FastifyRequest): boolean {
@@ -33,6 +37,8 @@ function summary(v: LoadedVendor) {
     opsKeyEnv: v.opsKeyEnv,
     opsKeySet: env(v.opsKeyEnv),
     owners: v.owners.length,
+    riders: v.riders.length,
+    dailyReport: v.dailyReport.enabled ? `${v.dailyReport.time} (${v.dailyReport.template})` : null,
     opsUrl: `${config.publicUrl}/ops/${v.slug}?key=…`,
     menuUrl: waNumber(v) ? `${config.publicUrl}/m/${v.slug}` : null,
     promptTokens: Math.round(buildSystemPrompt(v).length / 4),
@@ -71,8 +77,8 @@ export function vendorTemplate(slug: string) {
   };
 }
 
-export function registerAdminRoutes(app: FastifyInstance, deps: { vendors: VendorRegistry }) {
-  const { vendors } = deps;
+export function registerAdminRoutes(app: FastifyInstance, deps: { vendors: VendorRegistry; store: Store; engine: Engine }) {
+  const { vendors, store, engine } = deps;
   const fileOf = (slug: string) => path.join(config.vendorsDir, `${slug}.json`);
 
   function guard(req: FastifyRequest, reply: FastifyReply): boolean {
@@ -111,6 +117,27 @@ export function registerAdminRoutes(app: FastifyInstance, deps: { vendors: Vendo
   app.get("/admin/api/vendors", async (req, reply) => {
     if (!guard(req, reply)) return;
     return { vendors: vendors.all().map(summary) };
+  });
+
+  app.get("/admin/api/usage", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    const month = (req.query as { month?: string }).month ?? currentMonth();
+    try {
+      return { month, vendors: vendors.all().map((v) => usageSummary(store, v, month)) };
+    } catch (err) {
+      return reply.code(400).send({ error: (err as Error).message });
+    }
+  });
+
+  /** Sends the nightly report template right now, to check that the template is approved and works. */
+  app.post("/admin/api/vendors/:slug/report-test", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    const vendor = vendors.get((req.params as { slug: string }).slug);
+    if (!vendor) return reply.code(404).send({ error: "vendor not found" });
+    if (vendor.owners.length === 0) return reply.code(400).send({ error: "Vendor file mein owners number nahi hai." });
+    const sent = await sendReport(engine, store, vendor, Date.now());
+    if (sent === 0) return reply.code(502).send({ error: "Meta ne template nahi bheja. Template ka naam/language aur approval check karein (server logs)." });
+    return { ok: true, sent };
   });
 
   app.get("/admin/api/vendors/:slug", async (req, reply) => {

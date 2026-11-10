@@ -15,6 +15,8 @@ Code ko haath nahi lagana. Bas ek file aur do settings.
 | `whatsapp.phoneNumberId` | Meta se mila Phone number ID |
 | `whatsapp.displayNumber` | shop ka WhatsApp number, jaise `+92 300 1234567`. **Menu page isi number pe order bhejta hai** |
 | `owners` | owner/manager ke WhatsApp numbers, jaise `["923001234567"]`. Ye `#report` jaise commands bhej sakte hain |
+| `riders`, `riderKeyEnv` | delivery riders aur rider page ki key ka naam (optional, docs/PHASE3.md) |
+| `dailyReport` | owner ko raat ki report ka waqt aur template (optional, docs/PHASE3.md) |
 | `preorder` | `{ "enabled": true, "maxHoursAhead": 20 }`. Baad ke waqt ka order (max 22 ghante) |
 | `whatsapp.accessTokenEnv` | `.env` mein token ka naam, jaise `WA_TOKEN_KARACHI_BROAST` |
 | `opsKeyEnv` | kitchen screen key ka naam, jaise `OPS_KEY_KARACHI_BROAST` |

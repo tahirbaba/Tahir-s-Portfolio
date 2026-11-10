@@ -45,8 +45,12 @@ export class ScriptedLLM implements LLM {
 
 export class FakeWhatsApp implements WhatsAppSender {
   sent: { vendor: string; to: string; text: string }[] = [];
+  templates: { vendor: string; to: string; template: string; params: string[] }[] = [];
   async sendText(vendor: Vendor, to: string, text: string) {
     this.sent.push({ vendor: vendor.slug, to, text });
+  }
+  async sendTemplate(vendor: Vendor, to: string, template: string, _language: string, params: string[]) {
+    this.templates.push({ vendor: vendor.slug, to, template, params });
   }
   async markRead() {}
   async downloadMedia(): Promise<MediaFile> {

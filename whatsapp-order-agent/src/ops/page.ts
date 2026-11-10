@@ -109,11 +109,15 @@ function card(o){
   if (o.status === "accepted") b.push('<button data-a="ready" data-id="'+o.id+'">Tayyar ho gaya</button>');
   let rider = "";
   if (o.status === "ready" && o.fulfilment === "delivery") {
-    rider = '<input placeholder="Rider ka naam (optional)" id="rn'+o.id+'"><input placeholder="Rider ka number (optional)" id="rp'+o.id+'" inputmode="tel">';
+    rider = (state.riders && state.riders.length)
+      ? '<select id="ri'+o.id+'" aria-label="Rider"><option value="">Rider chunein…</option>'+state.riders.map((r,i) => '<option value="'+i+'">'+esc(r)+'</option>').join("")+'</select>'
+      : '<input placeholder="Rider ka naam (optional)" id="rn'+o.id+'"><input placeholder="Rider ka number (optional)" id="rp'+o.id+'" inputmode="tel">';
     b.push('<button data-a="out" data-id="'+o.id+'">Rider nikal gaya 🛵</button>');
   }
   if (o.status === "ready" && o.fulfilment === "pickup") b.push('<button class="ok" data-a="picked" data-id="'+o.id+'">Customer le gaya</button>');
-  if (o.status === "out_for_delivery") b.push('<button class="ok" data-a="delivered" data-id="'+o.id+'">Deliver ho gaya</button>');
+  if (o.status === "out_for_delivery") b.push(o.paymentMethod === "cod"
+    ? '<button class="ok" data-a="delivered" data-c="1" data-id="'+o.id+'">Deliver + cash mil gaya</button>'
+    : '<button class="ok" data-a="delivered" data-id="'+o.id+'">Deliver ho gaya</button>');
   if (o.paymentMethod === "online" && (o.paymentStatus === "claimed" || o.paymentStatus === "awaiting")) b.push(
     '<button class="ok" data-a="paid" data-id="'+o.id+'">Payment mil gayi</button>',
     '<button class="ghost" data-a="unpaid" data-id="'+o.id+'">Nahi mili</button>');
@@ -128,6 +132,7 @@ function card(o){
     '<div class="muted">'+esc(o.customerName || "")+' · <a href="'+wa+'" target="_blank" rel="noopener">+'+esc(o.customer)+'</a>' +
       (o.mapUrl ? ' · <a href="'+o.mapUrl+'" target="_blank" rel="noopener">📍 Map</a>' : "") + '</div>' +
     (o.addressNote ? '<div class="muted">🏠 '+esc(o.addressNote)+'</div>' : "") +
+    (o.riderName ? '<div class="muted">🛵 Rider: '+esc(o.riderName)+(o.paymentMethod === "cod" && o.status === "delivered" ? (o.cashCollected ? " · cash ✅" : " · cash baqi") : "")+'</div>' : "") +
     rider + (b.length ? '<div class="btns">'+b.join("")+'</div>' : "") + '</div>';
 }
 
@@ -174,6 +179,8 @@ function reportView(){
     (r.preorders ? '<div class="row"><span>Pre-orders</span><span>'+r.preorders+'</span></div>' : "") +
     (r.rejected ? '<div class="row"><span>Reject</span><span>'+r.rejected+'</span></div>' : "") + '</div>';
   h += '<div class="card"><b>🔥 Top items</b>' + (r.topItems.length ? '<ul>'+r.topItems.map(t => '<li>'+esc(t.name)+' × '+t.qty+'</li>').join("")+'</ul>' : '<div class="muted">Abhi koi order nahi.</div>') + '</div>';
+  if (r.riders && r.riders.length) h += '<div class="card"><b>🛵 Riders ka hisaab</b>' + r.riders.map(x =>
+    '<div class="row"><span>'+esc(x.name)+' · '+x.deliveries+' delivery</span><span>'+money(x.cash)+(x.cashPending ? ' <span class="badge warn">baqi '+money(x.cashPending)+'</span>' : "")+'</span></div>').join("") + '</div>';
   return h;
 }
 
@@ -221,9 +228,10 @@ document.getElementById("list").addEventListener("click", async (e) => {
     if (a === "reject" && confirm("Order reject karna hai? Customer ko message jayega.")) await api("/api/orders/"+id+"/status", { to:"rejected" });
     if (a === "ready") await api("/api/orders/"+id+"/status", { to:"ready" });
     if (a === "out") await api("/api/orders/"+id+"/status", { to:"out_for_delivery",
+      riderIndex: document.getElementById("ri"+id) && document.getElementById("ri"+id).value !== "" ? Number(document.getElementById("ri"+id).value) : undefined,
       riderName: (document.getElementById("rn"+id)||{}).value, riderPhone: (document.getElementById("rp"+id)||{}).value });
     if (a === "picked") await api("/api/orders/"+id+"/status", { to:"picked_up" });
-    if (a === "delivered") await api("/api/orders/"+id+"/status", { to:"delivered" });
+    if (a === "delivered") await api("/api/orders/"+id+"/status", { to:"delivered", cashCollected: btn.dataset.c === "1" ? true : undefined });
     if (a === "paid") await api("/api/orders/"+id+"/payment", { status:"verified" });
     if (a === "unpaid" && confirm("Customer ko batana hai ke payment nahi mili?")) await api("/api/orders/"+id+"/payment", { status:"not_received" });
     if (a === "release") await api("/api/handoffs/"+id+"/release", {});

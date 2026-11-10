@@ -195,7 +195,7 @@ export function changeStatus(
   vendor: LoadedVendor,
   order: Order,
   to: OrderStatus,
-  opts: { prepMinutes?: number; riderName?: string; riderPhone?: string } = {},
+  opts: { prepMinutes?: number; riderName?: string; riderPhone?: string; cashCollected?: boolean } = {},
   now = Date.now(),
 ): StatusChange {
   if (!TRANSITIONS[order.status].includes(to)) {
@@ -207,6 +207,13 @@ export function changeStatus(
   const ur = vendor.notifyLanguage === "roman_urdu";
   const patch: Parameters<Store["updateOrder"]>[1] = { status: to };
   let notify: string | null = null;
+  if (to === "out_for_delivery") {
+    patch.riderName = opts.riderName ?? null;
+    patch.riderPhone = opts.riderPhone ?? null;
+  }
+  if ((to === "delivered" || to === "picked_up") && order.paymentMethod === "cod" && opts.cashCollected !== undefined) {
+    patch.cashCollected = opts.cashCollected;
+  }
 
   if (to === "accepted" && opts.prepMinutes && !order.scheduledFor) {
     // Kitchen gave a real prep time. Tell the customer only if it is clearly later than promised.

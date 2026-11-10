@@ -50,6 +50,8 @@ function view(vendor: LoadedVendor, o: Order) {
     etaMax: o.etaMax,
     scheduledFor: o.scheduledFor,
     scheduledLabel: o.scheduledFor ? formatKarachi(o.scheduledFor) : null,
+    riderName: o.riderName,
+    cashCollected: o.cashCollected,
     createdAt: o.createdAt,
     updatedAt: o.updatedAt,
   };
@@ -100,6 +102,7 @@ export function registerOpsRoutes(app: FastifyInstance, deps: { store: Store; ve
       handoffs,
       today: store.dailyStats(vendor.slug, today),
       paused: store.vendorState(vendor.slug).paused,
+      riders: vendor.riders.map((r) => r.name),
     };
   });
 
@@ -107,15 +110,24 @@ export function registerOpsRoutes(app: FastifyInstance, deps: { store: Store; ve
     const vendor = auth(req, reply);
     if (!vendor) return;
     const id = Number((req.params as { id: string }).id);
-    const body = (req.body ?? {}) as { to?: OrderStatus; prepMinutes?: number; riderName?: string; riderPhone?: string };
+    const body = (req.body ?? {}) as {
+      to?: OrderStatus;
+      prepMinutes?: number;
+      riderName?: string;
+      riderPhone?: string;
+      riderIndex?: number;
+      cashCollected?: boolean;
+    };
+    const listed = Number.isInteger(body.riderIndex) ? vendor.riders[body.riderIndex!] : undefined;
     const order = store.getOrder(id);
     if (!order || order.vendorSlug !== vendor.slug) return reply.code(404).send({ error: "order not found" });
     try {
       const prep = Number(body.prepMinutes);
       const change = changeStatus(store, vendor, order, body.to as OrderStatus, {
         prepMinutes: Number.isFinite(prep) && prep > 0 && prep <= 180 ? prep : undefined,
-        riderName: body.riderName?.toString().slice(0, 40) || undefined,
-        riderPhone: body.riderPhone?.toString().replace(/[^\d+]/g, "").slice(0, 16) || undefined,
+        riderName: listed?.name ?? (body.riderName?.toString().slice(0, 40) || undefined),
+        riderPhone: listed?.phone ?? (body.riderPhone?.toString().replace(/[^\d+]/g, "").slice(0, 16) || undefined),
+        cashCollected: typeof body.cashCollected === "boolean" ? body.cashCollected : undefined,
       });
       if (change.notify) await engine.notifyCustomer(vendor, change.order, change.notify);
       return { ok: true, order: view(vendor, change.order), customerNotified: Boolean(change.notify) };

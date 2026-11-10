@@ -12,6 +12,23 @@
   "owners": [
     "923000000091"
   ],
+  "riders": [
+    {
+      "name": "Imran",
+      "phone": "923000000081"
+    },
+    {
+      "name": "Bilal",
+      "phone": "923000000082"
+    }
+  ],
+  "riderKeyEnv": "RIDER_KEY_DEMO_PIZZA",
+  "dailyReport": {
+    "enabled": false,
+    "time": "23:45",
+    "template": "daily_sales_report",
+    "language": "en"
+  },
   "branches": [
     {
       "id": "gulshan",

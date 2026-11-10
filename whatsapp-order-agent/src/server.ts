@@ -7,6 +7,7 @@ import type { Engine } from "./engine.js";
 import { registerAdminRoutes } from "./admin/routes.js";
 import { registerMenuRoutes } from "./menu/routes.js";
 import { registerOpsRoutes } from "./ops/routes.js";
+import { registerRiderRoutes } from "./rider/routes.js";
 import type { VendorRegistry } from "./vendors.js";
 import { parseWebhook, verifySignature } from "./whatsapp/webhook.js";
 
@@ -72,5 +73,6 @@ export function buildServer(deps: {
   registerOpsRoutes(app, deps);
   registerMenuRoutes(app, deps);
   registerAdminRoutes(app, deps);
+  registerRiderRoutes(app, deps);
   return app;
 }

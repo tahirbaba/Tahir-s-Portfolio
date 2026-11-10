@@ -34,6 +34,25 @@ export const config = {
     model: process.env.STT_MODEL ?? "whisper-large-v3",
   },
 
+  /**
+   * Rates for the usage meter's cost estimate. Check Meta's and Anthropic's price pages and
+   * update these in .env when they change. AI prices are USD per million tokens.
+   */
+  rates: {
+    usdToPkr: num("RATE_USD_TO_PKR", 280),
+    /** Meta: free-form replies inside the 24h window, after the free monthly allowance. */
+    waServiceUsd: num("RATE_WA_SERVICE_USD", 0.015),
+    /** Meta: utility template messages (e.g. the owner's nightly report). */
+    waUtilityUsd: num("RATE_WA_UTILITY_USD", 0.015),
+    /** Meta: free service messages per business number per month. */
+    waFreePerMonth: num("RATE_WA_FREE_PER_MONTH", 1000),
+    aiInputUsd: num("RATE_AI_INPUT_USD", 0.1),
+    aiCacheReadUsd: num("RATE_AI_CACHE_READ_USD", 0.01),
+    /** Cache writes: 1.25x (5 min) or 2x (1 hour) input price; the system prompt uses 1 hour. */
+    aiCacheWriteUsd: num("RATE_AI_CACHE_WRITE_USD", 0.2),
+    aiOutputUsd: num("RATE_AI_OUTPUT_USD", 0.5),
+  },
+
   /** Secret for the admin panel (/admin). Empty = admin panel off. */
   adminKey: process.env.ADMIN_KEY ?? "",
 
