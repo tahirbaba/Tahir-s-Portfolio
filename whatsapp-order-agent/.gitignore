@@ -5,3 +5,4 @@ data/*.db*
 backups/
 data/backups/
 vendors/.history/
+data/demo/

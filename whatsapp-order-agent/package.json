@@ -15,7 +15,8 @@
     "test": "node --import tsx --disable-warning=ExperimentalWarning --test test/*.test.ts",
     "chat": "tsx --env-file-if-exists=.env src/cli/chat.ts",
     "vendors:check": "tsx src/cli/check-vendors.ts",
-    "scenarios": "tsx --env-file-if-exists=.env src/cli/scenarios.ts"
+    "scenarios": "tsx --env-file-if-exists=.env src/cli/scenarios.ts",
+    "demo": "node --import tsx --disable-warning=ExperimentalWarning src/cli/demo.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.7.0",

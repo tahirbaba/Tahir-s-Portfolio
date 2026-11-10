@@ -42,6 +42,18 @@ Kitchen ka "Accept" aur "Ready" customer ko message **nahi** bhejte. Sirf tab bh
 | `src/cli/chat.ts` | Terminal simulator (Meta ke baghair test) |
 | `docs/` | Setup guides |
 
+## Bina kisi key ke sab screens dekhein: `npm run demo`
+
+```bash
+npm install
+```
+
+```bash
+npm run demo
+```
+
+Claude key, Meta ya `.env` ki zaroorat nahi. Demo orders, rider, chats aur usage ke saath server chal jata hai, aur terminal mein saare links (keys ke saath) print hote hain: owner portal, kitchen, rider, tracking, menu page, admin. Customer ko jaane wale WhatsApp messages terminal mein dikhte hain. Demo apni copy (`data/demo/`) pe chalta hai, asal files ko haath nahi lagata.
+
 ## Pehla test, apne computer pe (sirf Claude key chahiye)
 
 ```bash
