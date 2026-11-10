@@ -1,0 +1,5 @@
+# Automatic free HTTPS (Let's Encrypt). Meta only calls https webhooks.
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy app:3000
+}

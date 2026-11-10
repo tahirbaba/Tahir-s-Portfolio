@@ -1,0 +1,88 @@
+{
+  "slug": "demo-pizza",
+  "name": "Crust Corner Pizza (Demo)",
+  "orderPrefix": "CC",
+  "currency": "PKR",
+  "whatsapp": {
+    "phoneNumberId": "REPLACE_WITH_PHONE_NUMBER_ID_1",
+    "accessTokenEnv": "WA_TOKEN_DEMO_PIZZA",
+    "displayNumber": "+92 300 0000001"
+  },
+  "opsKeyEnv": "OPS_KEY_DEMO_PIZZA",
+  "branches": [
+    {
+      "id": "gulshan",
+      "name": "Gulshan Branch (University Road)",
+      "address": "Block 13-A, University Road, Gulshan-e-Iqbal, Karachi",
+      "lat": 24.9172,
+      "lng": 67.0968,
+      "hours": {
+        "mon": { "open": "12:00", "close": "03:00" },
+        "tue": { "open": "12:00", "close": "03:00" },
+        "wed": { "open": "12:00", "close": "03:00" },
+        "thu": { "open": "12:00", "close": "03:00" },
+        "fri": { "open": "14:00", "close": "03:00" },
+        "sat": { "open": "12:00", "close": "03:00" },
+        "sun": { "open": "12:00", "close": "03:00" }
+      },
+      "delivery": {
+        "rule": { "type": "slabs", "slabs": [ { "upToKm": 3, "fee": 100 }, { "upToKm": 6, "fee": 150 }, { "upToKm": 8, "fee": 200 } ] },
+        "maxKm": 8,
+        "freeAbove": 3000,
+        "minOrder": 800
+      },
+      "pickup": true,
+      "prepMinutes": 20
+    },
+    {
+      "id": "johar",
+      "name": "Johar Branch",
+      "address": "Block 15, Gulistan-e-Johar, Karachi",
+      "lat": 24.9137,
+      "lng": 67.1236,
+      "hours": {
+        "mon": { "open": "13:00", "close": "02:00" },
+        "tue": { "open": "13:00", "close": "02:00" },
+        "wed": { "open": "13:00", "close": "02:00" },
+        "thu": { "open": "13:00", "close": "02:00" },
+        "fri": { "open": "14:00", "close": "02:00" },
+        "sat": { "open": "13:00", "close": "02:00" },
+        "sun": { "open": "13:00", "close": "02:00" }
+      },
+      "delivery": {
+        "rule": { "type": "per_km", "baseFee": 80, "perKm": 25, "includedKm": 2 },
+        "maxKm": 7,
+        "minOrder": 800
+      },
+      "pickup": true,
+      "prepMinutes": 25
+    }
+  ],
+  "menu": [
+    { "id": "chicken-tikka-pizza", "name": "Chicken Tikka Pizza", "category": "Pizza", "variants": [ { "name": "Small", "price": 650 }, { "name": "Medium", "price": 1150 }, { "name": "Large", "price": 1650 } ] },
+    { "id": "fajita-pizza", "name": "Chicken Fajita Pizza", "category": "Pizza", "variants": [ { "name": "Small", "price": 650 }, { "name": "Medium", "price": 1150 }, { "name": "Large", "price": 1650 } ] },
+    { "id": "malai-boti-pizza", "name": "Malai Boti Pizza", "category": "Pizza", "variants": [ { "name": "Medium", "price": 1250 }, { "name": "Large", "price": 1750 } ] },
+    { "id": "veggie-pizza", "name": "Veggie Lover Pizza", "category": "Pizza", "variants": [ { "name": "Small", "price": 600 }, { "name": "Medium", "price": 1050 }, { "name": "Large", "price": 1500 } ] },
+    { "id": "deal-2-medium", "name": "Deal: 2 Medium Pizzas + 1.5L Drink", "category": "Deals", "price": 2499, "description": "Any two medium pizzas (mention flavours in the note)" },
+    { "id": "deal-student", "name": "Student Deal: Small Pizza + Fries + 345ml Drink", "category": "Deals", "price": 899 },
+    { "id": "garlic-bread", "name": "Garlic Bread (4 pcs)", "category": "Sides", "price": 350 },
+    { "id": "fries", "name": "Fries", "category": "Sides", "variants": [ { "name": "Regular", "price": 250 }, { "name": "Large", "price": 380 } ] },
+    { "id": "wings", "name": "Hot Wings (6 pcs)", "category": "Sides", "price": 550 },
+    { "id": "drink-345", "name": "Soft Drink 345ml", "category": "Drinks", "price": 120 },
+    { "id": "drink-1-5", "name": "Soft Drink 1.5L", "category": "Drinks", "price": 280 },
+    { "id": "water", "name": "Mineral Water 500ml", "category": "Drinks", "price": 80 }
+  ],
+  "payment": {
+    "cod": true,
+    "online": "Raast ID 03000000001 (Crust Corner) or JazzCash 03000000001"
+  },
+  "faq": [
+    "All meat is halal.",
+    "Pizza dough is made fresh daily.",
+    "Extra cheese can be added to any pizza for PKR 150: add it as a note, the staff will charge it at the counter or on delivery.",
+    "Dine-in is available at both branches."
+  ],
+  "style": "Friendly and quick, like a polite shop assistant. Use 'aap'. Short replies. Match the customer's language (Roman Urdu, Urdu or English).",
+  "upsell": "If the order has no drink, offer a 1.5L soft drink for PKR 280.",
+  "notifyLanguage": "roman_urdu"
+}

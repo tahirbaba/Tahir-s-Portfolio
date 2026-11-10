@@ -1,0 +1,30 @@
+# One server runs every vendor. Start with:  docker compose up -d --build
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_PATH: /app/data/agent.db
+    volumes:
+      - ./data:/app/data          # database survives restarts/updates
+      - ./vendors:/app/vendors:ro # edit vendor files without rebuilding (then: docker compose restart app)
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env, e.g. 140-238-1-2.sslip.io}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on:
+      - app
+
+volumes:
+  caddy_data:
