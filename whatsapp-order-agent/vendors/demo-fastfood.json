@@ -149,5 +149,11 @@
   ],
   "style": "Casual and energetic, Karachi style. Use 'aap'. Short replies. Match the customer's language (Roman Urdu, Urdu or English).",
   "upsell": "If the order has a burger but no fries, offer the Combo deal or fries.",
-  "notifyLanguage": "roman_urdu"
+  "notifyLanguage": "roman_urdu",
+  "billing": {
+    "plan": "Starter",
+    "monthlyFee": 4000,
+    "includedOrders": 1000,
+    "extraPerOrder": 5
+  }
 }

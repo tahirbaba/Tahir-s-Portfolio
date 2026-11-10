@@ -68,6 +68,12 @@ export function contextLine(vendor: LoadedVendor, session: Session, store: Store
     `cart: ${session.cart.length ? cartSummary(session.cart, vendor.currency).replace(/\n/g, " | ") : "empty"}`,
   ];
   if (last) parts.push(`last order: ${last.number} (${last.status})`);
+  if (vendor.loyalty.enabled) {
+    const done = store.countOrdersOf(vendor.slug, session.customer);
+    const left = vendor.loyalty.every - (done % vendor.loyalty.every);
+    const reward = vendor.menu.find((m) => m.id === vendor.loyalty.rewardItemId)?.name ?? "a free item";
+    parts.push(`loyalty: ${done} orders so far; free ${reward} on every ${vendor.loyalty.every}th order (${left === 1 ? "the NEXT order is free-item order" : `${left} orders to go`})`);
+  }
   return `[context ${parts.join("; ")}]`;
 }
 

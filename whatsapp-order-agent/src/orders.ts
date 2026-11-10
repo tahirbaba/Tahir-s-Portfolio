@@ -1,7 +1,8 @@
 // Placing orders and moving them through the kitchen -> rider -> delivered steps.
 // Customer messages are kept to a minimum because each outgoing WhatsApp message can cost money.
 
-import { cartSummary, lineLabel, subtotal } from "./cart.js";
+import { cartSummary, lineLabel, subtotal, type CartLine } from "./cart.js";
+import { config } from "./config.js";
 import type { Order, OrderStatus, PaymentMethod, Session, Store } from "./db.js";
 import { estimateMinutes, quoteDelivery } from "./delivery.js";
 import { formatKarachi, hoursText, isOpen, parseKarachiDateTime } from "./hours.js";
@@ -110,6 +111,7 @@ export function placeOrder(
     const hint = vendor.preorder.enabled ? " You can offer a pre-order for a time when the branch is open (scheduled_for)." : " Do not take the order.";
     return { ok: false, error: `${branch.name} is closed right now. Hours: ${hoursText(branch)}.${hint}` };
   }
+  const reward = loyaltyReward(store, vendor, session.customer);
   const number = store.nextOrderNumber(vendor.slug, vendor.orderPrefix);
   const order = store.createOrder(
     {
@@ -119,7 +121,7 @@ export function placeOrder(
       customerName: name,
       branchId: branch.id,
       fulfilment: session.fulfilment,
-      items: cart,
+      items: reward ? [...cart, reward] : cart,
       subtotal: sub,
       deliveryFee,
       total: sub + deliveryFee,
@@ -143,6 +145,32 @@ function money(vendor: LoadedVendor, n: number): string {
 }
 
 /** The one confirmation message: number, bill, ETA and payment in a single WhatsApp message. */
+export const LOYALTY_NOTE = "loyalty reward";
+
+/** Every Nth order (rejected ones not counted) gets the vendor's free item, added at price 0. */
+export function loyaltyReward(store: Store, vendor: LoadedVendor, customer: string): CartLine | null {
+  const l = vendor.loyalty;
+  if (!l.enabled) return null;
+  const nth = store.countOrdersOf(vendor.slug, customer) + 1;
+  if (nth % l.every !== 0) return null;
+  const item = vendor.menu.find((m) => m.id === l.rewardItemId);
+  if (!item) return null;
+  return {
+    itemId: item.id,
+    name: `🎁 FREE ${item.name}`,
+    variant: item.variants?.[0]?.name,
+    qty: 1,
+    unitPrice: 0,
+    note: LOYALTY_NOTE,
+  };
+}
+
+/** Customer's tracking page link (only when the server has a public https address). */
+export function trackingUrl(order: Order): string | null {
+  if (!order.trackToken || !config.publicUrl.startsWith("https://")) return null;
+  return `${config.publicUrl}/t/${order.trackToken}`;
+}
+
 export function confirmationText(vendor: LoadedVendor, order: Order, branch: Branch): string {
   const ur = vendor.notifyLanguage === "roman_urdu";
   const items = order.items.map((l) => `• ${lineLabel(l)} — ${money(vendor, l.qty * l.unitPrice)}`).join("\n");
@@ -170,7 +198,14 @@ export function confirmationText(vendor: LoadedVendor, order: Order, branch: Bra
         ? `💳 Payment: ${vendor.payment.online}\nPayment ke baad screenshot yahin bhej dein.`
         : `💳 Payment: ${vendor.payment.online}\nPlease send the payment screenshot here.`;
   const head = ur ? `✅ Order confirm! Order # *${order.number}*` : `✅ Order confirmed! Order # *${order.number}*`;
-  return `${head}\n\n${items}\nSubtotal: ${money(vendor, order.subtotal)}${fee}\n*Total: ${money(vendor, order.total)}*\n\n${when}\n${pay}`;
+  const gift = order.items.some((l) => l.note === LOYALTY_NOTE)
+    ? ur
+      ? `\n🎁 Shukriya! Ye aap ka ${vendor.loyalty.every}th order hai, is liye ek cheez free.`
+      : `\n🎁 Thank you! This is your ${vendor.loyalty.every}th order, so one item is on us.`
+    : "";
+  const track = trackingUrl(order);
+  const trackLine = track ? `\n📍 ${ur ? "Order track karein" : "Track your order"}: ${track}` : "";
+  return `${head}\n\n${items}\nSubtotal: ${money(vendor, order.subtotal)}${fee}\n*Total: ${money(vendor, order.total)}*${gift}\n\n${when}\n${pay}${trackLine}`;
 }
 
 /** Allowed moves on the kitchen/rider screen. */
@@ -245,9 +280,11 @@ export function changeStatus(
     notify = ur
       ? `🛵 Order *${order.number}* rider le kar nikal gaya hai${rider ? `: ${rider}` : ""}.` +
         (cash ? ` Cash tayyar rakhein: ${cash}.` : "") +
+        (trackingUrl(order) ? `\n📍 Rider kahan hai: ${trackingUrl(order)}` : "") +
         `\nKhana kaisa laga? 1 se 5 tak rating reply kar dein ⭐`
       : `🛵 Order *${order.number}* is on the way${rider ? ` with ${rider}` : ""}.` +
         (cash ? ` Please keep ${cash} cash ready.` : "") +
+        (trackingUrl(order) ? `\n📍 Where is my rider: ${trackingUrl(order)}` : "") +
         `\nHow was it? Reply with a rating from 1 to 5 ⭐`;
   }
   return { order: store.updateOrder(order.id, patch, now), notify };

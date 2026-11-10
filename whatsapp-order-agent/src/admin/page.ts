@@ -49,7 +49,17 @@ export function adminPage(): string {
     <div style="overflow-x:auto"><table id="usage"></table></div>
     <div class="muted">Kharcha = Meta (har number ke mahana free messages ke baad; bracket mein free wale) + Claude AI. Rates .env mein (RATE_…) badal sakte hain. Ye andaza hai; asal bill Meta aur Anthropic ke dashboard mein dekhein.</div>
   </div>
+  <div class="card" style="grid-column:1/-1">
+    <div class="row" style="margin-top:0"><h2 style="margin:0;flex:1">🧾 Billing (aap ki fees)</h2><span class="muted">Usage wala month</span></div>
+    <div style="overflow-x:auto"><table id="billing"></table></div>
+    <div class="muted" id="nobill"></div>
+  </div>
   <div>
+    <div class="card" style="margin-bottom:16px">
+      <h2>💾 Backups</h2>
+      <div id="backups" class="muted">Loading…</div>
+      <div class="row"><button class="ghost" id="backupNow">Backup abhi lo</button></div>
+    </div>
     <div class="card">
       <h2>Vendors</h2>
       <div id="list" class="muted">Loading…</div>
@@ -83,7 +93,7 @@ async function loadList(){
   const { vendors } = await api("/admin/api/vendors");
   document.getElementById("list").innerHTML = vendors.map(v =>
     '<div class="v '+(v.slug===current?"on":"")+'" data-slug="'+esc(v.slug)+'"><b>'+esc(v.name)+'</b><span class="muted">'+esc(v.slug)+' · '+v.branches+' branch · '+v.menuItems+' items</span>' +
-    '<div class="tags">'+tag(v.phoneReady,"Number ✓","Number ID missing")+tag(v.tokenSet,"Token ✓",esc(v.tokenEnv)+" missing")+tag(v.opsKeySet,"Kitchen key ✓",esc(v.opsKeyEnv)+" missing")+tag(v.owners>0,"Owner ✓","No owner")+(v.riders ? tag(true, v.riders+" rider", "") : "")+(v.dailyReport ? tag(true,"Report "+esc(v.dailyReport),"") : "")+'</div></div>'
+    '<div class="tags">'+tag(v.phoneReady,"Number ✓","Number ID missing")+tag(v.tokenSet,"Token ✓",esc(v.tokenEnv)+" missing")+tag(v.opsKeySet,"Kitchen key ✓",esc(v.opsKeyEnv)+" missing")+tag(v.owners>0,"Owner ✓","No owner")+(v.riders ? tag(true, v.riders+" rider", "") : "")+(v.dailyReport ? tag(true,"Report "+esc(v.dailyReport),"") : "")+(v.trialDaysLeft != null && v.trialDaysLeft > 0 ? tag(v.trialDaysLeft > 3,"Trial: "+v.trialDaysLeft+" din","Trial: "+v.trialDaysLeft+" din") : "")+'</div></div>'
   ).join("") || "Koi vendor nahi.";
 }
 
@@ -131,14 +141,45 @@ async function loadUsage(){
   document.getElementById("usage").innerHTML = head + u.vendors.map(v =>
     "<tr><td>"+esc(v.name)+"</td><td>"+v.conversations+"</td><td>"+v.aiTurns+"</td><td>"+v.orders+"</td><td>"+pkr(v.revenue)+"</td><td>"+v.waService+" ("+v.waFree+")"+(v.waTemplate ? " +"+v.waTemplate+" tmpl" : "")+"</td><td>"+pkr(v.cost.meta)+"</td><td>"+pkr(v.cost.ai)+"</td><td><b>"+pkr(v.cost.total)+"</b></td><td>"+pkr(v.cost.perOrder)+"</td></tr>").join("");
 }
-document.getElementById("loadUsage").onclick = () => loadUsage().catch(e => msg(e.message));
+document.getElementById("loadUsage").onclick = () => { loadUsage().catch(e => msg(e.message)); loadBilling().catch(e => msg(e.message)); };
+
+async function loadBilling(){
+  const m = document.getElementById("month").value;
+  const b = await api("/admin/api/billing" + (m ? "?month=" + m : ""));
+  const head = "<tr><th>Vendor</th><th>Plan</th><th>Trial</th><th>Paid din</th><th>Orders</th><th>Extra</th><th>Bill</th><th></th></tr>";
+  document.getElementById("billing").innerHTML = head + b.invoices.map(i => {
+    const t = i.trialDaysLeft == null ? "—" : i.trialDaysLeft > 0 ? (i.trialDaysLeft <= 3 ? '<span class="tag bad">'+i.trialDaysLeft+' din baqi</span>' : i.trialDaysLeft + " din baqi") : "khatam";
+    return "<tr><td>"+esc(i.name)+"</td><td>"+esc(i.plan)+"</td><td>"+t+"</td><td>"+i.paidDays+"/"+i.daysInMonth+"</td><td>"+i.orders+"</td><td>"+i.extraOrders+"</td><td><b>"+pkr(i.total)+"</b></td>" +
+      '<td><a href="/admin/invoice/'+encodeURIComponent(i.vendor)+'?month='+b.month+'&key='+encodeURIComponent(KEY)+'" target="_blank" rel="noopener">Invoice</a></td></tr>';
+  }).join("");
+  document.getElementById("nobill").textContent = b.noBilling.length ? "Billing set nahi: " + b.noBilling.join(", ") + ' (vendor file mein "billing" add karein).' : "";
+}
+
+const kb = n => n > 1048576 ? (n/1048576).toFixed(1) + " MB" : Math.ceil(n/1024) + " KB";
+async function loadBackups(){
+  const b = await api("/admin/api/backups");
+  document.getElementById("backups").innerHTML = (b.backups.length
+    ? b.backups.slice(0, 5).map(x => '<div class="row" style="margin:4px 0"><span style="flex:1">'+esc(x.name)+'</span><span>'+kb(x.bytes)+'</span><button class="ghost" data-dl="'+esc(x.name)+'">⬇</button></div>').join("")
+    : "Abhi koi backup nahi.") + '<div class="muted">Roz '+esc(b.time)+' baje (PKT) khud; aakhri '+b.keep+' rakhe jaate hain.</div>';
+}
+document.getElementById("backups").addEventListener("click", async e => {
+  const b = e.target.closest("[data-dl]"); if (!b) return;
+  const res = await fetch("/admin/api/backups/" + encodeURIComponent(b.dataset.dl), { headers: { "x-admin-key": KEY } });
+  if (!res.ok) return msg("Download nahi hua");
+  const url = URL.createObjectURL(await res.blob());
+  const a = document.createElement("a"); a.href = url; a.download = b.dataset.dl; a.click(); URL.revokeObjectURL(url);
+});
+document.getElementById("backupNow").onclick = async () => {
+  try { const r = await api("/admin/api/backups", "POST", {}); msg("✅ Backup ban gaya: " + r.backup.name, true); loadBackups(); } catch (e) { msg("❌ " + e.message); }
+};
 document.getElementById("testReport").onclick = async () => {
   if (!current) return msg("Pehle vendor chunein.");
   try { const r = await api("/admin/api/vendors/"+current+"/report-test", "POST", {}); msg("✅ Report template " + r.sent + " owner(s) ko bhej diya.", true); }
   catch (e) { msg("❌ " + e.message); }
 };
 loadList().catch(e => msg("Login masla: " + e.message));
-loadUsage().catch(() => {});
+loadUsage().then(loadBilling).catch(() => {});
+loadBackups().catch(() => {});
 </script>
 </body>
 </html>`;

@@ -53,6 +53,20 @@ export const config = {
     aiOutputUsd: num("RATE_AI_OUTPUT_USD", 0.5),
   },
 
+  /** Your business details printed on vendor invoices. */
+  business: {
+    name: process.env.BUSINESS_NAME ?? "WhatsApp Order Agent",
+    contact: process.env.BUSINESS_CONTACT ?? "",
+  },
+
+  /** Daily database backups (one file each, oldest deleted after `keep`). */
+  backup: {
+    dir: process.env.BACKUP_DIR ?? "data/backups",
+    keep: num("BACKUP_KEEP", 14),
+    /** Pakistan time, when the shops are quiet. */
+    time: process.env.BACKUP_TIME ?? "05:00",
+  },
+
   /** Secret for the admin panel (/admin). Empty = admin panel off. */
   adminKey: process.env.ADMIN_KEY ?? "",
 

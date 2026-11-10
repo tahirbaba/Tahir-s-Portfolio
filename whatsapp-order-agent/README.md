@@ -83,6 +83,7 @@ npm run dev
 2. [docs/DEPLOY-ORACLE.md](docs/DEPLOY-ORACLE.md): Oracle Cloud free server pe 24/7
 3. [docs/ADD-VENDOR.md](docs/ADD-VENDOR.md): naya vendor add karna
 4. [docs/PHASE3.md](docs/PHASE3.md): riders, usage meter, owner ki report
+5. [docs/PHASE4.md](docs/PHASE4.md): tracking page, loyalty, backup, billing
 
 ## Phase 2 features
 
@@ -105,7 +106,16 @@ Sold-out items aur pause ka asar har jagah hota hai: bot unhein add nahi karta, 
 | **Reorder** | Chat | "pichla order dobara": aaj ki prices ke saath cart, aur khatam items chhod deta hai |
 | **Owner ki raat wali report** | WhatsApp template | Tay waqt pe din mein ek dafa: orders, sale, top item. Meta mein utility template banana zaroori hai. Admin panel mein "test bhejo" button |
 
+## Phase 4 features ([docs/PHASE4.md](docs/PHASE4.md))
+
+| Feature | Kahan | Kaise |
+|---|---|---|
+| **Customer tracking page** | `/t/<code>` (link confirmation aur "rider nikal gaya" messages mein) | Order ke steps, ETA, rider ka naam, call, aur rider kitni door hai (rider page ke GPS se). Extra WhatsApp kharcha nahi. 24 ghante tak |
+| **Loyalty** | Vendor file `loyalty` | Har Nth order pe free item khud add, confirmation mein shukriya, bot ko progress maloom |
+| **Automatic backup** | Admin → Backups | Roz 05:00 database ki copy, aakhri 14, download aur "abhi lo" button |
+| **Billing / invoice** | Admin → Billing | Vendor ka plan, trial (pro-rata), extra orders, aur print/PDF hone wala invoice |
+
 ## Agle ideas
-- Customer ki location ke hisaab se rider ki live ETA
-- Loyalty (10th order pe free item)
 - Kai vendors ke liye ek hi Meta app (Tech Provider bannay ke baad Embedded Signup)
+- Backups ka khud Google Drive pe jana
+- Vendor ke liye apna dashboard login (abhi kitchen screen + admin)

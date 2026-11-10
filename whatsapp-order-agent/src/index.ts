@@ -4,6 +4,7 @@ import { AnthropicLLM } from "./agent/llm.js";
 import { config } from "./config.js";
 import { Store } from "./db.js";
 import { Engine } from "./engine.js";
+import { runDailyBackup } from "./backup.js";
 import { runDailyReports } from "./scheduler.js";
 import { buildServer } from "./server.js";
 import { HttpTranscriber } from "./stt.js";
@@ -42,8 +43,14 @@ async function main() {
   // Forget processed message ids after 3 days.
   setInterval(() => store.pruneProcessed(3 * 86_400_000), 3_600_000).unref();
 
-  // Owners' nightly report (only vendors with dailyReport.enabled).
+  // Owners' nightly report (only vendors with dailyReport.enabled) and the daily database backup.
   setInterval(() => {
+    try {
+      const b = runDailyBackup(store);
+      if (b) console.log(`💾 backup saved: ${b.name}`);
+    } catch (err) {
+      console.error("backup failed", err);
+    }
     runDailyReports(engine, store, vendors)
       .then((sent) => sent.length && console.log(`📊 daily report sent: ${sent.join(", ")}`))
       .catch((err) => console.error("daily report failed", err));

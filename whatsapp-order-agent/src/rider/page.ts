@@ -95,8 +95,25 @@ async function load(){
       h += '<h2>Tayyar orders (uthane ke liye)</h2>' + (s.ready.map(readyCard).join("") || '<div class="empty">Koi order tayyar nahi.</div>');
     }
     document.getElementById("list").innerHTML = h;
+    gps(s.mine.length > 0);
   } catch (e) { document.getElementById("stat").textContent = "Connection masla: " + e.message; }
 }
+// Share GPS only while the rider has orders on the way (customers see distance on their tracking page).
+let watchId = null, lastSent = 0, gpsNote = "";
+function gps(on){
+  if (!navigator.geolocation) return;
+  if (on && watchId === null) {
+    watchId = navigator.geolocation.watchPosition(p => {
+      if (Date.now() - lastSent < 25000) return;
+      lastSent = Date.now();
+      api("/api/location", { rider: Number(me), lat: p.coords.latitude, lng: p.coords.longitude })
+        .then(() => { gpsNote = "📡 Location customer ko dikh rahi hai"; showGps(); }).catch(() => {});
+    }, () => { gpsNote = "📡 Location band hai (phone settings mein allow karein)"; showGps(); }, { enableHighAccuracy: true, maximumAge: 20000 });
+  } else if (!on && watchId !== null) {
+    navigator.geolocation.clearWatch(watchId); watchId = null; gpsNote = ""; showGps();
+  }
+}
+function showGps(){ let el = document.getElementById("gps"); if (!el) { el = document.createElement("div"); el.id = "gps"; el.className = "stat"; document.querySelector("header").appendChild(el); } el.textContent = gpsNote; }
 document.getElementById("me").addEventListener("change", e => { me = e.target.value || null; try { localStorage.setItem("rider:" + BASE, me ?? ""); } catch {} load(); });
 document.getElementById("list").addEventListener("click", async e => {
   const b = e.target.closest("button[data-a]"); if (!b) return;

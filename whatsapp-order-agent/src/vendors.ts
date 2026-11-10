@@ -120,6 +120,27 @@ export const VendorSchema = z.object({
       language: z.string().default("en"),
     })
     .default({ enabled: false, time: "23:45", template: "daily_sales_report", language: "en" }),
+  /** Loyalty: every Nth order of a customer gets a free menu item. */
+  loyalty: z
+    .object({
+      enabled: z.boolean().default(false),
+      every: z.number().int().min(2).max(50).default(10),
+      /** Menu item id given free (its first size if it has sizes). */
+      rewardItemId: z.string().default(""),
+    })
+    .default({ enabled: false, every: 10, rewardItemId: "" }),
+  /** Your subscription for this vendor (admin billing and invoices). */
+  billing: z
+    .object({
+      plan: z.string().default("Starter"),
+      monthlyFee: z.number().min(0).default(0),
+      /** Orders included in the monthly fee; 0 = unlimited. */
+      includedOrders: z.number().int().min(0).default(0),
+      extraPerOrder: z.number().min(0).default(0),
+      /** Free trial until this date (inclusive), "YYYY-MM-DD". */
+      trialUntil: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    })
+    .optional(),
   /** Orders for a later time (today or tomorrow). */
   preorder: z
     .object({
@@ -151,6 +172,10 @@ export function parseVendor(raw: unknown, source = "vendor"): LoadedVendor {
   for (const item of v.menu) {
     if (ids.has(item.id)) throw new Error(`Invalid ${source}: duplicate menu id "${item.id}"`);
     ids.add(item.id);
+  }
+  if (v.loyalty.enabled) {
+    const reward = v.menu.find((m) => m.id === v.loyalty.rewardItemId);
+    if (!reward) throw new Error(`Invalid ${source}: loyalty.rewardItemId "${v.loyalty.rewardItemId}" is not a menu item id`);
   }
   const configHash = createHash("sha256").update(JSON.stringify(v)).digest("hex").slice(0, 16);
   return { ...v, configHash };

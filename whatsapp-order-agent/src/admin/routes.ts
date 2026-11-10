@@ -13,6 +13,10 @@ import type { Store } from "../db.js";
 import type { Engine } from "../engine.js";
 import { sendReport } from "../scheduler.js";
 import { currentMonth, usageSummary } from "../usage.js";
+import { createReadStream } from "node:fs";
+import { backupNow, isBackupName, listBackups } from "../backup.js";
+import { invoiceFor, trialDaysLeft } from "../billing.js";
+import { invoicePage } from "./invoice.js";
 import { adminPage } from "./page.js";
 
 function allowed(req: FastifyRequest): boolean {
@@ -39,6 +43,7 @@ function summary(v: LoadedVendor) {
     owners: v.owners.length,
     riders: v.riders.length,
     dailyReport: v.dailyReport.enabled ? `${v.dailyReport.time} (${v.dailyReport.template})` : null,
+    trialDaysLeft: trialDaysLeft(v),
     opsUrl: `${config.publicUrl}/ops/${v.slug}?key=…`,
     menuUrl: waNumber(v) ? `${config.publicUrl}/m/${v.slug}` : null,
     promptTokens: Math.round(buildSystemPrompt(v).length / 4),
@@ -127,6 +132,61 @@ export function registerAdminRoutes(app: FastifyInstance, deps: { vendors: Vendo
     } catch (err) {
       return reply.code(400).send({ error: (err as Error).message });
     }
+  });
+
+  // ---- backups ----
+
+  app.get("/admin/api/backups", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    return { dir: config.backup.dir, keep: config.backup.keep, time: config.backup.time, backups: listBackups() };
+  });
+
+  app.post("/admin/api/backups", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    return { ok: true, backup: backupNow(store) };
+  });
+
+  app.get("/admin/api/backups/:name", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    const name = (req.params as { name: string }).name;
+    if (!isBackupName(name) || !listBackups().some((b) => b.name === name)) return reply.code(404).send({ error: "not found" });
+    reply.header("Content-Disposition", `attachment; filename="${name}"`).type("application/vnd.sqlite3");
+    return reply.send(createReadStream(path.join(config.backup.dir, name)));
+  });
+
+  // ---- billing ----
+
+  app.get("/admin/api/billing", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    const month = (req.query as { month?: string }).month ?? currentMonth();
+    try {
+      const invoices = vendors
+        .all()
+        .map((v) => {
+          const inv = invoiceFor(store, v, month);
+          return inv ? { ...inv, trialDaysLeft: trialDaysLeft(v) } : null;
+        })
+        .filter(Boolean);
+      return { month, invoices, noBilling: vendors.all().filter((v) => !v.billing).map((v) => v.name) };
+    } catch (err) {
+      return reply.code(400).send({ error: (err as Error).message });
+    }
+  });
+
+  app.get("/admin/invoice/:slug", async (req, reply) => {
+    if (!guard(req, reply)) return;
+    const vendor = vendors.get((req.params as { slug: string }).slug);
+    const month = (req.query as { month?: string }).month ?? currentMonth();
+    if (!vendor) return reply.code(404).send({ error: "vendor not found" });
+    let inv;
+    try {
+      inv = invoiceFor(store, vendor, month);
+    } catch (err) {
+      return reply.code(400).send({ error: (err as Error).message });
+    }
+    if (!inv) return reply.code(400).send({ error: "Is vendor ki file mein billing nahi hai." });
+    reply.header("Cache-Control", "no-store").header("Referrer-Policy", "no-referrer").type("text/html");
+    return invoicePage(inv, config.business, `${vendor.orderPrefix}-${month.replace("-", "")}`);
   });
 
   /** Sends the nightly report template right now, to check that the template is approved and works. */

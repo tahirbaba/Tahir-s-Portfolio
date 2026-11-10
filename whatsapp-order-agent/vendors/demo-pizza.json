@@ -285,5 +285,17 @@
   ],
   "style": "Friendly and quick, like a polite shop assistant. Use 'aap'. Short replies. Match the customer's language (Roman Urdu, Urdu or English).",
   "upsell": "If the order has no drink, offer a 1.5L soft drink for PKR 280.",
-  "notifyLanguage": "roman_urdu"
+  "notifyLanguage": "roman_urdu",
+  "loyalty": {
+    "enabled": true,
+    "every": 10,
+    "rewardItemId": "drink-345"
+  },
+  "billing": {
+    "plan": "Standard",
+    "monthlyFee": 7000,
+    "includedOrders": 3000,
+    "extraPerOrder": 3,
+    "trialUntil": "2026-11-14"
+  }
 }

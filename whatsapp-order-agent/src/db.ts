@@ -1,6 +1,7 @@
 // Storage on SQLite (built into Node 22). One file, no separate database server needed.
 // Every row carries vendor_slug, so vendors never see each other's data.
 
+import { randomBytes } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
@@ -64,6 +65,8 @@ export interface Order {
   riderPhone: string | null;
   /** Rider confirmed the cash for a COD order. */
   cashCollected: boolean;
+  /** Secret part of the customer's tracking link /t/<token>. */
+  trackToken: string;
   createdAt: number;
   updatedAt: number;
 }
@@ -153,6 +156,14 @@ CREATE TABLE IF NOT EXISTS usage_daily (
   value INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (vendor_slug, day, metric)
 );
+CREATE TABLE IF NOT EXISTS rider_locations (
+  vendor_slug TEXT NOT NULL,
+  rider_phone TEXT NOT NULL,
+  lat REAL NOT NULL,
+  lng REAL NOT NULL,
+  at INTEGER NOT NULL,
+  PRIMARY KEY (vendor_slug, rider_phone)
+);
 CREATE TABLE IF NOT EXISTS report_log (
   vendor_slug TEXT NOT NULL,
   day TEXT NOT NULL,
@@ -174,6 +185,7 @@ const MIGRATIONS: { table: string; column: string; ddl: string }[] = [
   { table: "orders", column: "rider_name", ddl: "ALTER TABLE orders ADD COLUMN rider_name TEXT" },
   { table: "orders", column: "rider_phone", ddl: "ALTER TABLE orders ADD COLUMN rider_phone TEXT" },
   { table: "orders", column: "cash_collected", ddl: "ALTER TABLE orders ADD COLUMN cash_collected INTEGER NOT NULL DEFAULT 0" },
+  { table: "orders", column: "track_token", ddl: "ALTER TABLE orders ADD COLUMN track_token TEXT" },
 ];
 
 type Row = Record<string, unknown>;
@@ -223,6 +235,7 @@ function rowToOrder(r: Row): Order {
     riderName: (r.rider_name as string | null) ?? null,
     riderPhone: (r.rider_phone as string | null) ?? null,
     cashCollected: Number(r.cash_collected ?? 0) === 1,
+    trackToken: String(r.track_token ?? ""),
     createdAt: Number(r.created_at),
     updatedAt: Number(r.updated_at),
   };
@@ -243,6 +256,7 @@ export class Store {
       const cols = this.db.prepare(`PRAGMA table_info(${m.table})`).all() as Row[];
       if (!cols.some((c) => c.name === m.column)) this.db.exec(m.ddl);
     }
+    this.db.exec("CREATE INDEX IF NOT EXISTS orders_track ON orders(track_token)");
   }
 
   /** True the first time a WhatsApp message id is seen (Meta sometimes delivers twice). */
@@ -345,15 +359,15 @@ export class Store {
   }
 
   createOrder(
-    o: Omit<Order, "id" | "createdAt" | "updatedAt" | "riderName" | "riderPhone" | "cashCollected">,
+    o: Omit<Order, "id" | "createdAt" | "updatedAt" | "riderName" | "riderPhone" | "cashCollected" | "trackToken">,
     now = Date.now(),
   ): Order {
     const res = this.db
       .prepare(
         `INSERT INTO orders (vendor_slug, number, customer, customer_name, branch_id, fulfilment, items,
           subtotal, delivery_fee, total, payment_method, payment_status, payment_note, location, address_note,
-          status, eta_min, eta_max, scheduled_for, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          status, eta_min, eta_max, scheduled_for, track_token, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .run(
         o.vendorSlug,
@@ -375,6 +389,7 @@ export class Store {
         o.etaMin,
         o.etaMax,
         o.scheduledFor ?? null,
+        randomBytes(9).toString("base64url"),
         now,
         now,
       );
@@ -398,6 +413,43 @@ export class Store {
       .prepare("SELECT * FROM orders WHERE vendor_slug = ? AND customer = ? ORDER BY id DESC LIMIT 1")
       .get(vendorSlug, customer) as Row | undefined;
     return r ? rowToOrder(r) : undefined;
+  }
+
+  findOrderByToken(token: string): Order | undefined {
+    if (!/^[A-Za-z0-9_-]{8,40}$/.test(token)) return undefined;
+    const r = this.db.prepare("SELECT * FROM orders WHERE track_token = ?").get(token) as Row | undefined;
+    return r ? rowToOrder(r) : undefined;
+  }
+
+  /** Orders this customer placed at this shop, rejected ones not counted (loyalty). */
+  countOrdersOf(vendorSlug: string, customer: string): number {
+    const r = this.db
+      .prepare("SELECT COUNT(*) AS c FROM orders WHERE vendor_slug = ? AND customer = ? AND status != 'rejected'")
+      .get(vendorSlug, customer) as Row;
+    return Number(r.c);
+  }
+
+  // ---- rider live location (shared from the rider page) ----
+
+  setRiderLocation(vendorSlug: string, riderPhone: string, lat: number, lng: number, now = Date.now()): void {
+    this.db
+      .prepare(
+        `INSERT INTO rider_locations (vendor_slug, rider_phone, lat, lng, at) VALUES (?, ?, ?, ?, ?)
+         ON CONFLICT(vendor_slug, rider_phone) DO UPDATE SET lat = excluded.lat, lng = excluded.lng, at = excluded.at`,
+      )
+      .run(vendorSlug, riderPhone, lat, lng, now);
+  }
+
+  riderLocation(vendorSlug: string, riderPhone: string): { lat: number; lng: number; at: number } | undefined {
+    const r = this.db
+      .prepare("SELECT lat, lng, at FROM rider_locations WHERE vendor_slug = ? AND rider_phone = ?")
+      .get(vendorSlug, riderPhone) as Row | undefined;
+    return r ? { lat: Number(r.lat), lng: Number(r.lng), at: Number(r.at) } : undefined;
+  }
+
+  /** Consistent copy of the whole database into one file (safe while the server runs). */
+  backupTo(file: string): void {
+    this.db.exec(`VACUUM INTO '${file.replace(/'/g, "''")}'`);
   }
 
   recentOrdersOf(vendorSlug: string, customer: string, limit = 5): Order[] {

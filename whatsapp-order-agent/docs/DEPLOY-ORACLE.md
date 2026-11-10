@@ -125,7 +125,7 @@ Naya code aaya:
 git pull && docker compose up -d --build
 ```
 
-Database ka backup (ek file):
+Database ka backup: roz 05:00 baje khud banta hai (admin panel → Backups, docs/PHASE4.md). Haath se lena ho to:
 
 ```bash
 mkdir -p backups && sqlite3 data/agent.db ".backup backups/agent-$(date +%F).db"

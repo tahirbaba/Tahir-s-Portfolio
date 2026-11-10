@@ -112,6 +112,22 @@ export function registerRiderRoutes(app: FastifyInstance, deps: { store: Store; 
     }
   });
 
+  /** Rider page shares GPS while the rider has deliveries, for the customer's tracking page. */
+  app.post("/r/:slug/api/location", async (req, reply) => {
+    const vendor = auth(req, reply);
+    if (!vendor) return;
+    const body = (req.body ?? {}) as { rider?: unknown; lat?: unknown; lng?: unknown };
+    const me = riderOf(vendor, body.rider);
+    const lat = Number(body.lat);
+    const lng = Number(body.lng);
+    if (!me) return reply.code(400).send({ error: "Pehle apna naam chunein" });
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) {
+      return reply.code(400).send({ error: "bad location" });
+    }
+    store.setRiderLocation(vendor.slug, me.phone, lat, lng);
+    return { ok: true };
+  });
+
   app.post("/r/:slug/api/orders/:id/delivered", async (req, reply) => {
     const vendor = auth(req, reply);
     if (!vendor) return;

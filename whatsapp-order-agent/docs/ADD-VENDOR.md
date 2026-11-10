@@ -16,6 +16,8 @@ Code ko haath nahi lagana. Bas ek file aur do settings.
 | `whatsapp.displayNumber` | shop ka WhatsApp number, jaise `+92 300 1234567`. **Menu page isi number pe order bhejta hai** |
 | `owners` | owner/manager ke WhatsApp numbers, jaise `["923001234567"]`. Ye `#report` jaise commands bhej sakte hain |
 | `riders`, `riderKeyEnv` | delivery riders aur rider page ki key ka naam (optional, docs/PHASE3.md) |
+| `loyalty` | har Nth order pe free item (optional, docs/PHASE4.md) |
+| `billing` | aap ki fees: plan, mahana fee, trial (optional, docs/PHASE4.md) |
 | `dailyReport` | owner ko raat ki report ka waqt aur template (optional, docs/PHASE3.md) |
 | `preorder` | `{ "enabled": true, "maxHoursAhead": 20 }`. Baad ke waqt ka order (max 22 ghante) |
 | `whatsapp.accessTokenEnv` | `.env` mein token ka naam, jaise `WA_TOKEN_KARACHI_BROAST` |
