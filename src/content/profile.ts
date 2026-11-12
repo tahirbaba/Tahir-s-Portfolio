@@ -1,7 +1,6 @@
 /**
  * Single source of truth for portfolio content.
  * The UI renders from this file and the AI twin answers from it.
- * Items marked `placeholder: true` (or commented PLACEHOLDER) are sample content to replace.
  */
 
 export const profile = {
@@ -10,26 +9,29 @@ export const profile = {
   initials: "MTH",
   role: "Forward Deployed Engineer",
   secondaryRole: "AI Agents Architect",
-  location: "Karachi, Pakistan",
-  coords: "24.86° N, 67.01° E",
+  location: "Islamabad, Pakistan",
+  coords: "33.68° N, 73.05° E",
   timezone: "UTC+5",
   availability: "Open to remote FDE and AI engineering roles",
-  // PLACEHOLDER contact details
-  email: "tahir.hasni@example.com",
-  linkedin: "https://www.linkedin.com/",
+  email: "muhammadtahirhasni@gmail.com",
+  linkedin: "https://www.linkedin.com/in/muhammad-tahir-hasni",
   github: "https://github.com/tahirbaba",
+  whatsapp: "https://wa.me/923129114002",
+  phone: "+92 312 9114002",
   calendar: "#contact",
-  resume: "#",
+  resume: "/muhammad-tahir-hasni-resume.pdf",
+  company: "Nexora",
+  since: 2024,
+  languages: ["English", "Arabic", "Urdu"],
   headline: "I ship AI agents into the real world.",
   intro:
-    "Forward Deployed Engineer and AI Agents Architect. I embed with customer teams, find the workflow that is bleeding hours, and deploy agents that run inside their stack, measured, monitored and owned by them.",
+    "Founder of Nexora, Forward Deployed Engineer and AI Agents Architect. I embed with customer teams, find the workflow that is bleeding hours, and deploy agents that run inside their stack, measured, monitored and owned by them.",
   bio: [
     "I work where AI meets the messy reality of a business: legacy systems, unclear processes, impatient stakeholders and data nobody has cleaned. My job is to sit with the people who do the work, understand it better than the spec does, and turn it into agent systems that hold up in production.",
     "I design multi-agent architectures, write the integrations, build the evaluation harness and stay through rollout. I measure success the way the customer does: hours returned, tickets closed, revenue protected. Then I write down what we learned so the product team can make it repeatable.",
   ],
 };
 
-// PLACEHOLDER numbers: replace with real figures
 // Real numbers from the six live projects' test and eval suites.
 export const metrics: { value: number; suffix: string; label: string; decimals?: number }[] = [
   { value: 6, suffix: "", label: "Agent projects live" },
@@ -185,40 +187,48 @@ export const stack: { group: string; items: string[] }[] = [
   { group: "Cloud & infra", items: ["AWS", "Azure AI Foundry", "Google Cloud", "Docker", "Kubernetes", "Dapr", "Kafka", "Terraform", "GitHub Actions", "Vercel"] },
 ];
 
-// PLACEHOLDER experience: replace with real companies and dates
 export const experience = [
   {
     period: "2024 — Now",
-    title: "Forward Deployed Engineer & AI Agents Architect",
-    org: "Independent · clients in the US, UK, GCC and Pakistan",
-    body: "Embed with customer teams to design, build and roll out production agent systems for support, finance, sales, voice and HR. Own architecture, evaluation and handover.",
+    title: "Founder & Lead AI Engineer",
+    org: "Nexora · Islamabad",
+    body: "Founded Nexora to design, build and deploy AI agents and automation for businesses. Own the full cycle: discovery with the client's team, architecture, integrations, evaluation, rollout and handover.",
   },
   {
-    period: "2023 — 2024",
-    title: "AI Automation Engineer",
-    org: "Automation agency · Karachi",
-    body: "Delivered LLM workflows and RAG assistants for 15+ SMB clients. Built reusable n8n and Python templates that halved delivery time.",
-  },
-  {
-    period: "2021 — 2023",
-    title: "Full-Stack Python Developer",
-    org: "Software house · Karachi",
-    body: "Shipped web apps, APIs and data pipelines. Introduced the team's first ML features and Docker-based CI/CD.",
+    period: "2024 — Now",
+    title: "Freelance AI Agent Developer",
+    org: "Remote · clients in the US, UAE and other markets",
+    body: "Build AI agents, workflow automations and full-stack web apps for clients across time zones, from first scoping call to production.",
   },
 ];
 
-// PLACEHOLDER certifications: keep only the ones you hold and add credential links
-export const certifications = [
-  { issuer: "Panaversity · PIAIC", name: "Certified Agentic & Robotic AI Engineer", href: "#" },
-  { issuer: "Anthropic", name: "Building with the Claude API", href: "#" },
-  { issuer: "LangChain Academy", name: "Introduction to LangGraph", href: "#" },
-  { issuer: "Hugging Face", name: "AI Agents Course", href: "#" },
-  { issuer: "DeepLearning.AI", name: "Multi AI Agent Systems with CrewAI", href: "#" },
-  { issuer: "Microsoft", name: "Azure AI Engineer Associate", href: "#" },
+/** Training programmes (not certifications). */
+export const training = [
+  { org: "GIAIC", full: "Governor's Initiative for Artificial Intelligence & Computing", items: ["Agentic AI Development", "AI Agents", "Full-Stack Development"] },
+  { org: "PIAIC", full: "Presidential Initiative for Artificial Intelligence & Computing", items: ["Agentic AI Development", "Digital FTE", "Full-Stack Development"] },
 ];
 
-// Cities on the globe (lat, lng). Karachi is home base.
-export const home = { name: "Karachi", lat: 24.86, lng: 67.01 };
+/** Only real credentials. Each one gets a verification link once issued. */
+export const certifications: { issuer: string; name: string; status: "in_progress" | "earned"; href?: string }[] = [
+  { issuer: "Anthropic Academy", name: "Claude courses: building with the Claude API, MCP and agents", status: "in_progress" },
+  { issuer: "Anthropic", name: "Claude Certified Associate: Foundations", status: "in_progress" },
+];
+
+/** Reviews: each one links to the reviewer's public profile. Labels: Client, Pilot client, Expert review. */
+export const reviews: { label: "Client" | "Pilot client" | "Expert review"; name: string; title: string; href: string; project: string; projectHref: string; summary: string; quote?: string }[] = [
+  {
+    label: "Expert review",
+    name: "Razan N. Alomrani",
+    title: "Academic · Cybersecurity, AI research, data governance & privacy",
+    href: "https://www.linkedin.com/in/ACoAADrgZg4Bsc09GfQyG5GXmvI82q1rvdlladA",
+    project: "Verity",
+    projectHref: "https://verity-recruiter-copilot.vercel.app/case-study",
+    summary: "Reviewed Verity's privacy and governance against the EU AI Act, GDPR and Saudi PDPL, and sent 10 detailed recommendations. All 10 were implemented in Verity v1.2: re-identification guard, data minimisation, applicant notice and consent, audit log, bias audit dashboard and more.",
+  },
+];
+
+// Cities on the globe (lat, lng). Islamabad is home base.
+export const home = { name: "Islamabad", lat: 33.68, lng: 73.05 };
 export const sites = [
   { name: "Austin", lat: 30.27, lng: -97.74 },
   { name: "New York", lat: 40.71, lng: -74.0 },
@@ -240,7 +250,7 @@ export function knowledgePack(): string {
     )
     .join("\n");
   return [
-    `Name: ${profile.name}. Role: ${profile.role} and ${profile.secondaryRole}. Based in ${profile.location} (${profile.timezone}). ${profile.availability}.`,
+    `Name: ${profile.name}. Role: ${profile.role} and ${profile.secondaryRole}; founder of ${profile.company} (since ${profile.since}). Based in ${profile.location} (${profile.timezone}). ${profile.availability}. Languages: ${profile.languages.join(", ")}.`,
     `Summary: ${profile.intro}`,
     `Bio: ${profile.bio.join(" ")}`,
     `Headline metrics: ${metrics.map((m) => `${m.value}${m.suffix} ${m.label}`).join("; ")}.`,
@@ -248,7 +258,9 @@ export function knowledgePack(): string {
     `Deployments:\n${d}`,
     `Tech stack: ${stack.map((s) => `${s.group}: ${s.items.join(", ")}`).join(". ")}.`,
     `Experience: ${experience.map((e) => `${e.period} ${e.title} at ${e.org}. ${e.body}`).join(" ")}`,
-    `Certifications: ${certifications.map((c) => `${c.name} (${c.issuer})`).join("; ")}.`,
-    `Contact: email ${profile.email}, LinkedIn ${profile.linkedin}, GitHub ${profile.github}.`,
+    `Training: ${training.map((t) => `${t.org} (${t.full}): ${t.items.join(", ")}`).join("; ")}.`,
+    `Certifications: ${certifications.map((c) => `${c.name} (${c.issuer}, ${c.status === "earned" ? "earned" : "in progress"})`).join("; ")}.`,
+    `Reviews: ${reviews.map((r) => `${r.label} by ${r.name} (${r.title}) of ${r.project}: ${r.summary}`).join(" ")}`,
+    `Contact: email ${profile.email}, WhatsApp ${profile.phone}, LinkedIn ${profile.linkedin}, GitHub ${profile.github}. Résumé PDF on the site.`,
   ].join("\n\n");
 }

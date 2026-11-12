@@ -143,7 +143,7 @@ function World({ dots }: { dots: [number, number][] }) {
   const { gl } = useThree();
   const reduced = useMemo(() => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches, []);
 
-  // Face Karachi toward the viewer, nudged so the westward arcs show.
+  // Face home base toward the viewer, nudged so the westward arcs show.
   const startY = useMemo(() => {
     const v = toVec(home.lat, home.lng);
     return -Math.atan2(v.x, v.z) + 0.55;

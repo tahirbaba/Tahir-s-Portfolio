@@ -5,10 +5,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { profile } from "@/content/profile";
 
 const links = [
-  { href: "#deployments", label: "Deployments" },
+  { href: "#about", label: "About" },
+  { href: "#deployments", label: "Projects" },
+  { href: "#reviews", label: "Reviews" },
   { href: "#lab", label: "Live Lab" },
-  { href: "#playbook", label: "Playbook" },
-  { href: "#stack", label: "Stack" },
+  { href: "#experience", label: "Experience" },
   { href: "#twin", label: "AI Twin" },
 ];
 
@@ -36,13 +37,17 @@ export default function Nav() {
 
   const commands: Cmd[] = useMemo(
     () => [
-      { label: "Go to deployments", hint: "Section", run: () => go("#deployments") },
+      { label: "Go to live projects", hint: "Section", run: () => go("#deployments") },
       { label: "Run the Live Lab", hint: "Section", run: () => go("#lab") },
       { label: "Ask my AI twin", hint: "Section", run: () => go("#twin") },
       { label: "See the forward deployment playbook", hint: "Section", run: () => go("#playbook") },
       { label: "Browse the tech stack", hint: "Section", run: () => go("#stack") },
       { label: "Experience and certifications", hint: "Section", run: () => go("#experience") },
+      { label: "About Tahir", hint: "Section", run: () => go("#about") },
+      { label: "Reviews", hint: "Section", run: () => go("#reviews") },
       { label: "Contact", hint: "Section", run: () => go("#contact") },
+      { label: "Message on WhatsApp", hint: profile.phone, run: () => { window.open(profile.whatsapp, "_blank", "noopener"); setOpen(false); } },
+      { label: "Download résumé (PDF)", hint: "PDF", run: () => { window.open(profile.resume, "_blank", "noopener"); setOpen(false); } },
       {
         label: "Copy email address",
         hint: profile.email,
@@ -79,7 +84,7 @@ export default function Nav() {
           }`}
         >
           <a href="#top" className="flex items-center gap-2.5 pl-1 text-[15px] font-semibold tracking-tight">
-            <span className="grid h-8 w-8 place-items-center rounded-lg border border-line-2 bg-panel-2 font-mono text-[11px] text-ice">MTH</span>
+            <span className="grid h-9 w-9 place-items-center rounded-lg border border-line-2 bg-panel-2 p-1"><img src="/markhor.svg" alt="" width={28} height={28} className="h-7 w-7" /></span>
             <span className="hidden sm:inline">{profile.shortName}</span>
           </a>
           <div className="hidden items-center gap-1 lg:flex">
