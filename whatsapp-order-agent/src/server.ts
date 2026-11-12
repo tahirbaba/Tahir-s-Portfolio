@@ -60,7 +60,8 @@ export function buildServer(deps: {
   const pitch = () => {
     const html = readFileSync(path.resolve("public/pitch.html"), "utf8");
     const contact = config.business.contact.trim();
-    return contact ? html.replace("+92 3XX XXXXXXX", contact.replace(/[&<>"']/g, "")) : html;
+    // BUSINESS_CONTACT (if set) replaces the number printed in the page.
+    return contact ? html.replace(/(<code id="phone">)[^<]*(<\/code>)/, `$1${contact.replace(/[&<>"'$]/g, "")}$2`) : html;
   };
   for (const url of ["/", "/pitch"]) {
     app.get(url, async (_req, reply) => reply.header("Cache-Control", "public, max-age=300").type("text/html").send(pitch()));
