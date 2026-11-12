@@ -93,8 +93,9 @@ describe("rider page", () => {
     const engine = engineWith(new ScriptedLLM([]));
     const app = buildServer({ store, vendors, engine, logger: false });
     const h = { "x-rider-key": "rider-key" };
-    const o = order({ number: "CC-6001" });
-    order({ number: "CC-6002", fulfilment: "pickup", location: null }); // pickup orders are not for riders
+    // Rider page counts "today" by the real clock, so these orders use it too.
+    const o = order({ number: "CC-6001" }, Date.now());
+    order({ number: "CC-6002", fulfilment: "pickup", location: null }, Date.now()); // pickup orders are not for riders
 
     assert.equal((await app.inject({ method: "GET", url: "/r/demo-pizza?key=wrong" })).statusCode, 404);
     assert.equal((await app.inject({ method: "GET", url: "/r/demo-fastfood?key=rider-key" })).statusCode, 404); // no rider page
@@ -121,7 +122,7 @@ describe("rider page", () => {
     state = (await app.inject({ method: "GET", url: "/r/demo-pizza/api/state?rider=0", headers: h })).json();
     assert.deepEqual(state.today, { delivered: 1, cash: 1600 });
 
-    const report = buildReport(store, vendors.get("demo-pizza")!, "today", NOW.getTime());
+    const report = buildReport(store, vendors.get("demo-pizza")!, "today");
     assert.deepEqual(report.riders, [{ name: "Imran", deliveries: 1, cash: 1600, cashPending: 0 }]);
     await app.close();
   });

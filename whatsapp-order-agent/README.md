@@ -54,6 +54,10 @@ npm run demo
 
 Claude key, Meta ya `.env` ki zaroorat nahi. Demo orders, rider, chats aur usage ke saath server chal jata hai, aur terminal mein saare links (keys ke saath) print hote hain: owner portal, kitchen, rider, tracking, menu page, admin. Customer ko jaane wale WhatsApp messages terminal mein dikhte hain. Demo apni copy (`data/demo/`) pe chalta hai, asal files ko haath nahi lagata.
 
+## Vendors ke liye pitch page: `/pitch`
+
+Server ka home page (`/` aur `/pitch`) ek savings calculator hai: vendor apne orders, average bill, miss orders aur Foodpanda ke numbers daal kar mahana bachat, kharcha aur zyada sale dekhta hai. Login ki zaroorat nahi. Neeche ka contact number `.env` ke `BUSINESS_CONTACT` se aata hai. File: `public/pitch.html`.
+
 ## Pehla test, apne computer pe (sirf Claude key chahiye)
 
 ```bash

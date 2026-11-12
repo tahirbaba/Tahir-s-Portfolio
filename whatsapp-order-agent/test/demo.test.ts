@@ -29,3 +29,29 @@ describe("npm run demo data", () => {
     assert.equal(reply.stop_reason, "end_turn");
   });
 });
+
+describe("pitch page", () => {
+  it("is served at / and /pitch with the business contact", async () => {
+    const { buildServer } = await import("../src/server.js");
+    const { config } = await import("../src/config.js");
+    const { Engine } = await import("../src/engine.js");
+    const { FakeWhatsApp, ScriptedLLM } = await import("./helpers.js");
+    const biz = config.business as { contact: string };
+    const old = biz.contact;
+    biz.contact = "WhatsApp +92 300 1234567";
+    const vendors = new VendorRegistry([]);
+    const store = new Store(":memory:");
+    const app = buildServer({ store, vendors, engine: new Engine({ store, vendors, llm: new ScriptedLLM([]), wa: new FakeWhatsApp() }), logger: false });
+    try {
+      for (const url of ["/", "/pitch"]) {
+        const r = await app.inject({ method: "GET", url });
+        assert.equal(r.statusCode, 200);
+        assert.match(r.body, /WhatsApp Order Bachat/);
+        assert.match(r.body, /WhatsApp \+92 300 1234567/);
+      }
+    } finally {
+      biz.contact = old;
+      await app.close();
+    }
+  });
+});

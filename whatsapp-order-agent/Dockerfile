@@ -15,6 +15,7 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY package.json ./
 COPY vendors ./vendors
+COPY public ./public
 RUN mkdir -p data && chown -R node:node /app
 USER node
 EXPOSE 3000

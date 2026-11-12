@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WhatsApp Order Bachat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Layout: pitch on top, then a two-column calculator (inputs | receipt-style bill), stacking on phones. */
+:root {
+  --bg: #f4f5f2;
+  --surface: #ffffff;
+  --ink: #1b1e1c;
+  --muted: #5d655f;
+  --line: #dde1db;
+  --accent: #e0a100;        /* saffron */
+  --accent-ink: #1b1e1c;
+  --save: #177245;          /* bachat */
+  --cost: #b3361f;          /* kharcha */
+  --paper: #fffdf6;         /* receipt */
+  --paper-line: #d9d3c1;
+  --font-display: "Archivo", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121513; --surface: #1b1f1c; --ink: #eef1ec; --muted: #a2aba4; --line: #2e3530;
+    --accent: #f2b928; --accent-ink: #141613; --save: #4fc58a; --cost: #f0846c;
+    --paper: #20231f; --paper-line: #3a3f38; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121513; --surface: #1b1f1c; --ink: #eef1ec; --muted: #a2aba4; --line: #2e3530;
+  --accent: #f2b928; --accent-ink: #141613; --save: #4fc58a; --cost: #f0846c;
+  --paper: #20231f; --paper-line: #3a3f38; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1080px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.01em; margin: 0; }
+p { margin: 0; }
+.eyebrow { font: 600 12px/1 var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+/* Hero */
+.hero { padding-block: 40px 28px; display: grid; gap: 18px; }
+.hero h1 { font-size: clamp(30px, 5.2vw, 52px); font-weight: 800; line-height: 1.05; max-width: 17ch; }
+.hero h1 mark { background: linear-gradient(transparent 58%, color-mix(in srgb, var(--accent) 55%, transparent) 58%); color: inherit; padding: 0 2px; }
+.hero .lead { font-size: 18px; color: var(--muted); max-width: 60ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.fact { font-size: 14px; font-weight: 600; padding: 7px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+
+/* Calculator */
+.calc { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 24px; align-items: start; padding-block: 8px 40px; }
+@media (max-width: 860px) { .calc { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: grid; gap: 18px; }
+.panel h2 { font-size: 22px; }
+.panel .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.group { display: grid; gap: 14px; }
+.group-title { font: 700 13px/1 var(--font-body); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; padding-top: 6px; border-top: 1px dashed var(--line); padding-block: 14px 0; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 600; font-size: 15px; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.field label .hint { font-weight: 400; font-size: 13px; color: var(--muted); }
+.ctl { display: grid; grid-template-columns: minmax(0, 1fr) 112px; gap: 12px; align-items: center; }
+input[type=range] { width: 100%; accent-color: var(--accent); height: 28px; }
+input[type=number] {
+  width: 100%; font: 600 16px var(--font-mono); padding: 8px 10px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink); text-align: right; font-variant-numeric: tabular-nums;
+}
+input:focus-visible, button:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 70%, transparent); outline-offset: 2px; }
+.toggle { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+.toggle input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--save); flex: none; }
+.toggle small { display: block; color: var(--muted); font-size: 13px; }
+
+/* Receipt */
+.bill-col { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); display: grid; gap: 14px; }
+@media (max-width: 860px) { .bill-col { position: static; } }
+.receipt {
+  background: var(--paper); color: var(--ink); font: 14px/1.6 var(--font-mono); font-variant-numeric: tabular-nums;
+  padding: 22px 20px 26px; border-radius: 4px; border: 1px solid var(--paper-line);
+  box-shadow: 0 10px 30px -18px rgba(0,0,0,.35);
+  -webkit-mask: radial-gradient(circle 6px at 50% 100%, transparent 98%, #000) 0 0 / 16px 100% repeat-x;
+          mask: radial-gradient(circle 6px at 50% 100%, transparent 98%, #000) 0 0 / 16px 100% repeat-x;
+}
+.r-head { text-align: center; display: grid; gap: 2px; padding-bottom: 10px; }
+.r-head b { font-size: 15px; letter-spacing: .08em; }
+.r-head span { color: var(--muted); font-size: 12px; }
+.r-sec { border-top: 1px dashed var(--paper-line); padding-top: 10px; margin-top: 10px; display: grid; gap: 4px; }
+.r-sec .t { font-weight: 700; font-size: 12px; letter-spacing: .1em; color: var(--muted); }
+.r-row { display: flex; justify-content: space-between; gap: 12px; }
+.r-row span:first-child { min-width: 0; }
+.r-row span:last-child { white-space: nowrap; }
+.save { color: var(--save); } .cost { color: var(--cost); }
+.r-total { border-top: 2px solid var(--ink); margin-top: 12px; padding-top: 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.r-total span:first-child { font-weight: 700; }
+.r-total b { font-size: 22px; }
+.r-note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+.verdict { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 12px; }
+.verdict h3 { font-size: 20px; }
+.verdict p { color: var(--muted); font-size: 15px; }
+.bars { display: grid; gap: 8px; }
+.bar { display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 13px; font-variant-numeric: tabular-nums; }
+.track { height: 12px; background: color-mix(in srgb, var(--line) 70%, transparent); border-radius: 6px; overflow: hidden; }
+.fill { height: 100%; border-radius: 6px; transition: width .35s ease; }
+.fill.cost { background: var(--cost); } .fill.save { background: var(--save); }
+@media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
+
+/* Sections */
+section.block { padding-block: 34px; border-top: 1px solid var(--line); display: grid; gap: 22px; }
+section.block > header { display: grid; gap: 8px; }
+section.block h2 { font-size: clamp(24px, 3.4vw, 32px); font-weight: 800; }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; counter-reset: s; }
+@media (max-width: 860px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .steps { grid-template-columns: minmax(0, 1fr); } }
+.step { display: grid; gap: 6px; align-content: start; }
+.step::before { counter-increment: s; content: counter(s); font: 800 15px/1 var(--font-display); width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--accent-ink); }
+.step h3 { font-size: 17px; }
+.step p { color: var(--muted); font-size: 14.5px; }
+.who { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 860px) { .who { grid-template-columns: minmax(0, 1fr); } }
+.who > div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 10px; align-content: start; }
+.who h3 { font-size: 18px; }
+.who ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 15px; }
+.compare { overflow-x: auto; }
+.compare table { width: 100%; border-collapse: collapse; min-width: 560px; font-size: 15px; }
+.compare th, .compare td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.compare th { font: 700 13px var(--font-body); color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+.compare td:last-child { font-weight: 600; }
+.faq { display: grid; gap: 10px; }
+.faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.faq summary { cursor: pointer; font-weight: 600; }
+.faq p { margin-top: 8px; color: var(--muted); }
+.cta { background: var(--ink); color: var(--bg); border-radius: 18px; padding: 26px; display: grid; gap: 14px; margin-block: 34px 48px; }
+.cta h2 { font-size: clamp(24px, 3.6vw, 34px); font-weight: 800; color: var(--bg); }
+.cta p { color: color-mix(in srgb, var(--bg) 78%, transparent); max-width: 62ch; }
+.contact { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.contact code { font: 700 18px var(--font-mono); background: color-mix(in srgb, var(--bg) 12%, transparent); padding: 8px 12px; border-radius: 10px; user-select: all; }
+.btn { font: 700 15px var(--font-body); border: 0; border-radius: 10px; padding: 10px 16px; background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+.small { font-size: 13px; color: var(--muted); }
+[hidden] { display: none !important; }
+.mbar { display: none; }
+@media (max-width: 860px) {
+  .mbar {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background: var(--ink); color: var(--bg); text-decoration: none; font-weight: 600; font-size: 15px;
+  }
+  .mbar b { font: 700 18px var(--font-mono); font-variant-numeric: tabular-nums; }
+  .mbar b.pos { color: color-mix(in srgb, var(--save) 55%, var(--bg)); }
+  .mbar b.neg { color: color-mix(in srgb, var(--cost) 55%, var(--bg)); }
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+}
+.bill-col { scroll-margin-top: 16px; }
+.cta .small { color: color-mix(in srgb, var(--bg) 65%, transparent); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Restaurants aur food shops ke liye · WhatsApp AI assistant</span>
+    <h1>WhatsApp pe aane wala <mark>har order</mark> pakka, aur Foodpanda ka commission kam.</h1>
+    <p class="lead">Aap ke apne WhatsApp number pe AI assistant customers se Roman Urdu, Urdu ya English mein baat karta hai, order leta hai, aur seedha aap ki kitchen aur riders tak pohanchata hai. Neeche apne numbers daal kar dekhein ke aap ki dukaan ko mahana kitna faida hoga.</p>
+    <div class="facts" aria-label="Khaas baatein">
+      <span class="fact">24 ghante, 3–5 second mein jawab</span>
+      <span class="fact">Aap ka apna number aur apne riders</span>
+      <span class="fact">Prices menu se, ghalti nahi</span>
+      <span class="fact">Customer ko koi app nahi chahiye</span>
+    </div>
+  </header>
+
+  <div class="calc" id="calculator">
+    <form class="panel" id="inputs" autocomplete="off">
+      <div>
+        <h2>Apni dukaan ke numbers</h2>
+        <p class="sub">Andaze se bharein. Har tabdeeli pe hisaab foran badal jata hai.</p>
+      </div>
+
+      <div class="group">
+        <div class="field">
+          <label for="orders">Roz ke kul orders <span class="hint">WhatsApp + Foodpanda</span></label>
+          <div class="ctl"><input type="range" id="orders-r" min="5" max="300" step="1" aria-label="Roz ke kul orders"><input type="number" id="orders" min="1" max="2000" inputmode="numeric"></div>
+        </div>
+        <div class="field">
+          <label for="waShare">In mein WhatsApp ke orders <span class="hint">% (baqi Foodpanda)</span></label>
+          <div class="ctl"><input type="range" id="waShare-r" min="0" max="100" step="5" aria-label="WhatsApp ka hissa"><input type="number" id="waShare" min="0" max="100" inputmode="numeric"></div>
+        </div>
+        <div class="field">
+          <label for="aov">Average order (PKR)</label>
+          <div class="ctl"><input type="range" id="aov-r" min="300" max="6000" step="50" aria-label="Average order"><input type="number" id="aov" min="50" max="50000" inputmode="numeric"></div>
+        </div>
+        <div class="field">
+          <label for="missed">Hafte mein kitne orders miss <span class="hint">der se jawab, rush, raat</span></label>
+          <div class="ctl"><input type="range" id="missed-r" min="0" max="60" step="1" aria-label="Miss orders"><input type="number" id="missed" min="0" max="500" inputmode="numeric"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Foodpanda</div>
+        <div class="field">
+          <label for="commission">Foodpanda commission <span class="hint">%</span></label>
+          <div class="ctl"><input type="range" id="commission-r" min="0" max="40" step="1" aria-label="Commission"><input type="number" id="commission" min="0" max="60" inputmode="numeric"></div>
+        </div>
+        <div class="field">
+          <label for="repeat">Foodpanda pe purane customers <span class="hint">%</span></label>
+          <div class="ctl"><input type="range" id="repeat-r" min="0" max="100" step="5" aria-label="Purane customers"><input type="number" id="repeat" min="0" max="100" inputmode="numeric"></div>
+        </div>
+        <div class="field">
+          <label for="shift">Un mein se kitne WhatsApp pe aa jayein <span class="hint">% (andaza)</span></label>
+          <div class="ctl"><input type="range" id="shift-r" min="0" max="100" step="5" aria-label="Shift hone wale"><input type="number" id="shift" min="0" max="100" inputmode="numeric"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Baqi</div>
+        <div class="field">
+          <label for="upsell">Har WhatsApp order pe upsell <span class="hint">PKR (drink, fries)</span></label>
+          <div class="ctl"><input type="range" id="upsell-r" min="0" max="400" step="10" aria-label="Upsell"><input type="number" id="upsell" min="0" max="2000" inputmode="numeric"></div>
+        </div>
+        <div class="field">
+          <label for="salary">WhatsApp ke liye staff ki salary <span class="hint">PKR mahana</span></label>
+          <div class="ctl"><input type="range" id="salary-r" min="0" max="80000" step="1000" aria-label="Salary"><input type="number" id="salary" min="0" max="500000" inputmode="numeric"></div>
+        </div>
+        <label class="toggle" for="countSalary"><input type="checkbox" id="countSalary"><span>Salary ko bachat mein gino<small>Aksar staff rehta hai aur calls, Foodpanda tablet aur packing sambhalta hai. Sirf tab tick karein jab ye kharcha waqai band hoga.</small></span></label>
+        <div class="field">
+          <label for="fee">System ki mahana fee <span class="hint">PKR</span></label>
+          <div class="ctl"><input type="range" id="fee-r" min="0" max="20000" step="500" aria-label="System fee"><input type="number" id="fee" min="0" max="100000" inputmode="numeric"></div>
+        </div>
+      </div>
+      <p class="small">Shuru mein ek misali dukaan ke numbers bhare hain: 50 orders roz, 60% WhatsApp, PKR 1,500 average bill. Inhein apne numbers se badlein.</p>
+    </form>
+
+    <div class="bill-col" id="bill">
+      <div class="receipt" aria-live="polite">
+        <div class="r-head"><b>MAHANA HISAAB</b><span id="r-sub">30 din · andaza</span></div>
+
+        <div class="r-sec">
+          <span class="t">BACHAT</span>
+          <div class="r-row"><span>Foodpanda commission bachat</span><span class="save" id="o-comm"></span></div>
+          <div class="r-row" id="row-salary"><span>Staff salary</span><span class="save" id="o-salary"></span></div>
+        </div>
+        <div class="r-sec">
+          <span class="t">KHARCHA</span>
+          <div class="r-row"><span>System fee</span><span class="cost" id="o-fee"></span></div>
+          <div class="r-row"><span>WhatsApp (Meta) andaza</span><span class="cost" id="o-meta"></span></div>
+        </div>
+        <div class="r-total"><span>Seedhi bachat</span><b id="o-net"></b></div>
+
+        <div class="r-sec">
+          <span class="t">ZYADA SALE (OOPAR SE)</span>
+          <div class="r-row"><span>Miss orders wapas</span><span id="o-missed"></span></div>
+          <div class="r-row"><span>Upsell</span><span id="o-upsell"></span></div>
+        </div>
+        <div class="r-sec">
+          <span class="t">ORDERS</span>
+          <div class="r-row"><span>WhatsApp orders / mahina</span><span id="o-waorders"></span></div>
+          <div class="r-row"><span>Foodpanda se WhatsApp pe</span><span id="o-shifted"></span></div>
+          <div class="r-row"><span>Har order ka system kharcha</span><span id="o-perorder"></span></div>
+        </div>
+        <p class="r-note">Sale ka matlab munafa nahi; asal munafa aap ke margin pe hai. WhatsApp ka kharcha Meta ke rate (~PKR 4 per message, har number ke 1,000 mahana free) aur ~4 messages per order ke andaze pe hai.</p>
+      </div>
+
+      <div class="verdict">
+        <h3 id="v-title"></h3>
+        <p id="v-text"></p>
+        <div class="bars" aria-hidden="true">
+          <div class="bar"><span>Kharcha</span><div class="track"><div class="fill cost" id="b-cost"></div></div><span id="b-cost-v"></span></div>
+          <div class="bar"><span>Bachat</span><div class="track"><div class="fill save" id="b-save"></div></div><span id="b-save-v"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="block" aria-labelledby="how">
+    <header><span class="eyebrow">Order ka safar</span><h2 id="how">Customer ke message se delivery tak</h2></header>
+    <div class="steps">
+      <div class="step"><h3>Customer WhatsApp karta hai</h3><p>Aap ke apne number pe: "2 large tikka pizza chahiye." Menu ka link bhi milta hai jahan wo khud items chun sakta hai.</p></div>
+      <div class="step"><h3>AI order leta hai</h3><p>Size, delivery ya pickup, location pin, naam aur payment poochh kar ek message mein bill, delivery charges aur waqt bata deta hai.</p></div>
+      <div class="step"><h3>Kitchen screen pe order</h3><p>Order number ke saath. Kitchen "Accept" aur "Tayyar" dabati hai; kisi likhne ya parchi ki zaroorat nahi.</p></div>
+      <div class="step"><h3>Aap ka rider le jata hai</h3><p>Rider ke mobile pe address, map aur cash ki raqam. Customer ko rider ka naam aur tracking link jata hai.</p></div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="what">
+    <header><span class="eyebrow">Kya milta hai</span><h2 id="what">Har ek ke kaam ki cheez</h2></header>
+    <div class="who">
+      <div><h3>Customer ke liye</h3><ul>
+        <li>24 ghante foran jawab, apni zabaan mein</li>
+        <li>Voice note bhi samajhta hai (setting ke saath)</li>
+        <li>Pichla order ek message mein dobara</li>
+        <li>Pre-order: "kal 2 baje"</li>
+        <li>Order tracking ka link</li>
+      </ul></div>
+      <div><h3>Kitchen aur riders ke liye</h3><ul>
+        <li>Mobile ya tablet pe kitchen screen, naye order pe awaaz</li>
+        <li>Rider page: map, call, cash ka hisaab</li>
+        <li>Distance ke hisaab se delivery charges aur sab se qareebi branch</li>
+        <li>Item khatam ho to ek button se band</li>
+      </ul></div>
+      <div><h3>Owner ke liye</h3><ul>
+        <li>Menu, price, timing khud mobile se badlein</li>
+        <li>WhatsApp pe <code>#report</code> bhejein: aaj ki sale</li>
+        <li>Shikayat wali chat aap ke staff ko</li>
+        <li>Loyalty: har 10th order pe free item</li>
+        <li>Riders ka cash ka hisaab</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="cmp">
+    <header><span class="eyebrow">Muqabla</span><h2 id="cmp">Aaj kal ke tareeqe aur ye assistant</h2></header>
+    <div class="compare">
+      <table>
+        <thead><tr><th>Baat</th><th>Staff WhatsApp sambhalta hai</th><th>Foodpanda</th><th>WhatsApp AI assistant</th></tr></thead>
+        <tbody>
+          <tr><td>Rush aur raat mein jawab</td><td>Der se ya miss</td><td>App pe</td><td>Har waqt, foran</td></tr>
+          <tr><td>Har order pe kharcha</td><td>Salary</td><td>~25–30% commission</td><td>Kuch rupay</td></tr>
+          <tr><td>Customer kis ka</td><td>Aap ka</td><td>Platform ka</td><td>Aap ka</td></tr>
+          <tr><td>Kitchen tak order</td><td>Zubaani ya screenshot</td><td>Tablet</td><td>Order number ke saath screen pe</td></tr>
+          <tr><td>Naye customers</td><td>Nahi</td><td>Haan</td><td>Nahi: purane customers ke liye hai</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Foodpanda chhodne ki zaroorat nahi. Naye customers wahan se aate rahein; purane customers aap ke WhatsApp pe commission ke baghair order karein.</p>
+  </section>
+
+  <section class="block" aria-labelledby="faq">
+    <header><span class="eyebrow">Sawal</span><h2 id="faq">Owners aksar ye poochhte hain</h2></header>
+    <div class="faq">
+      <details><summary>Mera purana WhatsApp number chalega?</summary><p>Zyada tar haan. Setup ke waqt check kiya jata hai ke aap ka number WhatsApp Business App ke saath chalta rahe. Na ho sake to order ke liye alag number liya ja sakta hai.</p></details>
+      <details><summary>Kya AI ghalat price bata dega?</summary><p>Nahi. Prices, delivery charges aur total aap ke menu se system calculate karta hai; AI sirf baat karta hai. Menu badlein to agli chat se nayi price lagti hai.</p></details>
+      <details><summary>Mere apne riders hain, wo kaise kaam karenge?</summary><p>Wahi riders. Un ke mobile pe ek page khulta hai: kaunsa order uthana hai, address, map aur kitna cash lena hai.</p></details>
+      <details><summary>Customer ghussa ho ya shikayat kare to?</summary><p>AI chat aap ke staff ko de deta hai. Aap ka banda apni WhatsApp Business App se jawab deta hai, aur kaam khatam hone pe chat wapas AI ko.</p></details>
+      <details><summary>WhatsApp ka kharcha kaun deta hai?</summary><p>Meta ka bill seedha aap ke WhatsApp account pe aata hai: har number ke 1,000 messages mahana free, phir ~PKR 4 per message. System is tarah bana hai ke har order pe kam se kam messages jaayein.</p></details>
+      <details><summary>Pehle aazma sakte hain?</summary><p>Haan, 14 din free trial. Trial mein har hafte report milti hai: kitne orders aaye, kitni sale hui, raat ke kitne orders the.</p></details>
+    </div>
+  </section>
+
+  <div class="cta">
+    <h2>14 din free aazmaein</h2>
+    <p>Apni dukaan ka menu, branches aur delivery charges bhejein. Aap ke apne number pe demo dikhayenge, phir trial shuru.</p>
+    <div class="contact"><code id="phone">+92 3XX XXXXXXX</code><button class="btn" type="button" id="copy">Number copy karein</button><span class="small" id="copied" role="status"></span></div>
+    <p class="small">Upar ke saare numbers andaze hain; asal faida aap ki dukaan ke orders, margin aur Meta ke rate pe hai.</p>
+  </div>
+</div>
+
+<a class="mbar" href="#bill" id="mbar"><span>Seedhi bachat / mahina</span><b id="m-net"></b></a>
+
+<script>
+(() => {
+  const DEFAULTS = { orders: 50, waShare: 60, aov: 1500, missed: 7, commission: 27, repeat: 35, shift: 50, upsell: 80, salary: 30000, fee: 6000, countSalary: false };
+  const META_RATE = 4.2, META_FREE = 1000, MSGS_PER_ORDER = 4, DAYS = 30, WEEKS = 4.33;
+  const ids = Object.keys(DEFAULTS).filter(k => k !== "countSalary");
+  const $ = id => document.getElementById(id);
+  const pkr = n => "PKR " + Math.round(n).toLocaleString("en-US");
+  const num = n => Math.round(n).toLocaleString("en-US");
+
+  let state = { ...DEFAULTS };
+  try { Object.assign(state, JSON.parse(localStorage.getItem("bachat-calc") || "{}")); } catch {}
+
+  function syncInputs() {
+    for (const k of ids) { $(k).value = state[k]; $(k + "-r").value = state[k]; }
+    $("countSalary").checked = !!state.countSalary;
+  }
+
+  function compute(s) {
+    const waDay = s.orders * s.waShare / 100;
+    const fpMonth = (s.orders - waDay) * DAYS;
+    const missedMonth = s.missed * WEEKS;
+    const shifted = fpMonth * s.repeat / 100 * s.shift / 100;
+    const commSaved = shifted * s.aov * s.commission / 100;
+    const waMonth = waDay * DAYS + missedMonth + shifted;
+    const meta = Math.max(0, waMonth * MSGS_PER_ORDER - META_FREE) * META_RATE;
+    const salary = s.countSalary ? s.salary : 0;
+    const cost = s.fee + meta;
+    const saving = commSaved + salary;
+    return { commSaved, salary, meta, cost, saving, net: saving - cost,
+      missedSale: missedMonth * s.aov, upsellSale: waMonth * s.upsell, waMonth, shifted,
+      perOrder: waMonth > 0 ? cost / waMonth : 0 };
+  }
+
+  function render() {
+    const r = compute(state);
+    $("o-comm").textContent = pkr(r.commSaved);
+    $("row-salary").hidden = !state.countSalary;
+    $("o-salary").textContent = pkr(r.salary);
+    $("o-fee").textContent = "−" + pkr(state.fee);
+    $("o-meta").textContent = "−" + pkr(r.meta);
+    const net = $("o-net");
+    net.textContent = (r.net >= 0 ? "+" : "−") + pkr(Math.abs(r.net));
+    net.className = r.net >= 0 ? "save" : "cost";
+    $("m-net").textContent = net.textContent;
+    $("m-net").className = r.net >= 0 ? "pos" : "neg";
+    $("o-missed").textContent = "+" + pkr(r.missedSale);
+    $("o-upsell").textContent = "+" + pkr(r.upsellSale);
+    $("o-waorders").textContent = num(r.waMonth);
+    $("o-shifted").textContent = num(r.shifted);
+    $("o-perorder").textContent = pkr(r.perOrder);
+
+    const ratio = r.cost > 0 ? r.saving / r.cost : 0;
+    const extra = r.missedSale + r.upsellSale;
+    if (r.net > 0) {
+      $("v-title").textContent = "Har PKR 1 kharche pe ~PKR " + ratio.toFixed(1) + " bachat";
+      $("v-text").textContent = "Sirf bachat se kharcha poora nikal kar " + pkr(r.net) + " mahana bachta hai, aur " + pkr(extra) + " ki zyada sale is ke oopar.";
+    } else {
+      $("v-title").textContent = "Bachat se kharcha poora nahi nikalta";
+      $("v-text").textContent = "In numbers pe seedhi bachat kam hai. Faida zyada sale (" + pkr(extra) + ") aur waqt ki bachat mein hai; Foodpanda ke kitne purane customers WhatsApp pe aa sakte hain, ye number sab se zyada farq dalta hai.";
+    }
+    const max = Math.max(r.cost, r.saving, 1);
+    $("b-cost").style.width = (r.cost / max * 100) + "%";
+    $("b-save").style.width = (r.saving / max * 100) + "%";
+    $("b-cost-v").textContent = pkr(r.cost);
+    $("b-save-v").textContent = pkr(r.saving);
+    try { localStorage.setItem("bachat-calc", JSON.stringify(state)); } catch {}
+  }
+
+  for (const k of ids) {
+    const n = $(k), rg = $(k + "-r");
+    rg.addEventListener("input", () => { state[k] = Number(rg.value); n.value = rg.value; render(); });
+    n.addEventListener("input", () => {
+      const v = Number(n.value);
+      if (n.value === "" || !Number.isFinite(v) || v < 0) return;
+      state[k] = Math.min(v, Number(n.max) || v);
+      rg.value = state[k]; render();
+    });
+    n.addEventListener("blur", () => { n.value = state[k]; });
+  }
+  $("countSalary").addEventListener("change", e => { state.countSalary = e.target.checked; render(); });
+  $("inputs").addEventListener("submit", e => e.preventDefault());
+
+  $("copy").addEventListener("click", async () => {
+    const text = $("phone").textContent.trim();
+    try { await navigator.clipboard.writeText(text); $("copied").textContent = "Copy ho gaya"; }
+    catch { const sel = window.getSelection(); const range = document.createRange(); range.selectNodeContents($("phone")); sel.removeAllRanges(); sel.addRange(range); $("copied").textContent = "Number select ho gaya, copy kar lein"; }
+  });
+
+  syncInputs();
+  render();
+})();
+</script>
+</body>
+</html>

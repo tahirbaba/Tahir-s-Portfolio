@@ -1,5 +1,7 @@
 // HTTP server: Meta webhook + kitchen/rider screen + health check.
 
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import Fastify, { type FastifyInstance } from "fastify";
 import { config } from "./config.js";
 import type { Store } from "./db.js";
@@ -53,6 +55,16 @@ export function buildServer(deps: {
   });
 
   app.get("/health", async () => ({ ok: true, vendors: deps.vendors.all().length }));
+
+  // Public pitch page with the savings calculator (also the site's home page).
+  const pitch = () => {
+    const html = readFileSync(path.resolve("public/pitch.html"), "utf8");
+    const contact = config.business.contact.trim();
+    return contact ? html.replace("+92 3XX XXXXXXX", contact.replace(/[&<>"']/g, "")) : html;
+  };
+  for (const url of ["/", "/pitch"]) {
+    app.get(url, async (_req, reply) => reply.header("Cache-Control", "public, max-age=300").type("text/html").send(pitch()));
+  }
 
   // Meta calls this once when you save the webhook URL in the app dashboard.
   app.get("/webhook", async (req, reply) => {
