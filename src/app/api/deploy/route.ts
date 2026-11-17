@@ -4,7 +4,7 @@ import { demoPlan } from "@/lib/demo";
 import type { LabEvent } from "@/lib/plan-types";
 
 export const runtime = "nodejs";
-export const maxDuration = 120;
+export const maxDuration = 60;
 
 const str = { type: "string" } as const;
 const strArr = { type: "array", items: str } as const;
