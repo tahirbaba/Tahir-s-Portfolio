@@ -44,7 +44,7 @@ function SectionHead({ eyebrow, title, accent, lead }: { eyebrow: string; title:
   );
 }
 
-const marquee = ["Claude Agent SDK", "OpenAI Agents SDK", "LangGraph", "Model Context Protocol", "CrewAI", "Temporal", "pgvector", "Langfuse", "FastAPI", "Next.js", "Kubernetes", "Twilio", "n8n", "A2A"];
+const marquee = ["Claude API", "Model Context Protocol", "Tool use", "Structured outputs", "Python", "FastAPI", "TypeScript", "Next.js", "Evals", "Guardrails", "RAG", "pytest", "OpenAI Agents SDK", "Vercel"];
 
 export default function Page() {
   return (
@@ -227,11 +227,11 @@ export default function Page() {
 
         {/* Stack */}
         <section id="stack" className="gutter mx-auto max-w-[1180px] pb-28 sm:pb-36">
-          <SectionHead eyebrow="Tech stack" title="The toolkit I" accent="carry into the field." />
+          <SectionHead eyebrow="Tech stack" title="The toolkit I" accent="carry into the field." lead="Everything marked “in my live projects” is used in the six agents above, and the code is public." />
           <div className="grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {stack.map((g) => (
               <div key={g.group} className="flex flex-col gap-4 bg-ink p-6 transition-colors hover:bg-panel">
-                <h3 className="font-mono text-[11.5px] uppercase tracking-[0.14em] text-dim">{g.group}</h3>
+                <h3 className="flex flex-wrap items-center justify-between gap-2 font-mono text-[11.5px] uppercase tracking-[0.14em] text-dim">{g.group}{g.proven && <span className="rounded-full border border-ok/30 px-2 py-0.5 text-[10px] normal-case tracking-normal text-ok">in my live projects</span>}</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {g.items.map((s) => <span key={s} className="chip text-[13px]">{s}</span>)}
                 </div>

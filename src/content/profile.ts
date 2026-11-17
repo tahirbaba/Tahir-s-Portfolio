@@ -174,17 +174,14 @@ export const playbook = [
   { week: "Week 6+", title: "Hand over", body: "Dashboards, runbooks and alerts. The customer team owns it, and the lessons go back to the product as reusable patterns." },
 ];
 
-export const stack: { group: string; items: string[] }[] = [
-  { group: "Agent frameworks", items: ["Claude Agent SDK", "OpenAI Agents SDK", "LangGraph", "LangChain", "CrewAI", "AutoGen / AG2", "Google ADK", "Pydantic AI", "Vercel AI SDK"] },
-  { group: "Models", items: ["Claude", "GPT", "Gemini", "Llama", "Mistral", "DeepSeek", "Ollama", "vLLM", "LoRA fine-tuning"] },
-  { group: "Protocols", items: ["Model Context Protocol", "A2A", "Tool calling", "Structured outputs", "REST", "GraphQL", "Webhooks", "OAuth 2.1"] },
-  { group: "RAG & data", items: ["LlamaIndex", "pgvector", "Pinecone", "Qdrant", "Weaviate", "PostgreSQL", "Redis", "Neo4j", "Supabase"] },
-  { group: "Automation", items: ["n8n", "Temporal", "Celery", "Make", "Zapier", "Playwright", "Browser Use"] },
-  { group: "Voice & channels", items: ["OpenAI Realtime", "Vapi", "Retell", "ElevenLabs", "Deepgram", "Twilio", "WhatsApp Cloud API"] },
-  { group: "Evals & AgentOps", items: ["Langfuse", "LangSmith", "Arize Phoenix", "Ragas", "DeepEval", "OpenTelemetry", "Guardrails"] },
-  { group: "Languages", items: ["Python", "TypeScript", "SQL", "Bash"] },
-  { group: "App & backend", items: ["Next.js", "React", "FastAPI", "Node.js", "Tailwind CSS", "Prisma"] },
-  { group: "Cloud & infra", items: ["AWS", "Azure AI Foundry", "Google Cloud", "Docker", "Kubernetes", "Dapr", "Kafka", "Terraform", "GitHub Actions", "Vercel"] },
+/** "In my live projects" groups are used in the six agents above (the code is public). "Also work with" is the wider toolkit. */
+export const stack: { group: string; items: string[]; proven?: boolean }[] = [
+  { group: "Agents & LLMs", proven: true, items: ["Claude API", "Tool use", "Structured outputs", "Prompt caching", "Model Context Protocol", "Multi-step agents"] },
+  { group: "Safety & evals", proven: true, items: ["Eval suites", "pytest", "Guardrails", "PII redaction", "Prompt-injection defence", "Audit logs", "Fairness tests"] },
+  { group: "RAG & data", proven: true, items: ["Retrieval (BM25)", "Permission-aware search", "Verified citations", "SQL", "SQLite"] },
+  { group: "Backend", proven: true, items: ["Python", "FastAPI", "TypeScript", "Node.js", "REST APIs"] },
+  { group: "Frontend & delivery", proven: true, items: ["Next.js", "React", "Tailwind CSS", "Three.js", "Vercel", "Git & GitHub"] },
+  { group: "Also work with", items: ["OpenAI Agents SDK", "LangGraph", "A2A", "PostgreSQL", "Docker", "Kubernetes", "n8n"] },
 ];
 
 export const experience = [
@@ -256,7 +253,7 @@ export function knowledgePack(): string {
     `Headline metrics: ${metrics.map((m) => `${m.value}${m.suffix} ${m.label}`).join("; ")}.`,
     `How he works (forward deployment playbook): ${playbook.map((p) => `${p.week} ${p.title}: ${p.body}`).join(" ")}`,
     `Deployments:\n${d}`,
-    `Tech stack: ${stack.map((s) => `${s.group}: ${s.items.join(", ")}`).join(". ")}.`,
+    `Tech stack: ${stack.map((s) => `${s.group}${s.proven ? " (used in his live projects)" : ""}: ${s.items.join(", ")}`).join(". ")}.`,
     `Experience: ${experience.map((e) => `${e.period} ${e.title} at ${e.org}. ${e.body}`).join(" ")}`,
     `Training: ${training.map((t) => `${t.org} (${t.full}): ${t.items.join(", ")}`).join("; ")}.`,
     `Certifications: ${certifications.map((c) => `${c.name} (${c.issuer}, ${c.status === "earned" ? "earned" : "in progress"})`).join("; ")}.`,
