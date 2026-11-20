@@ -1,7 +1,7 @@
 {
-  "runAt": "2026-11-06T19:36:52Z",
-  "total": 39,
-  "passed": 39,
+  "runAt": "2026-11-20T11:37:30Z",
+  "total": 45,
+  "passed": 45,
   "results": [
     {
       "id": "REC-amina",
@@ -236,6 +236,42 @@
       "category": "Bias audit",
       "pass": true,
       "detail": "1008 counterfactual screenings: impact ratio 1.00 for every gender, age band and marital status"
+    },
+    {
+      "id": "VAL-1",
+      "category": "Output validation",
+      "pass": true,
+      "detail": "a job the AI invented (Google, 7 years) is not in the CV: ignored for years and flagged for the recruiter"
+    },
+    {
+      "id": "VAL-2",
+      "category": "Output validation",
+      "pass": true,
+      "detail": "a start date the AI got wrong is caught because it doesn't match the CV"
+    },
+    {
+      "id": "VAL-3",
+      "category": "Output validation",
+      "pass": true,
+      "detail": "a wrong university and a wrong certificate ID are both flagged"
+    },
+    {
+      "id": "VAL-4",
+      "category": "Output validation",
+      "pass": true,
+      "detail": "correct extractions for all 7 candidates pass validation with no false alarms"
+    },
+    {
+      "id": "PRIV-8",
+      "category": "Privacy",
+      "pass": true,
+      "detail": "health and family reasons for a career break are removed before the AI reads the CV; the dates stay"
+    },
+    {
+      "id": "GOV-1",
+      "category": "Governance",
+      "pass": true,
+      "detail": "every result includes a plain-language explanation for the candidate, with no protected attributes, and a route to human review"
     }
   ]
 }

@@ -29,19 +29,23 @@ c = copy.deepcopy(C["amina"]); c["form"]["claimed_years"] = 8
 add("CON-1", "Consistency", "years_inflated" not in flags(c), "8 claimed vs 7.9 computed is within tolerance")
 c["form"]["claimed_years"] = 10
 add("CON-2", "Consistency", "years_inflated" in flags(c), "10 claimed vs 7.9 computed is flagged")
-p = copy.deepcopy(C["amina"]["profile"]); p["roles"][1]["end"] = "2022-05"
-add("CON-3", "Consistency", "overlapping_roles" not in flags(C["amina"], p), "a 2-month overlap during a job change is not flagged")
-p["roles"][1]["end"] = "2023-01"
-add("CON-4", "Consistency", "overlapping_roles" in flags(C["amina"], p), "an 11-month overlap is flagged")
+def with_end(end):
+    p = copy.deepcopy(C["amina"]["profile"]); p["roles"][1]["end"] = end
+    return {**C["amina"], "cv": C["amina"]["cv"].replace("(2019-01 to 2022-02)", f"(2019-01 to {end})")}, p
+cf, p = with_end("2022-05")
+add("CON-3", "Consistency", "overlapping_roles" not in flags(cf, p) and "unverified_extraction" not in flags(cf, p), "a 2-month overlap during a job change is not flagged")
+cf, p = with_end("2023-01")
+add("CON-4", "Consistency", "overlapping_roles" in flags(cf, p), "an 11-month overlap is flagged")
 p = copy.deepcopy(C["li"]["profile"]); p["roles"][1]["full_time"] = False
 add("CON-5", "Consistency", "overlapping_roles" not in flags(C["li"], p), "overlap with a part-time role is not flagged")
 add("CON-6", "Consistency", abs(computed_years(C["li"]["profile"]["roles"]) - 9.6) < 0.05, "overlapping years are not double-counted (9.6, not 12.4)")
 c = copy.deepcopy(C["omar"]); c["public"]["roles"][0]["title"] = "Lead Data Engineer"
 add("CON-7", "Consistency", "title_inflation" not in flags(c), "matching titles raise nothing")
-c = copy.deepcopy(C["nadia"]); c["form"]["degree_year"] = 2016; c["profile"]["certifications"][0]["id"] = "SPC-1234-5678"
+c = copy.deepcopy(C["nadia"]); c["form"]["degree_year"] = 2016; c["profile"]["certifications"][0]["id"] = "SPC-1234-5678"; c["cv"] = c["cv"].replace("12345", "SPC-1234-5678")
 add("CON-8", "Consistency", flags(c) == [], "fixing degree year and certificate ID clears both flags")
 p = copy.deepcopy(C["amina"]["profile"]); p["roles"][0]["start"] = "2027-01"
-add("CON-9", "Consistency", "future_date" in flags(C["amina"], p), "a start date in the future is flagged")
+cf = {**C["amina"], "cv": C["amina"]["cv"].replace("(2022-03 to present)", "(2027-01 to present)")}
+add("CON-9", "Consistency", "future_date" in flags(cf, p), "a start date in the future is flagged")
 add("CON-10", "Consistency", [f["severity"] for f in screen(C["sara"], C["sara"]["profile"])["flags"]] == ["info"], "a career gap is informational, never a penalty")
 
 # 3. evidence grounding: invented quotes earn nothing
@@ -84,6 +88,24 @@ fake = [{"g": "a", "progressed": True}] * 10 + [{"g": "b", "progressed": True}] 
 add("BIAS-1", "Bias audit", not bias_audit(fake, "g")["ok"], "a group selected at half the rate of another is flagged (impact ratio 0.50 < 0.80)")
 bias = json.load(open(os.path.join(os.path.dirname(__file__), "results", "bias.json")))
 add("BIAS-2", "Bias audit", bias["redacted_text_identical"] and all(a["ok"] for a in bias["audits"]), f"{bias['cohort']} counterfactual screenings: impact ratio 1.00 for every gender, age band and marital status")
+
+# 6. validating AI-extracted facts against the CV (v1.3, after an expert review)
+p = copy.deepcopy(C["tom"]["profile"]); p["roles"].append({"title": "Senior Data Engineer", "company": "Google", "start": "2015-01", "end": "2021-12", "full_time": True})
+r = screen(C["tom"], p)
+add("VAL-1", "Output validation", r["score"]["computed_years"] == screen(C["tom"], C["tom"]["profile"])["score"]["computed_years"] and any(f["type"] == "unverified_extraction" for f in r["flags"]),
+    "a job the AI invented (Google, 7 years) is not in the CV: ignored for years and flagged for the recruiter")
+p = copy.deepcopy(C["amina"]["profile"]); p["roles"][0]["start"] = "2018-03"
+r = screen(C["amina"], p)
+add("VAL-2", "Output validation", any("start" in f["detail"] for f in r["flags"]) and r["validation"]["fields_verified"] < r["validation"]["fields_checked"], "a start date the AI got wrong is caught because it doesn't match the CV")
+p = copy.deepcopy(C["amina"]["profile"]); p["education"][0]["institution"] = "Stanford University"; p["certifications"][0]["id"] = "SPC-0000-0000"
+r = screen(C["amina"], p)
+add("VAL-3", "Output validation", sum(f["type"] == "unverified_extraction" for f in r["flags"]) == 2, "a wrong university and a wrong certificate ID are both flagged")
+add("VAL-4", "Output validation", all(screen(c, c["profile"])["validation"]["issues"] == [] for c in CANDIDATES), "correct extractions for all 7 candidates pass validation with no false alarms")
+cv = C["sara"]["cv"].replace("EDUCATION", "Career break 2016-01 to 2016-12: maternity leave, then recovering from an illness.\n\nEDUCATION", 1)
+r = redact_cv(cv, "Sara Khalid")
+add("PRIV-8", "Privacy", "maternity" not in r and "illness" not in r and "Career break" in r, "health and family reasons for a career break are removed before the AI reads the CV; the dates stay")
+exp = screen(C["amina"], C["amina"]["profile"])["candidate_explanation"]
+add("GOV-1", "Governance", "Amina" not in exp and "Female" not in exp and "reviewed" in exp, "every result includes a plain-language explanation for the candidate, with no protected attributes, and a route to human review")
 
 out = {"runAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "total": len(results), "passed": sum(r["pass"] for r in results), "results": results}
 os.makedirs(os.path.join(os.path.dirname(__file__), "results"), exist_ok=True)

@@ -100,13 +100,19 @@
         "unverified_evidence": []
       },
       "flags": [],
+      "validation": {
+        "issues": [],
+        "fields_checked": 11,
+        "fields_verified": 11
+      },
       "recommendation": "advance",
       "why": "Meets every must-have with verified evidence and no inconsistencies.",
       "checklist": [],
       "decided_by": "a recruiter, not the system",
+      "candidate_explanation": "Your application was assessed against 7 job requirements, using only what your CV says. Evidence was found for: Production Python; Spark or dbt pipelines; Cloud warehouse (BigQuery, Snowflake, Redshift); Data quality and testing; Technical leadership or mentoring; Healthcare or regulated data; 5+ years (computed from dates). Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.",
       "audit": {
-        "at": "2026-11-06T19:36:52Z",
-        "rules_version": "verity-rules 1.2",
+        "at": "2026-11-20T11:37:56Z",
+        "rules_version": "verity-rules 1.3",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -233,6 +239,11 @@
           "detail": "Application claims 8 years; the CV's dates add up to 5.9."
         }
       ],
+      "validation": {
+        "issues": [],
+        "fields_checked": 10,
+        "fields_verified": 10
+      },
       "recommendation": "verify_first",
       "why": "Strong on paper, but serious inconsistencies must be resolved before an interview.",
       "checklist": [
@@ -242,9 +253,10 @@
         }
       ],
       "decided_by": "a recruiter, not the system",
+      "candidate_explanation": "Your application was assessed against 7 job requirements, using only what your CV says. Evidence was found for: Production Python; Spark or dbt pipelines; Cloud warehouse (BigQuery, Snowflake, Redshift); 5+ years (computed from dates). No evidence was found in the CV for: Data quality and testing; Technical leadership or mentoring; Healthcare or regulated data. Some details will be checked with you: Application claims 8 years; the CV's dates add up to 5.9. Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.",
       "audit": {
-        "at": "2026-11-06T19:36:52Z",
-        "rules_version": "verity-rules 1.2",
+        "at": "2026-11-20T11:37:56Z",
+        "rules_version": "verity-rules 1.3",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -367,6 +379,11 @@
           "detail": "CV says Lead Data Engineer at Petra Pay; public profile says Data Engineer."
         }
       ],
+      "validation": {
+        "issues": [],
+        "fields_checked": 10,
+        "fields_verified": 10
+      },
       "recommendation": "interview_and_verify",
       "why": "Meets the bar; some claims need checking alongside the interview.",
       "checklist": [
@@ -376,9 +393,10 @@
         }
       ],
       "decided_by": "a recruiter, not the system",
+      "candidate_explanation": "Your application was assessed against 7 job requirements, using only what your CV says. Evidence was found for: Production Python; Spark or dbt pipelines; Cloud warehouse (BigQuery, Snowflake, Redshift); Data quality and testing; Technical leadership or mentoring; 5+ years (computed from dates). No evidence was found in the CV for: Healthcare or regulated data. Some details will be checked with you: CV says Lead Data Engineer at Petra Pay; public profile says Data Engineer. Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.",
       "audit": {
-        "at": "2026-11-06T19:36:52Z",
-        "rules_version": "verity-rules 1.2",
+        "at": "2026-11-20T11:37:56Z",
+        "rules_version": "verity-rules 1.3",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -506,6 +524,11 @@
           "detail": "Senior Data Engineer at Kopi Logistics is not on the public profile. Verify employment."
         }
       ],
+      "validation": {
+        "issues": [],
+        "fields_checked": 14,
+        "fields_verified": 14
+      },
       "recommendation": "verify_first",
       "why": "Strong on paper, but serious inconsistencies must be resolved before an interview.",
       "checklist": [
@@ -519,9 +542,10 @@
         }
       ],
       "decided_by": "a recruiter, not the system",
+      "candidate_explanation": "Your application was assessed against 7 job requirements, using only what your CV says. Evidence was found for: Production Python; Spark or dbt pipelines; Cloud warehouse (BigQuery, Snowflake, Redshift); Data quality and testing; 5+ years (computed from dates). No evidence was found in the CV for: Technical leadership or mentoring; Healthcare or regulated data. Some details will be checked with you: Full-time roles at Harbour Bank and Kopi Logistics overlap for 33 months. Senior Data Engineer at Kopi Logistics is not on the public profile. Verify employment. Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.",
       "audit": {
-        "at": "2026-11-06T19:36:52Z",
-        "rules_version": "verity-rules 1.2",
+        "at": "2026-11-20T11:37:56Z",
+        "rules_version": "verity-rules 1.3",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -644,6 +668,11 @@
           "detail": "27-month gap between Ravi Fintech and Indus Health. Not scored and not a negative signal."
         }
       ],
+      "validation": {
+        "issues": [],
+        "fields_checked": 10,
+        "fields_verified": 10
+      },
       "recommendation": "advance",
       "why": "Meets every must-have with verified evidence and no inconsistencies.",
       "checklist": [
@@ -653,9 +682,10 @@
         }
       ],
       "decided_by": "a recruiter, not the system",
+      "candidate_explanation": "Your application was assessed against 7 job requirements, using only what your CV says. Evidence was found for: Production Python; Spark or dbt pipelines; Cloud warehouse (BigQuery, Snowflake, Redshift); Data quality and testing; Technical leadership or mentoring; Healthcare or regulated data; 5+ years (computed from dates). Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.",
       "audit": {
-        "at": "2026-11-06T19:36:52Z",
-        "rules_version": "verity-rules 1.2",
+        "at": "2026-11-20T11:37:56Z",
+        "rules_version": "verity-rules 1.3",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -771,13 +801,19 @@
         "unverified_evidence": []
       },
       "flags": [],
+      "validation": {
+        "issues": [],
+        "fields_checked": 6,
+        "fields_verified": 6
+      },
       "recommendation": "not_a_fit_yet",
       "why": "Missing must-haves: Spark or dbt pipelines, 5+ years (computed from dates).",
       "checklist": [],
       "decided_by": "a recruiter, not the system",
+      "candidate_explanation": "Your application was assessed against 7 job requirements, using only what your CV says. Evidence was found for: Production Python. No evidence was found in the CV for: Spark or dbt pipelines; Cloud warehouse (BigQuery, Snowflake, Redshift); Data quality and testing; Technical leadership or mentoring; Healthcare or regulated data; 5+ years (computed from dates). Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.",
       "audit": {
-        "at": "2026-11-06T19:36:52Z",
-        "rules_version": "verity-rules 1.2",
+        "at": "2026-11-20T11:37:56Z",
+        "rules_version": "verity-rules 1.3",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -901,6 +937,11 @@
           "detail": "Snowflake SnowPro Core ID “12345” doesn't match the issuer's ID format. Check with the issuer."
         }
       ],
+      "validation": {
+        "issues": [],
+        "fields_checked": 7,
+        "fields_verified": 7
+      },
       "recommendation": "interview_and_verify",
       "why": "Meets the bar; some claims need checking alongside the interview.",
       "checklist": [
@@ -914,9 +955,10 @@
         }
       ],
       "decided_by": "a recruiter, not the system",
+      "candidate_explanation": "Your application was assessed against 7 job requirements, using only what your CV says. Evidence was found for: Production Python; Spark or dbt pipelines; Cloud warehouse (BigQuery, Snowflake, Redshift); Data quality and testing; 5+ years (computed from dates). No evidence was found in the CV for: Technical leadership or mentoring; Healthcare or regulated data. Some details will be checked with you: MSc Computer Science: CV says 2016, application form says 2014. Snowflake SnowPro Core ID “12345” doesn't match the issuer's ID format. Check with the issuer. Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.",
       "audit": {
-        "at": "2026-11-06T19:36:52Z",
-        "rules_version": "verity-rules 1.2",
+        "at": "2026-11-20T11:37:56Z",
+        "rules_version": "verity-rules 1.3",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,
@@ -1033,13 +1075,19 @@
         "unverified_evidence": []
       },
       "flags": [],
+      "validation": {
+        "issues": [],
+        "fields_checked": 11,
+        "fields_verified": 11
+      },
       "recommendation": "advance",
       "why": "Meets every must-have with verified evidence and no inconsistencies.",
       "checklist": [],
       "decided_by": "a recruiter, not the system",
+      "candidate_explanation": "Your application was assessed against 7 job requirements, using only what your CV says. Evidence was found for: Production Python; Spark or dbt pipelines; Cloud warehouse (BigQuery, Snowflake, Redshift); Data quality and testing; Technical leadership or mentoring; Healthcare or regulated data; 5+ years (computed from dates). Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.",
       "audit": {
-        "at": "2026-11-06T19:36:52Z",
-        "rules_version": "verity-rules 1.2",
+        "at": "2026-11-20T11:37:56Z",
+        "rules_version": "verity-rules 1.3",
         "model": "none: rules only",
         "redacted_before_model": {
           "name": 1,

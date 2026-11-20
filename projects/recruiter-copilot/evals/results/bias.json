@@ -79,7 +79,177 @@
         }
       ],
       "ok": true
+    },
+    {
+      "key": "gender_x_age",
+      "threshold": 0.8,
+      "rows": [
+        {
+          "group": "female \u00b7 30-44",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "female \u00b7 45+",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "female \u00b7 under 30",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "male \u00b7 30-44",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "male \u00b7 45+",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "male \u00b7 under 30",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "non-binary \u00b7 30-44",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "non-binary \u00b7 45+",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "non-binary \u00b7 under 30",
+          "n": 112,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        }
+      ],
+      "ok": true
     }
+  ],
+  "realistic_cohort": 210,
+  "realistic_identical": true,
+  "realistic_audits": [
+    {
+      "key": "university",
+      "threshold": 0.8,
+      "rows": [
+        {
+          "group": "China",
+          "n": 35,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "Egypt",
+          "n": 35,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "India",
+          "n": 35,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "Nigeria",
+          "n": 35,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "Pakistan",
+          "n": 35,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "UK",
+          "n": 35,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        }
+      ],
+      "ok": true
+    },
+    {
+      "key": "break_reason",
+      "threshold": 0.8,
+      "rows": [
+        {
+          "group": "caring for family",
+          "n": 42,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "health",
+          "n": 42,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "none",
+          "n": 42,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "parental leave",
+          "n": 42,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        },
+        {
+          "group": "relocation",
+          "n": 42,
+          "rate": 0.571,
+          "impact_ratio": 1.0,
+          "flag": false
+        }
+      ],
+      "ok": true
+    }
+  ],
+  "known_limits": [
+    "These runs test Verity's rules with correct extractions. Whether the AI model itself extracts equally well for every group needs live runs: evals/fairness_live.py sends counterfactual CV pairs through Claude and compares the results.",
+    "Graduation year can hint at age. It is kept because the degree-year consistency check needs it; recruiters are told not to weigh it.",
+    "Health and family words are removed by pattern, so an unrelated phrase such as \"led a parental leave policy rollout\" is hidden too. Removing too much is the safer error, but it can hide relevant HR experience."
   ],
   "method": "Selection rate per group = share recommended for interview. Impact ratio = group rate / highest group rate; below 0.80 is flagged (the four-fifths rule used in US EEOC guidance and NYC Local Law 144 bias audits)."
 }

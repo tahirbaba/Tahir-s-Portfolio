@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 from .candidates import CERT_FORMATS, NOW, ROLE
 
-RULES_VERSION = "verity-rules 1.2"
+RULES_VERSION = "verity-rules 1.3"
 URL = re.compile(r"(https?://\S+|www\.\S+|\b(?:linkedin|github|gitlab|twitter|x|behance|medium)\.com/\S*)", re.I)
 PROTECTED_PATTERNS = [
     ("email", re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"), "[email]"),
@@ -21,6 +21,8 @@ PROTECTED_PATTERNS = [
     ("gender", re.compile(r"\b(male|female|man|woman|non-binary)\b", re.I), "[removed]"),
     ("marital_status", re.compile(r"\b(married|single|divorced|widowed)\b", re.I), "[removed]"),
     ("religion", re.compile(r"\b(muslim|christian|catholic|protestant|hindu|jewish|buddhist|sikh|atheist|religion:?)\b", re.I), "[removed]"),
+    # health and family reasons (special-category data under GDPR); the gap itself stays, the reason goes
+    ("health_or_family", re.compile(r"\b(parental|maternity|paternity) leave\b|\bpregnan\w*|\b(illness|sickness|sick leave|disability|disabled|cancer|surgery|chronic \w+|mental health|burnout)\b|\bcar(ing|ed) for (a |my )?(sick |elderly )?(family member|child|children|parent|parents|mother|father|spouse)\b|\brecover(ing|ed)? from( an?)?\b", re.I), "[reason removed]"),
     ("age", re.compile(r"\b\d{2}\s*(years old|y/o)?\b(?=[,\s]*(married|single|\[removed\]|$))", re.I), "[removed]"),
 ]
 CONTACT_LINE = "[contact details removed]"
@@ -142,6 +144,55 @@ def computed_years(roles: list[dict]) -> float:
     return round(total / 12, 1)
 
 
+def _norm(t: str) -> str:
+    return " ".join(str(t).lower().replace("–", "-").replace("—", "-").split())
+
+
+def validate_extraction(profile: dict, cv: str) -> dict:
+    """Check every fact the AI extracted against the CV text. A role, date, school or certificate that isn't in the CV
+    is treated as unverified and ignored for scoring, so a hallucinated job can't add years or trigger a flag."""
+    text = _norm(cv)
+    issues, roles, total, ok = [], [], 0, 0
+    for r in profile.get("roles", []):
+        missing = [f"{k} “{r.get(k)}”" for k in ("company", "title", "start") if _norm(r.get(k, "")) not in text]
+        if str(r.get("end")) != "present" and _norm(r.get("end", "")) not in text:
+            missing.append(f"end “{r.get('end')}”")
+        total += 4; ok += 4 - len(missing)
+        if missing:
+            issues.append({"field": "role", "value": f"{r.get('title')} at {r.get('company')}", "detail": "Not found in the CV: " + ", ".join(missing)})
+        else:
+            roles.append(r)
+    for e in profile.get("education", []):
+        total += 2
+        miss = [x for x in (e.get("institution", ""), str(e.get("year", ""))) if _norm(x) not in text]
+        ok += 2 - len(miss)
+        if miss:
+            issues.append({"field": "education", "value": f"{e.get('degree')}, {e.get('institution')}", "detail": "Not found in the CV: " + ", ".join(miss)})
+    for c in profile.get("certifications", []):
+        total += 1
+        if _norm(c.get("id", "")) in text:
+            ok += 1
+        else:
+            issues.append({"field": "certification", "value": c.get("name"), "detail": f"ID “{c.get('id')}” not found in the CV"})
+    return {"verified_roles": roles, "issues": issues, "fields_checked": total, "fields_verified": ok}
+
+
+def candidate_explanation(sc: dict, flags: list[dict], rec: str) -> str:
+    """Plain-language summary a recruiter can share with the candidate (right to an explanation)."""
+    met = [r["label"] for r in sc["rows"] if r["met"]]
+    unmet = [r["label"] for r in sc["rows"] if not r["met"]]
+    parts = [f"Your application was assessed against {len(sc['rows'])} job requirements, using only what your CV says."]
+    if met:
+        parts.append("Evidence was found for: " + "; ".join(met) + ".")
+    if unmet:
+        parts.append("No evidence was found in the CV for: " + "; ".join(unmet) + ".")
+    checks = [f["detail"] for f in flags if f["severity"] in ("high", "medium") and f["type"] != "unverified_extraction"]
+    if checks:
+        parts.append("Some details will be checked with you: " + " ".join(checks))
+    parts.append("Your name, contact details, photo, gender, age, marital status, religion and nationality were not used. A recruiter makes the decision, and you can ask for it to be reviewed.")
+    return " ".join(parts)
+
+
 def score(profile: dict, cv: str) -> dict:
     cv_l = " ".join(cv.lower().split())
     rows, unverified = [], []
@@ -206,6 +257,7 @@ CHECKLIST = {
     "degree_year_mismatch": "Request the degree certificate or verify with the university.",
     "certificate_id_format": "Verify the certificate on the issuer's verification page.",
     "future_date": "Clarify the dates with the candidate.",
+    "unverified_extraction": "Read the CV yourself for this detail; the AI's version was not used.",
     "career_gap": "No action needed. Judge skills only; never ask why (family or health reasons are private) and never score the gap.",
 }
 
@@ -226,9 +278,14 @@ def recommend(sc: dict, flags: list[dict]) -> dict:
 
 
 def screen(cand: dict, profile: dict) -> dict:
-    sc = score(profile, cand["cv"])
-    flags = consistency(profile, cand["form"], cand["public"])
-    return {"score": sc, "flags": flags, **recommend(sc, flags)}
+    val = validate_extraction(profile, cand["cv"])
+    checked = {**profile, "roles": val["verified_roles"]}
+    sc = score(checked, cand["cv"])
+    flags = consistency(checked, cand["form"], cand["public"])
+    flags += [{"type": "unverified_extraction", "severity": "medium", "detail": f"AI-extracted {i['field']} “{i['value']}” is not supported by the CV ({i['detail']}). Ignored for scoring."} for i in val["issues"]]
+    out = recommend(sc, flags)
+    return {"score": sc, "flags": flags, "validation": {k: v for k, v in val.items() if k != "verified_roles"}, **out,
+            "candidate_explanation": candidate_explanation(sc, flags, out["recommendation"])}
 
 
 # ---------------------------------------------------------------- agent tools

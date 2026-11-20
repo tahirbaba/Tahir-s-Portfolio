@@ -6,6 +6,7 @@ const LINKS = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/case-study", label: "Case study" },
   { href: "/evals", label: "Evals" },
+  { href: "/governance", label: "Governance" },
 ];
 
 export default function Nav({ active }: { active?: string }) {
