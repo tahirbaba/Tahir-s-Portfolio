@@ -35,8 +35,8 @@ export const profile = {
 // Real numbers from the six live projects' test and eval suites.
 export const metrics: { value: number; suffix: string; label: string; decimals?: number }[] = [
   { value: 6, suffix: "", label: "Agent projects live" },
-  { value: 94, suffix: "", label: "Unit tests passing" },
-  { value: 160, suffix: "", label: "Eval cases, all measured" },
+  { value: 96, suffix: "", label: "Unit tests passing" },
+  { value: 202, suffix: "", label: "Eval cases, all measured" },
   { value: 40, suffix: "/40", label: "Security attacks stopped" },
 ];
 
@@ -114,11 +114,12 @@ export const deployments: Deployment[] = [
     problem: "Teams give AI agents broad credentials; one manipulated agent can read salaries, drop tables or email data out.",
     shipped: [
       "MCP server (initialize, tools/list, tools/call) with per-agent keys and scopes",
-      "Read-only SQL guard via SQLite's authorizer, path policy, PII masking by value, prompt-injection quarantine, approvals and audit log",
+      "Read-only SQL guard via SQLite's authorizer, path policy, PII masking by value, prompt-injection quarantine, multi-person approvals and audit log",
+      "v1.1 after an expert review: session policy for multi-step attacks, 3,000 fuzzed calls with 0 violations",
       "Live attack playground that runs without any AI; tests caught a PII leak through column aliases",
     ],
     graph: ["Authenticate", "Scope", "Guard arguments", "Approve", "Filter output", "Audit"],
-    impact: [{ value: "40/40", label: "attacks stopped" }, { value: "9/9", label: "legitimate calls allowed" }, { value: "12/12", label: "pytest tests" }],
+    impact: [{ value: "40/40", label: "attacks stopped" }, { value: "9/9", label: "legitimate calls allowed" }, { value: "36/36", label: "multi-step and approval scenarios" }],
     stack: ["Python", "FastAPI", "MCP", "SQLite authorizer", "Claude"],
     links: [{ label: "Try to break it", href: "https://gatekeeper-mcp-gateway.vercel.app/demo" }, { label: "Security results", href: "https://gatekeeper-mcp-gateway.vercel.app/evals" }, { label: "Code", href: GH + "mcp-gateway" }],
   },
@@ -138,7 +139,7 @@ export const deployments: Deployment[] = [
   },
   {
     id: "verity", title: "Verity: recruiter integrity copilot", codename: "VERITY", client: "recruiters and HR teams",
-    sector: "HR & recruiting", location: "Live demo", year: "2026", duration: "39/39 fairness & privacy checks", mode: "Python · FastAPI · Next.js",
+    sector: "HR & recruiting", location: "Live demo", year: "2026", duration: "45/45 fairness & privacy checks", mode: "Python · FastAPI · Next.js",
     problem: "Polished AI-written applications flood recruiters, claims don't add up, and screening tools can react to names and gender.",
     shipped: [
       "Blind screening: names, contact details, gender, age and marital status removed before the AI reads a CV",
@@ -146,7 +147,7 @@ export const deployments: Deployment[] = [
       "Consistency checks against the application form and public profile, a verification checklist, and no auto-reject",
     ],
     graph: ["Redact", "Cite evidence", "Verify quotes", "Consistency checks", "Recruiter decides"],
-    impact: [{ value: "39/39", label: "integrity, fairness, privacy and bias cases" }, { value: "0", label: "score change from name or gender swaps" }, { value: "12/12", label: "pytest tests" }],
+    impact: [{ value: "45/45", label: "integrity, fairness, privacy and bias cases" }, { value: "0", label: "score change from name or gender swaps" }, { value: "12/12", label: "pytest tests" }],
     stack: ["Python", "FastAPI", "Claude", "Counterfactual tests", "Next.js"],
     links: [{ label: "Live demo", href: "https://verity-recruiter-copilot.vercel.app" }, { label: "Fairness tests", href: "https://verity-recruiter-copilot.vercel.app/evals" }, { label: "Code", href: GH + "recruiter-copilot" }],
   },
