@@ -10,7 +10,7 @@ from fastapi import FastAPI, Request  # noqa: E402
 from fastapi.responses import JSONResponse, Response  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
-from _lib.gateway import new_state  # noqa: E402
+from _lib.gateway import APPROVERS, decide, new_state  # noqa: E402
 from _lib.gateway import call as gw_call  # noqa: E402
 from _lib.mcp import handle  # noqa: E402
 from _lib.session import sign, verify  # noqa: E402
@@ -67,6 +67,31 @@ def play(body: PlayCall, request: Request):
     resp, st = gw_call(body.api_key, body.tool, body.args, st or new_state())
     st["audit"] = st["audit"][-50:]
     return {**resp, "audit": st["audit"], "approvals": st["approvals"], "state": sign(st)}
+
+
+class Decision(BaseModel):
+    approver: str = Field(max_length=40)
+    approval_id: str = Field(max_length=20)
+    decision: str = Field(pattern="^(approve|deny)$")
+    state: str
+
+
+@app.post("/api/py/approve")
+def approve(body: Decision, request: Request):
+    """A person approves or denies a held call. Multi-step: some actions need two different approvers."""
+    if _limited(request, 60):
+        return JSONResponse({"error": "Too many calls. Wait a minute."}, status_code=429)
+    st = verify(body.state)
+    if not st:
+        return JSONResponse({"error": "Invalid or missing session state."}, status_code=400)
+    resp, st = decide(body.approver, body.approval_id, body.decision, st)
+    st["audit"] = st["audit"][-50:]
+    return {**resp, "audit": st["audit"], "approvals": st["approvals"], "state": sign(st)}
+
+
+@app.get("/api/py/approvers")
+def approvers():
+    return [{"id": k, **v} for k, v in APPROVERS.items()]
 
 
 class Task(BaseModel):

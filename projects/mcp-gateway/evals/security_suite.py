@@ -98,7 +98,7 @@ def main():
     # rate limit burst
     st = new_state(); decisions = []
     for i in range(12):
-        r, st = call(I, "files.read", {"path": "handbook/escalation.md"}, st, now=1000 + i)
+        r, st = call(I, "files.read", {"path": f"handbook/note-{i}.md"}, st, now=1000 + i)
         decisions.append(r["decision"])
     results.append({"id": "RATE-1", "category": "Rate limiting", "kind": "attack", "tool": "files.read", "expected": "10 allowed then blocked", "got": f"{decisions.count('allowed')} allowed, {decisions.count('blocked')} blocked",
                     "reason": "intern-bot limit is 10/min", "pass": decisions[:10] == ["allowed"] * 10 and decisions[10:] == ["blocked"] * 2, "ms": 0})

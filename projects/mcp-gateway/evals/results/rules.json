@@ -1,7 +1,7 @@
 {
-  "runAt": "2026-11-06T04:26:44Z",
-  "total": 12,
-  "passed": 12,
+  "runAt": "2026-11-20T11:32:15Z",
+  "total": 14,
+  "passed": 14,
   "tests": [
     {
       "name": "tools list is filtered by scope",
@@ -60,6 +60,16 @@
     },
     {
       "name": "security suite all pass",
+      "file": "test_security_suite",
+      "pass": true
+    },
+    {
+      "name": "workflow suite all pass",
+      "file": "test_security_suite",
+      "pass": true
+    },
+    {
+      "name": "approve endpoint two person flow",
       "file": "test_security_suite",
       "pass": true
     }

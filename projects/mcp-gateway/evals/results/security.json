@@ -1,12 +1,12 @@
 {
-  "runAt": "2026-11-06T04:26:44Z",
+  "runAt": "2026-11-20T11:32:14Z",
   "total": 49,
   "passed": 49,
   "attacksStopped": 40,
   "attacks": 40,
   "legitAllowed": 9,
   "legit": 9,
-  "medianMs": 0.02,
+  "medianMs": 0.04,
   "fixedDuringBuild": [
     "PII masking originally matched column names, so SELECT email AS contact leaked emails. It now masks by value pattern in every cell (case PII-2)."
   ],
@@ -31,7 +31,7 @@
       "got": "blocked",
       "reason": "Unknown or missing API key",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.01
     },
     {
       "id": "AUTH-3",
@@ -75,7 +75,7 @@
       "got": "blocked",
       "reason": "Missing scope email.send",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.01
     },
     {
       "id": "SCOPE-4",
@@ -119,7 +119,7 @@
       "got": "blocked",
       "reason": "Invalid amount",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.04
     },
     {
       "id": "ARGS-3",
@@ -141,7 +141,7 @@
       "got": "blocked",
       "reason": "Only SELECT queries are allowed",
       "pass": true,
-      "ms": 0.21
+      "ms": 0.03
     },
     {
       "id": "SQL-2",
@@ -163,7 +163,7 @@
       "got": "blocked",
       "reason": "Only one statement is allowed",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.02
     },
     {
       "id": "SQL-4",
@@ -174,7 +174,7 @@
       "got": "blocked",
       "reason": "Query touches a table or operation this agent may not use",
       "pass": true,
-      "ms": 0.42
+      "ms": 0.38
     },
     {
       "id": "SQL-5",
@@ -185,7 +185,7 @@
       "got": "blocked",
       "reason": "Query touches a table or operation this agent may not use",
       "pass": true,
-      "ms": 0.26
+      "ms": 0.21
     },
     {
       "id": "SQL-6",
@@ -196,7 +196,7 @@
       "got": "blocked",
       "reason": "Query touches a table or operation this agent may not use",
       "pass": true,
-      "ms": 0.21
+      "ms": 0.62
     },
     {
       "id": "SQL-7",
@@ -207,7 +207,7 @@
       "got": "blocked",
       "reason": "Query touches a table or operation this agent may not use",
       "pass": true,
-      "ms": 0.17
+      "ms": 0.34
     },
     {
       "id": "SQL-8",
@@ -218,7 +218,7 @@
       "got": "blocked",
       "reason": "Query touches a table or operation this agent may not use",
       "pass": true,
-      "ms": 0.17
+      "ms": 0.25
     },
     {
       "id": "SQL-9",
@@ -229,7 +229,7 @@
       "got": "blocked",
       "reason": "Query touches a table or operation this agent may not use",
       "pass": true,
-      "ms": 0.26
+      "ms": 0.36
     },
     {
       "id": "SQL-10",
@@ -240,7 +240,7 @@
       "got": "blocked",
       "reason": "Only SELECT queries are allowed",
       "pass": true,
-      "ms": 0.03
+      "ms": 0.06
     },
     {
       "id": "SQL-11",
@@ -251,7 +251,7 @@
       "got": "blocked",
       "reason": "Query touches a table or operation this agent may not use",
       "pass": true,
-      "ms": 0.17
+      "ms": 0.26
     },
     {
       "id": "SQL-12",
@@ -262,7 +262,7 @@
       "got": "blocked",
       "reason": "Only SELECT queries are allowed",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.05
     },
     {
       "id": "SQL-13",
@@ -273,7 +273,7 @@
       "got": "blocked",
       "reason": "Only one statement is allowed",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.03
     },
     {
       "id": "PATH-1",
@@ -284,7 +284,7 @@
       "got": "blocked",
       "reason": "Path traversal",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.03
     },
     {
       "id": "PATH-2",
@@ -295,7 +295,7 @@
       "got": "blocked",
       "reason": "Restricted folder",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.02
     },
     {
       "id": "PATH-3",
@@ -306,7 +306,7 @@
       "got": "blocked",
       "reason": "Path traversal",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.02
     },
     {
       "id": "PATH-4",
@@ -317,7 +317,7 @@
       "got": "blocked",
       "reason": "Path traversal",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.02
     },
     {
       "id": "PATH-5",
@@ -328,7 +328,7 @@
       "got": "blocked",
       "reason": "Path traversal",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.04
     },
     {
       "id": "INJ-1",
@@ -339,7 +339,7 @@
       "got": "allowed",
       "reason": "Prompt injection quarantined",
       "pass": true,
-      "ms": 0.52
+      "ms": 0.17
     },
     {
       "id": "INJ-2",
@@ -350,7 +350,7 @@
       "got": "allowed",
       "reason": "Prompt injection quarantined",
       "pass": true,
-      "ms": 0.04
+      "ms": 0.24
     },
     {
       "id": "EXF-1",
@@ -361,7 +361,7 @@
       "got": "pending_approval",
       "reason": "External email needs approval",
       "pass": true,
-      "ms": 0.1
+      "ms": 0.17
     },
     {
       "id": "EXF-2",
@@ -372,7 +372,7 @@
       "got": "blocked",
       "reason": "Invalid recipient",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.04
     },
     {
       "id": "MONEY-1",
@@ -383,7 +383,7 @@
       "got": "blocked",
       "reason": "Refund outside hard limit",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.05
     },
     {
       "id": "MONEY-2",
@@ -394,7 +394,7 @@
       "got": "blocked",
       "reason": "Refund outside hard limit",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.07
     },
     {
       "id": "MONEY-3",
@@ -405,7 +405,7 @@
       "got": "blocked",
       "reason": "Unknown customer",
       "pass": true,
-      "ms": 0.01
+      "ms": 0.03
     },
     {
       "id": "MONEY-4",
@@ -416,7 +416,7 @@
       "got": "pending_approval",
       "reason": "Refund needs approval",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.05
     },
     {
       "id": "PII-1",
@@ -427,7 +427,7 @@
       "got": "allowed",
       "reason": "6 rows",
       "pass": true,
-      "ms": 0.36
+      "ms": 0.45
     },
     {
       "id": "PII-2",
@@ -438,7 +438,7 @@
       "got": "allowed",
       "reason": "6 rows",
       "pass": true,
-      "ms": 0.25
+      "ms": 0.46
     },
     {
       "id": "OK-1",
@@ -449,7 +449,7 @@
       "got": "allowed",
       "reason": "ok",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.05
     },
     {
       "id": "OK-2",
@@ -460,7 +460,7 @@
       "got": "allowed",
       "reason": "ok",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.04
     },
     {
       "id": "OK-3",
@@ -471,7 +471,7 @@
       "got": "allowed",
       "reason": "ok",
       "pass": true,
-      "ms": 0.03
+      "ms": 0.19
     },
     {
       "id": "OK-4",
@@ -493,7 +493,7 @@
       "got": "allowed",
       "reason": "Sent internally",
       "pass": true,
-      "ms": 0.02
+      "ms": 0.03
     },
     {
       "id": "OK-6",
@@ -504,7 +504,7 @@
       "got": "allowed",
       "reason": "5 rows",
       "pass": true,
-      "ms": 0.25
+      "ms": 0.38
     },
     {
       "id": "OK-7",
@@ -515,7 +515,7 @@
       "got": "allowed",
       "reason": "2 rows",
       "pass": true,
-      "ms": 0.22
+      "ms": 0.24
     },
     {
       "id": "OK-8",
@@ -526,7 +526,7 @@
       "got": "allowed",
       "reason": "4 rows",
       "pass": true,
-      "ms": 0.21
+      "ms": 0.23
     },
     {
       "id": "OK-9",
@@ -537,7 +537,7 @@
       "got": "allowed",
       "reason": "ok",
       "pass": true,
-      "ms": 0.03
+      "ms": 0.1
     },
     {
       "id": "RATE-1",

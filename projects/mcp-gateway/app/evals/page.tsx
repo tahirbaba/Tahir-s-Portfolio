@@ -3,6 +3,7 @@ import Footer from "@/components/site/Footer";
 import Nav from "@/components/site/Nav";
 import sec from "@/evals/results/security.json";
 import rules from "@/evals/results/rules.json";
+import wf from "@/evals/results/workflow.json";
 
 export const metadata: Metadata = { title: "Security results" };
 const STYLE: Record<string, string> = { allowed: "text-ok", blocked: "text-coral", pending_approval: "text-amber" };
@@ -37,6 +38,21 @@ export default function Evals() {
               </tbody>
             </table>
           </div>
+        </section>
+        <section className="flex flex-col gap-5">
+          <div><p className="eyebrow">Version 1.1 · real-world hardening</p><h2 className="mt-2 text-[clamp(24px,3vw,34px)] font-extrabold">Bypass attempts, multi-step workflows and multi-person approvals.</h2>
+            <p className="mt-3 max-w-[70ch] text-[15px] leading-relaxed text-muted">Added after an expert review asked how the controls hold up under realistic conditions. {wf.total} scenarios that carry state across calls, plus {wf.fuzzCalls.toLocaleString()} randomly mutated calls checked against invariants that must never break. Reproduce with <code className="rounded bg-panel-2 px-1.5 font-mono text-[12.5px]">python evals/workflow_suite.py</code>.</p></div>
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
+            {[["Scenarios passing", `${wf.passed}/${wf.total}`], ["Fuzzed calls", wf.fuzzCalls.toLocaleString()], ["Invariant violations", String(wf.fuzzViolations)], ["Added latency, p99", `${wf.p99ms} ms`]].map(([k, v]) => (
+              <div key={k} className="bg-panel p-5"><div className="font-display text-[30px] font-bold tabular-nums">{v}</div><div className="text-[12.5px] text-muted">{k}</div></div>
+            ))}
+          </div>
+          <div className="rounded-2xl border border-amber/30 bg-amber/5 p-5 text-[14px] leading-relaxed"><p className="eyebrow mb-1 !text-amber">Weaknesses this round found in v1.0, now fixed</p><ul className="flex list-disc flex-col gap-1 pl-5">{wf.fixedInV11.map((f) => <li key={f}>{f}</li>)}</ul></div>
+          <div className="panel overflow-hidden"><ul>{wf.results.map((r) => (
+            <li key={r.id} className="grid gap-1 border-t border-line px-4 py-2.5 text-[13px] first:border-t-0 sm:grid-cols-[110px_170px_1fr]">
+              <span className="font-mono"><span className={r.pass ? "text-ok" : "text-coral"}>{r.pass ? "✓" : "✗"}</span> {r.id}</span><span className="text-muted">{r.category}</span><span>{r.detail}</span>
+            </li>))}</ul></div>
+          <p className="text-[13px] text-dim">Still to prove: these runs use the demo systems. Behaviour on a client's real systems and traffic, and an independent third-party test, are the next steps.</p>
         </section>
         <section className="panel p-6"><p className="eyebrow">Unit tests · pytest</p><h2 className="mt-1 text-[22px] font-bold">{rules.passed} / {rules.total} passing</h2>
           <ul className="mt-3 grid gap-1.5 sm:grid-cols-2">{rules.tests.map((t) => <li key={t.name} className="flex gap-2 text-[13px]"><span className={t.pass ? "text-ok" : "text-coral"}>{t.pass ? "✓" : "✗"}</span><span className="text-muted">{t.name}</span></li>)}</ul>

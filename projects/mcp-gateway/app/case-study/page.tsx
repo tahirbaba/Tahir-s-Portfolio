@@ -7,6 +7,8 @@ import rules from "@/evals/results/rules.json";
 
 export const metadata: Metadata = { title: "Case study" };
 const DECISIONS = [
+  { q: "How do approvals work for risky actions? (v1.1)", a: "The gateway freezes the exact call and opens a request. Refunds over 100 USD need a team lead; over 300 USD, a team lead and finance, two different people. An external email after an agent has read personal data needs a team lead and security. Requests expire after 15 minutes, can't be replayed, can never be approved by an AI agent, and the frozen call is re-checked against hard limits before it runs." },
+  { q: "What about multi-step attacks? (v1.1)", a: "The gateway keeps session context. Once a document tries to instruct an agent, that agent's high-risk actions are locked for the session. Refunds have a per-customer daily cap and a per-agent auto budget, so a large refund can't be split into small ones. An agent repeating the same call is treated as a loop and stopped." },
   { q: "Why a gateway instead of a better system prompt?", a: "Prompts can be talked around; a gateway can't. Putting policy in front of the tools means even a fully manipulated agent hits the same checks as a well-behaved one." },
   { q: "Why SQLite's authorizer for the SQL guard?", a: "String matching misses tricks like CTEs, UNIONs, subqueries and table-valued pragmas. The database engine's own authorizer sees the real parsed query, so read-only and table bans hold whatever the SQL looks like." },
   { q: "Why mask PII by value, not by column?", a: "The first version masked the email column. The test suite showed SELECT email AS contact walked straight past it. Masking every cell by pattern closed the hole." },

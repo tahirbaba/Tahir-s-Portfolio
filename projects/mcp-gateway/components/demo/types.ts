@@ -9,6 +9,7 @@ export const AGENT_INFO: Record<string, { name: string; scopes: string[]; pii: s
   "intern-bot": { name: "Intern assistant", scopes: ["files.read"], pii: "masked" },
 };
 export const DECISION_STYLE: Record<string, string> = {
-  allowed: "bg-ok/15 text-ok border-ok/40", blocked: "bg-coral/15 text-coral border-coral/40", pending_approval: "bg-amber/15 text-amber border-amber/40",
+  allowed: "bg-ok/15 text-ok border-ok/40", blocked: "bg-coral/15 text-coral border-coral/40", pending_approval: "bg-amber/15 text-amber border-amber/40", denied: "bg-coral/15 text-coral border-coral/40",
 };
-export const DECISION_LABEL: Record<string, string> = { allowed: "ALLOWED", blocked: "BLOCKED", pending_approval: "HELD FOR APPROVAL" };
+export const DECISION_LABEL: Record<string, string> = { allowed: "ALLOWED", blocked: "BLOCKED", pending_approval: "HELD FOR APPROVAL", denied: "DENIED" };
+export type Approval = { id: string; agent: string; tool: string; summary: string; needs: string[]; approved_by: { by: string; role: string }[]; status: string; expires: number };
